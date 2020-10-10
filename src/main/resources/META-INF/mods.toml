@@ -1,0 +1,14 @@
+modLoader="javafml"
+loaderVersion="[34,)"
+license="GPLv3"
+issueTrackerURL="https://github.com/yungnickyoung/YUNGs-Better-Portals/issues"
+#displayURL="cuseforge URL"
+#logoFile="logo.png"
+
+[[mods]]
+	modId="${modId}"
+	version="${version}"
+	displayName="${modName}"
+	credits="${modCredits}"
+	authors="${modAuthor}"
+	description="${modDescription}"
