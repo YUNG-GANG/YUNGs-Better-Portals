@@ -1,5 +1,7 @@
 package com.yungnickyoung.minecraft.betterportals;
 
+import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
+import com.yungnickyoung.minecraft.betterportals.init.BPConfig;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
@@ -11,28 +13,18 @@ import net.minecraft.item.ItemGroup;
 import net.minecraft.item.Items;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod("betterportals")
+@Mod(BPSettings.MOD_ID)
 public class BetterPortals {
-    public static final String MOD_ID = "betterportals";
-    private static final Logger LOGGER = LogManager.getLogger(MOD_ID);
+    public static final Logger LOGGER = LogManager.getLogger(BPSettings.MOD_ID);
 
     public BetterPortals() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-
-        // Register ourselves for server and other game events we are interested in
-        MinecraftForge.EVENT_BUS.register(this);
+//        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
+        BPConfig.initConfigFiles();
     }
 
     public static final FlowingFluid FLOWING_PORTAL = new PortalFluid.Flowing();
@@ -42,32 +34,9 @@ public class BetterPortals {
 
     private void setup(final FMLCommonSetupEvent event)
     {
-        Registry.register(Registry.FLUID, new ResourceLocation(MOD_ID, "portal_liquid_flowing"), FLOWING_PORTAL);
-        Registry.register(Registry.FLUID, new ResourceLocation(MOD_ID, "portal_liquid"), SOURCE_PORTAL);
-        Registry.register(Registry.BLOCK, new ResourceLocation(MOD_ID, "portal_liquid"), PORTAL_LIQUID_BLOCK);
-        Registry.register(Registry.ITEM, new ResourceLocation(MOD_ID, "portal_bucket"), PORTAL_BUCKET);
-    }
-
-    private void doClientStuff(final FMLClientSetupEvent event) {
-        // do something that can only be done on the client
-        LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
-    }
-
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(FMLServerStartingEvent event) {
-        // do something when the server starts
-        LOGGER.info("HELLO from server starting");
-    }
-
-    // You can use EventBusSubscriber to automatically subscribe events on the contained class (this is subscribing to the MOD
-    // Event bus for receiving Registry Events)
-    @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
-    public static class RegistryEvents {
-        @SubscribeEvent
-        public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
-            // register a new block here
-            LOGGER.info("HELLO from Register Block");
-        }
+        Registry.register(Registry.FLUID, new ResourceLocation(BPSettings.MOD_ID, "portal_liquid_flowing"), FLOWING_PORTAL);
+        Registry.register(Registry.FLUID, new ResourceLocation(BPSettings.MOD_ID, "portal_liquid"), SOURCE_PORTAL);
+        Registry.register(Registry.BLOCK, new ResourceLocation(BPSettings.MOD_ID, "portal_liquid"), PORTAL_LIQUID_BLOCK);
+        Registry.register(Registry.ITEM, new ResourceLocation(BPSettings.MOD_ID, "portal_bucket"), PORTAL_BUCKET);
     }
 }

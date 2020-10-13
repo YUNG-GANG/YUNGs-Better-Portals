@@ -81,8 +81,13 @@ minecraft {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     minecraft "net.minecraftforge:forge:" + modMinecraftVersion + "-" + modForgeVersion
+    compile fg.deobf('com.yungnickyoung.minecraft.yungsapi:YungsApi:1.16.3-Forge-1')
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
