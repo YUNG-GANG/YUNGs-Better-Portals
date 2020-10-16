@@ -15,5 +15,8 @@ public class BiomeLoadingEventHandler {
         event.getGeneration().getFeatures(GenerationStage.Decoration.LAKES).add(
             () -> BPFeatures.CONFIGURED_PORTAL_LAKE
         );
+        event.getGeneration().getFeatures(GenerationStage.Decoration.LAKES).add(
+            () -> BPFeatures.CONFIGURED_MONOLITH
+        );
     }
 }

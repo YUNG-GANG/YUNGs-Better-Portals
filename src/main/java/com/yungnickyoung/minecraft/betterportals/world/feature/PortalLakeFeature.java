@@ -43,6 +43,10 @@ public class PortalLakeFeature extends Feature<NoFeatureConfig> {
             settings = PortalLakeVariants.get().getVariantForDimension(dimensionName);
         }
 
+        if (settings == null) {
+            return false;
+        }
+
         // Determine if we should spawn
         if (random.nextFloat() > settings.getSpawnChance()) {
             return false;
@@ -57,8 +61,9 @@ public class PortalLakeFeature extends Feature<NoFeatureConfig> {
         int startZ = pos.getZ();
         int startY = settings.getMinY() + random.nextInt(settings.getMaxY() - settings.getMinY() + 1);
 
-        fill(world, random, startX, startY - 1, startZ, startX + 6, startY, startZ + 6, settings.getBlockSelector());
-        fill(world, random, startX + 1, startY - 1, startZ + 1, startX + 5, startY - 1, startZ + 5, Blocks.WATER.getDefaultState());
+        fill(world, random, startX, startY - 8, startZ, startX + 6, startY, startZ + 6, settings.getBlockSelector());
+        fill(world, random, startX + 1, startY - 7, startZ + 1, startX + 5, startY - 1, startZ + 5, Blocks.CAVE_AIR.getDefaultState());
+        fill(world, random, startX + 1, startY - 7, startZ + 1, startX + 5, startY - 3, startZ + 5, BetterPortals.PORTAL_FLUID_BLOCK.getDefaultState());
 
         return true;
     }

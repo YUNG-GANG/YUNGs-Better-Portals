@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.betterportals.init;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
+import com.yungnickyoung.minecraft.betterportals.world.MonolithVariants;
 import com.yungnickyoung.minecraft.betterportals.world.PortalLakeVariants;
 import com.yungnickyoung.minecraft.yungsapi.io.JSON;
 import net.minecraftforge.fml.loading.FMLPaths;
@@ -16,7 +17,8 @@ public class BPConfig {
     public static void initConfigFiles() {
         createDirectory();
         createJsonReadMe();
-        loadJSONSettings();
+        loadRiftVariantSettings();
+        loadMonolithVariantSettings();
     }
 
     private static void createDirectory() {
@@ -37,10 +39,10 @@ public class BPConfig {
         File readme = new File(path.toString());
         if (!readme.exists()) {
             String readmeText =
-                "settings.json README\n" +
-                    "NOTE -- EDITING THE settings.json FILE REQUIRES A MINECRAFT RESTART TO UPDATE!" +
+                "README\n" +
+                    "NOTE -- EDITING THE rifts.json and monoliths.json FILES REQUIRES A MINECRAFT RESTART TO UPDATE!" +
                     "\n" +
-                    "The settings.json file contains the 'variants' property, which is a list of all the dimensional rifts to spawn.\n" +
+                    "The JSON files contains the 'variants' property, which is a list of all the dimensional rifts to spawn.\n" +
                     "Each dimensional rift has the following settings:\n" +
                     " - blockSelector: Describes a set of blocks and the probability of each block being chosen. See an example below.\n" +
                     "   - entries: An object where each entry's key is a block, and each value is that block's probability of being chosen.\n" +
@@ -75,8 +77,9 @@ public class BPConfig {
         }
     }
 
-    public static void loadJSONSettings() {
-        Path jsonPath = Paths.get(FMLPaths.CONFIGDIR.get().toString(), BPSettings.CUSTOM_CONFIG_PATH, BPSettings.VERSION_PATH, "settings.json");
+    public static void loadRiftVariantSettings() {
+        String fileName = "rifts.json";
+        Path jsonPath = Paths.get(FMLPaths.CONFIGDIR.get().toString(), BPSettings.CUSTOM_CONFIG_PATH, BPSettings.VERSION_PATH, fileName);
         File jsonFile = new File(jsonPath.toString());
 
         if (!jsonFile.exists()) {
@@ -84,19 +87,47 @@ public class BPConfig {
             try {
                 JSON.createJsonFileFromObject(jsonPath, PortalLakeVariants.get());
             } catch (IOException e) {
-                BetterPortals.LOGGER.error("Error creating Better Portals settings.json file! - {}", e.toString());
+                BetterPortals.LOGGER.error("Error creating Better Portals {} file! - {}", fileName, e.toString());
             }
         } else {
             // If file already exists, load data into PortalLakeVariants
             if (!jsonFile.canRead()) {
-                BetterPortals.LOGGER.error("Better Portals settings.json file not readable! Using default configuration...");
+                BetterPortals.LOGGER.error("Better Portals {} file not readable! Using default configuration...", fileName);
                 return;
             }
 
             try {
                 PortalLakeVariants.instance = JSON.loadObjectFromJsonFile(jsonPath, PortalLakeVariants.class);
             } catch (IOException e) {
-                BetterPortals.LOGGER.error("Error loading Better Portals settings.json file: {}", e.toString());
+                BetterPortals.LOGGER.error("Error loading Better Portals {} file: {}", fileName, e.toString());
+                BetterPortals.LOGGER.error("Using default configuration...");
+            }
+        }
+    }
+
+    public static void loadMonolithVariantSettings() {
+        String fileName = "monoliths.json";
+        Path jsonPath = Paths.get(FMLPaths.CONFIGDIR.get().toString(), BPSettings.CUSTOM_CONFIG_PATH, BPSettings.VERSION_PATH, fileName);
+        File jsonFile = new File(jsonPath.toString());
+
+        if (!jsonFile.exists()) {
+            // Create default file if JSON file doesn't already exist
+            try {
+                JSON.createJsonFileFromObject(jsonPath, MonolithVariants.get());
+            } catch (IOException e) {
+                BetterPortals.LOGGER.error("Error creating Better Portals {} file! - {}", fileName, e.toString());
+            }
+        } else {
+            // If file already exists, load data into PortalLakeVariants
+            if (!jsonFile.canRead()) {
+                BetterPortals.LOGGER.error("Better Portals {} file not readable! Using default configuration...", fileName);
+                return;
+            }
+
+            try {
+                MonolithVariants.instance = JSON.loadObjectFromJsonFile(jsonPath, MonolithVariants.class);
+            } catch (IOException e) {
+                BetterPortals.LOGGER.error("Error loading Better Portals {} file: {}", fileName, e.toString());
                 BetterPortals.LOGGER.error("Using default configuration...");
             }
         }

@@ -1,0 +1,4 @@
+{
+  "parent": "block/cube_all",
+  "textures": { "all": "betterportals:block/portal_fluid_still" }
+}

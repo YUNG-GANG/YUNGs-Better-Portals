@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "betterportals:portal_fluid_still",
+    "betterportals:portal_fluid_flowing"
+  ]
+}

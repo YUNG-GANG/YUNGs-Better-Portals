@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "level=0": { "model": "betterportals:block/portal_fluid_block" },
+    "level=1": { "model": "betterportals:block/portal_fluid_block" },
+    "level=2": { "model": "betterportals:block/portal_fluid_block" },
+    "level=3": { "model": "betterportals:block/portal_fluid_block" },
+    "level=4": { "model": "betterportals:block/portal_fluid_block" },
+    "level=5": { "model": "betterportals:block/portal_fluid_block" },
+    "level=6": { "model": "betterportals:block/portal_fluid_block" },
+    "level=7": { "model": "betterportals:block/portal_fluid_block" },
+    "level=8": { "model": "betterportals:block/portal_fluid_block" },
+    "level=9": { "model": "betterportals:block/portal_fluid_block" },
+    "level=10": { "model": "betterportals:block/portal_fluid_block" },
+    "level=11": { "model": "betterportals:block/portal_fluid_block" },
+    "level=12": { "model": "betterportals:block/portal_fluid_block" },
+    "level=13": { "model": "betterportals:block/portal_fluid_block" },
+    "level=14": { "model": "betterportals:block/portal_fluid_block" },
+    "level=15": { "model": "betterportals:block/portal_fluid_block" }
+  }
+}
