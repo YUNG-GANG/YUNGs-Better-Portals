@@ -1,5 +1,7 @@
-package com.yungnickyoung.minecraft.betterportals;
+package com.yungnickyoung.minecraft.betterportals.fluid;
 
+import com.yungnickyoung.minecraft.betterportals.init.BPBlocks;
+import com.yungnickyoung.minecraft.betterportals.init.BPItems;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -20,7 +22,6 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.IWorldReader;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 import java.util.Random;
@@ -33,17 +34,17 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
 
     @Override
     public Fluid getFlowingFluid() {
-        return BetterPortals.PORTAL_FLUID_FLOWING;
+        return BPBlocks.PORTAL_FLUID_FLOWING;
     }
 
     @Override
     public Fluid getStillFluid() {
-        return BetterPortals.PORTAL_FLUID;
+        return BPBlocks.PORTAL_FLUID;
     }
 
     @Override
     public Item getFilledBucket() {
-        return BetterPortals.PORTAL_BUCKET;
+        return BPItems.PORTAL_BUCKET;
     }
 
     @Override
@@ -53,7 +54,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
 
     @Override
     public boolean isEquivalentTo(Fluid fluidIn) {
-        return fluidIn == BetterPortals.PORTAL_FLUID || fluidIn == BetterPortals.PORTAL_FLUID_FLOWING;
+        return fluidIn == BPBlocks.PORTAL_FLUID || fluidIn == BPBlocks.PORTAL_FLUID_FLOWING;
     }
 
     @Override
@@ -119,7 +120,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
 
     @Override
     public BlockState getBlockState(FluidState state) {
-        return BetterPortals.PORTAL_FLUID_BLOCK.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
+        return BPBlocks.PORTAL_FLUID_BLOCK.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
     }
 
     public static class Flowing extends PortalFluid {
@@ -150,7 +151,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
     }
 
     public static class Source extends PortalFluid {
-        protected Source(Properties properties) {
+        public Source(Properties properties) {
             super(properties);
             setDefaultState(getStateContainer().getBaseState().with(LEVEL_1_8, 7));
         }

@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.betterportals.block;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
+import com.yungnickyoung.minecraft.betterportals.init.BPBlocks;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
@@ -12,7 +13,7 @@ import net.minecraft.world.World;
 public class PortalFluidBlock extends FlowingFluidBlock {
     public PortalFluidBlock() {
         super(
-            () -> BetterPortals.PORTAL_FLUID,
+            () -> BPBlocks.PORTAL_FLUID,
             AbstractBlock.Properties.create(Material.WATER)
                 .doesNotBlockMovement()
                 .hardnessAndResistance(100.0F)

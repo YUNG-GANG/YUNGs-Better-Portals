@@ -2,8 +2,8 @@ package com.yungnickyoung.minecraft.betterportals.world.feature;
 
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
-import com.yungnickyoung.minecraft.betterportals.world.MonolithVariantSettings;
-import com.yungnickyoung.minecraft.betterportals.world.MonolithVariants;
+import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
+import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
 import com.yungnickyoung.minecraft.yungsapi.world.BlockSetSelector;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.*;

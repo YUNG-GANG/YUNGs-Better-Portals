@@ -1,6 +1,6 @@
 package com.yungnickyoung.minecraft.betterportals.init;
 
-import com.yungnickyoung.minecraft.betterportals.world.PortalLakePlacement;
+import com.yungnickyoung.minecraft.betterportals.world.placement.PortalLakePlacement;
 import com.yungnickyoung.minecraft.betterportals.world.feature.MonolithFeature;
 import com.yungnickyoung.minecraft.betterportals.world.feature.PortalLakeFeature;
 import net.minecraft.world.gen.feature.ConfiguredFeature;

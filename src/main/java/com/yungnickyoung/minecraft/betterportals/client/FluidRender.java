@@ -19,7 +19,7 @@ import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 //
 //    private static final ResourceLocation TEXTURE_UNDERWATER = new ResourceLocation(BPSettings.MOD_ID + ":textures/misc/portal_fluid_underwater.png");
 //
-//    public static void sugarWaterOverlay(RenderBlockOverlayEvent event)
+//    public static void underwaterOverlay(RenderBlockOverlayEvent event)
 //    {
 //        if (event.getPlayer().world.getBlockState(event.getBlockPos()).getBlock() == BetterPortals.PORTAL_FLUID_BLOCK)
 //        {

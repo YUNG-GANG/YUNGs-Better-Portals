@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.betterportals.world;
+package com.yungnickyoung.minecraft.betterportals.world.placement;
 
 import com.mojang.serialization.Codec;
 import mcp.MethodsReturnNonnullByDefault;

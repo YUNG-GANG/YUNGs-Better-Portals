@@ -2,8 +2,8 @@ package com.yungnickyoung.minecraft.betterportals.init;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
-import com.yungnickyoung.minecraft.betterportals.world.MonolithVariants;
-import com.yungnickyoung.minecraft.betterportals.world.PortalLakeVariants;
+import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
+import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;
 import com.yungnickyoung.minecraft.yungsapi.io.JSON;
 import net.minecraftforge.fml.loading.FMLPaths;
 

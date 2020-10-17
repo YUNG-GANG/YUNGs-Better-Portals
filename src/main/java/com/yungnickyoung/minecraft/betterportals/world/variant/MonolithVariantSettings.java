@@ -1,4 +1,4 @@
-package com.yungnickyoung.minecraft.betterportals.world;
+package com.yungnickyoung.minecraft.betterportals.world.variant;
 
 import com.yungnickyoung.minecraft.yungsapi.world.BlockSetSelector;
 import net.minecraft.block.BlockState;
