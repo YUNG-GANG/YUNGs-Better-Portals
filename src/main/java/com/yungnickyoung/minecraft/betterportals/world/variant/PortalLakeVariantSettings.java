@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.betterportals.world.variant;
 
+import com.yungnickyoung.minecraft.betterportals.util.RGBAColor;
 import com.yungnickyoung.minecraft.yungsapi.world.BlockSetSelector;
 import net.minecraft.block.BlockState;
 
@@ -7,7 +8,7 @@ public class PortalLakeVariantSettings {
     public PortalLakeVariantSettings() {}
 
     private BlockSetSelector blockSelector;
-    private int fluidColor;
+    private RGBAColor fluidColor;
     private int minY;
     private int maxY;
     private int playerTeleportedMinY;
@@ -23,7 +24,7 @@ public class PortalLakeVariantSettings {
         return blockSelector;
     }
 
-    public int getFluidColor() {
+    public RGBAColor getFluidColor() {
         return fluidColor;
     }
 
@@ -66,7 +67,7 @@ public class PortalLakeVariantSettings {
         return this;
     }
 
-    public PortalLakeVariantSettings setFluidColor(int color) {
+    public PortalLakeVariantSettings setFluidColor(RGBAColor color) {
         this.fluidColor = color;
         return this;
     }

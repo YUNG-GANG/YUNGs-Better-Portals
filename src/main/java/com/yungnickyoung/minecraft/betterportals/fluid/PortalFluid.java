@@ -3,6 +3,7 @@ package com.yungnickyoung.minecraft.betterportals.fluid;
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.init.BPBlocks;
 import com.yungnickyoung.minecraft.betterportals.init.BPItems;
+import com.yungnickyoung.minecraft.betterportals.util.RGBAColor;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
@@ -195,7 +196,8 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
                 return 0xEE190040;
             }
 
-            return PortalLakeVariants.get().getVariantForDimension(dimensionName).getFluidColor();
+            RGBAColor fluidColor = PortalLakeVariants.get().getVariantForDimension(dimensionName).getFluidColor();
+            return fluidColor.toInt();
         }
 
         public static Builder builder(ResourceLocation stillTexture, ResourceLocation flowingTexture) {

@@ -55,6 +55,7 @@ public class PortalFluidBlock extends FlowingFluidBlock {
             // Determine player's spawn point in target dimension
             int targetMinY = settings.getPlayerTeleportedMinY();
             int targetMaxY = settings.getPlayerTeleportedMaxY();
+            BlockState spawnPlatformBlock = settings.getSpawnPlatformBlock();
             int targetY = -1;
             BlockPos.Mutable targetPos = pos.toMutable();
             targetPos.setY(targetMaxY);
@@ -76,7 +77,7 @@ public class PortalFluidBlock extends FlowingFluidBlock {
                 if (foundAir) {
                     // Air all the way - we need to spawn a platform somewhere
                     targetY = (targetMaxY + targetMinY) / 2;
-                    BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, Blocks.STONE.getDefaultState());
+                    BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
                     BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
                 } else {
                     // Solid all the way - we need to carve out a spawn point

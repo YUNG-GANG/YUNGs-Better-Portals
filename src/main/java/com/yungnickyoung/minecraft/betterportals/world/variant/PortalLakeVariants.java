@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.betterportals.world.variant;
 
+import com.yungnickyoung.minecraft.betterportals.util.RGBAColor;
 import com.yungnickyoung.minecraft.yungsapi.world.BlockSetSelector;
 import net.minecraft.block.Blocks;
 
@@ -30,7 +31,9 @@ public class PortalLakeVariants {
                     .addBlock(Blocks.OBSIDIAN.getDefaultState(), .1f)
                     .addBlock(Blocks.CRYING_OBSIDIAN.getDefaultState(), .05f)
             )
-            .setFluidColor(0xEE190040)
+            .setFluidColor(new RGBAColor(
+                "19", "00", "40", "EE"
+            ))
             .setMinY(5)
             .setMaxY(15)
             .setPlayerTeleportedMinY(100)
