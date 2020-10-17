@@ -33,9 +33,12 @@ public class PortalLakeVariants {
             .setFluidColor(0xFF000000)
             .setMinY(5)
             .setMaxY(15)
+            .setPlayerTeleportedMinY(100)
+            .setPlayerTeleportedMaxY(120)
             .setSpawnChance(.5)
             .setSpawnDimension("minecraft:overworld")
             .setTargetDimension("minecraft:the_nether")
+            .setSpawnPlatformBlock(Blocks.NETHERRACK.getDefaultState())
         );
     }
 

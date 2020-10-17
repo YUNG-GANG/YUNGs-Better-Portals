@@ -135,16 +135,6 @@ public class MonolithFeature extends Feature<NoFeatureConfig> {
         }
     }
 
-    private void fill(ISeedReader world, Random random, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, BlockState blockState) {
-        for (int x = minX; x <= maxX; ++x) {
-            for (int y = minY; y <= maxY; ++y) {
-                for (int z = minZ; z <= maxZ; ++z) {
-                    world.setBlockState(new BlockPos(x, y, z), blockState, 2);
-                }
-            }
-        }
-    }
-
     private void fillStairs(ISeedReader world, Random random, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, BlockSetSelector selector, Direction direction) {
         for (int x = minX; x <= maxX; ++x) {
             for (int y = minY; y <= maxY; ++y) {

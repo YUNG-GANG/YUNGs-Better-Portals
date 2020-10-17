@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.betterportals.world.variant;
 
 import com.yungnickyoung.minecraft.yungsapi.world.BlockSetSelector;
+import net.minecraft.block.BlockState;
 
 public class PortalLakeVariantSettings {
     public PortalLakeVariantSettings() {}
@@ -9,9 +10,12 @@ public class PortalLakeVariantSettings {
     private int fluidColor;
     private int minY;
     private int maxY;
+    private int playerTeleportedMinY;
+    private int playerTeleportedMaxY;
     private double spawnChance;
     private String spawnDimension;
     private String targetDimension;
+    private BlockState spawnPlatformBlock;
 
     /** Getters **/
 
@@ -31,6 +35,14 @@ public class PortalLakeVariantSettings {
         return maxY;
     }
 
+    public int getPlayerTeleportedMinY() {
+        return playerTeleportedMinY;
+    }
+
+    public int getPlayerTeleportedMaxY() {
+        return playerTeleportedMaxY;
+    }
+
     public double getSpawnChance() {
         return spawnChance;
     }
@@ -41,6 +53,10 @@ public class PortalLakeVariantSettings {
 
     public String getTargetDimension() {
         return targetDimension;
+    }
+
+    public BlockState getSpawnPlatformBlock() {
+        return spawnPlatformBlock;
     }
 
     /** Builder-style setters to make it more obvious which settings are being set when creating a new object **/
@@ -65,6 +81,16 @@ public class PortalLakeVariantSettings {
         return this;
     }
 
+    public PortalLakeVariantSettings setPlayerTeleportedMinY(int playerTeleportedMinY) {
+        this.playerTeleportedMinY = playerTeleportedMinY;
+        return this;
+    }
+
+    public PortalLakeVariantSettings setPlayerTeleportedMaxY(int playerTeleportedMaxY) {
+        this.playerTeleportedMaxY = playerTeleportedMaxY;
+        return this;
+    }
+
     public PortalLakeVariantSettings setSpawnChance(double spawnChance) {
         this.spawnChance = spawnChance;
         return this;
@@ -77,6 +103,11 @@ public class PortalLakeVariantSettings {
 
     public PortalLakeVariantSettings setTargetDimension(String targetDimension) {
         this.targetDimension = targetDimension;
+        return this;
+    }
+
+    public PortalLakeVariantSettings setSpawnPlatformBlock(BlockState spawnPlatformBlock) {
+        this.spawnPlatformBlock = spawnPlatformBlock;
         return this;
     }
 }

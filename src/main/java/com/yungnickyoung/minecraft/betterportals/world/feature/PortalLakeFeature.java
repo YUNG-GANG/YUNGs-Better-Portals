@@ -3,6 +3,7 @@ package com.yungnickyoung.minecraft.betterportals.world.feature;
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.init.BPBlocks;
+import com.yungnickyoung.minecraft.betterportals.util.BlockUtil;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;
 import com.yungnickyoung.minecraft.yungsapi.world.BlockSetSelector;
@@ -63,8 +64,8 @@ public class PortalLakeFeature extends Feature<NoFeatureConfig> {
         int startY = settings.getMinY() + random.nextInt(settings.getMaxY() - settings.getMinY() + 1);
 
         fill(world, random, startX, startY - 8, startZ, startX + 6, startY, startZ + 6, settings.getBlockSelector());
-        fill(world, random, startX + 1, startY - 7, startZ + 1, startX + 5, startY - 1, startZ + 5, Blocks.CAVE_AIR.getDefaultState());
-        fill(world, random, startX + 1, startY - 7, startZ + 1, startX + 5, startY - 3, startZ + 5, BPBlocks.PORTAL_FLUID_BLOCK.getDefaultState());
+        BlockUtil.fill(world,startX + 1, startY - 7, startZ + 1, startX + 5, startY - 1, startZ + 5, Blocks.CAVE_AIR.getDefaultState());
+        BlockUtil.fill(world,startX + 1, startY - 7, startZ + 1, startX + 5, startY - 3, startZ + 5, BPBlocks.PORTAL_FLUID_BLOCK.getDefaultState());
 
         return true;
     }
@@ -74,16 +75,6 @@ public class PortalLakeFeature extends Feature<NoFeatureConfig> {
             for (int y = minY; y <= maxY; ++y) {
                 for (int z = minZ; z <= maxZ; ++z) {
                     world.setBlockState(new BlockPos(x, y, z), selector.get(random), 2);
-                }
-            }
-        }
-    }
-
-    private void fill(ISeedReader world, Random random, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, BlockState blockState) {
-        for (int x = minX; x <= maxX; ++x) {
-            for (int y = minY; y <= maxY; ++y) {
-                for (int z = minZ; z <= maxZ; ++z) {
-                    world.setBlockState(new BlockPos(x, y, z), blockState, 2);
                 }
             }
         }

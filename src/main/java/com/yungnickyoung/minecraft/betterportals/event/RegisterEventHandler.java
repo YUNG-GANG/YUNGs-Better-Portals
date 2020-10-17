@@ -35,9 +35,18 @@ public class RegisterEventHandler {
     }
 
     @SubscribeEvent
-    public void registerBlocks(final RegistryEvent.Register<Block> event) {
-        BPBlocks.PORTAL_FLUID_PROPERTIES = new ForgeFlowingFluid.Properties(() -> BPBlocks.PORTAL_FLUID, () -> BPBlocks.PORTAL_FLUID_FLOWING,
-            FluidAttributes.builder(new ResourceLocation(BPSettings.MOD_ID, "block/portal_fluid_still"), new ResourceLocation(BPSettings.MOD_ID, "block/portal_fluid_flowing")).overlay(new ResourceLocation(BPSettings.MOD_ID, "block/portal_fluid_overlay")).viscosity(6000).translationKey("block.betterportals.portal_fluid").color(0xEE190040))
+    public static void registerBlocks(final RegistryEvent.Register<Block> event) {
+        BPBlocks.PORTAL_FLUID_PROPERTIES = new ForgeFlowingFluid.Properties(
+            () -> BPBlocks.PORTAL_FLUID, () -> BPBlocks.PORTAL_FLUID_FLOWING,
+            FluidAttributes.builder(
+                new ResourceLocation(BPSettings.MOD_ID, "block/portal_fluid_still"),
+                new ResourceLocation(BPSettings.MOD_ID, "block/portal_fluid_flowing")
+            )
+                .overlay(new ResourceLocation(BPSettings.MOD_ID, "block/portal_fluid_overlay"))
+                .viscosity(6000)
+                .translationKey("block.betterportals.portal_fluid")
+                .color(0xEE190040)
+        )
             .bucket(() -> BPItems.PORTAL_BUCKET).block(() -> BPBlocks.PORTAL_FLUID_BLOCK);
 
         BPBlocks.PORTAL_FLUID = Registry.register(Registry.FLUID, new ResourceLocation(BPSettings.MOD_ID, "portal_fluid_still"), new PortalFluid.Source(BPBlocks.PORTAL_FLUID_PROPERTIES));
@@ -49,7 +58,8 @@ public class RegisterEventHandler {
         );
     }
 
-    public void registerItems(final RegistryEvent.Register<Item> event) {
+    @SubscribeEvent
+    public static void registerItems(final RegistryEvent.Register<Item> event) {
         BPItems.PORTAL_BUCKET = Registry.register(Registry.ITEM, new ResourceLocation(BPSettings.MOD_ID, "portal_fluid_bucket"),
             new BucketItem(() -> BPBlocks.PORTAL_FLUID, new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ItemGroup.MISC)));
     }
