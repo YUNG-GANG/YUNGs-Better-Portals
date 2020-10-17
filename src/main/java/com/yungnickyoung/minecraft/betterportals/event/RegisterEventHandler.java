@@ -38,7 +38,7 @@ public class RegisterEventHandler {
     public static void registerBlocks(final RegistryEvent.Register<Block> event) {
         BPBlocks.PORTAL_FLUID_PROPERTIES = new ForgeFlowingFluid.Properties(
             () -> BPBlocks.PORTAL_FLUID, () -> BPBlocks.PORTAL_FLUID_FLOWING,
-            FluidAttributes.builder(
+            PortalFluid.PortalFluidAttributes.builder(
                 new ResourceLocation(BPSettings.MOD_ID, "block/portal_fluid_still"),
                 new ResourceLocation(BPSettings.MOD_ID, "block/portal_fluid_flowing")
             )
@@ -47,7 +47,8 @@ public class RegisterEventHandler {
                 .translationKey("block.betterportals.portal_fluid")
                 .color(0xEE190040)
         )
-            .bucket(() -> BPItems.PORTAL_BUCKET).block(() -> BPBlocks.PORTAL_FLUID_BLOCK);
+            .bucket(() -> BPItems.PORTAL_BUCKET)
+            .block(() -> BPBlocks.PORTAL_FLUID_BLOCK);
 
         BPBlocks.PORTAL_FLUID = Registry.register(Registry.FLUID, new ResourceLocation(BPSettings.MOD_ID, "portal_fluid_still"), new PortalFluid.Source(BPBlocks.PORTAL_FLUID_PROPERTIES));
         BPBlocks.PORTAL_FLUID_FLOWING = Registry.register(Registry.FLUID, new ResourceLocation(BPSettings.MOD_ID, "portal_fluid_flowing"), new PortalFluid.Flowing(BPBlocks.PORTAL_FLUID_PROPERTIES));

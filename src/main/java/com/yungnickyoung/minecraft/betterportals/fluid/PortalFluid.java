@@ -1,11 +1,14 @@
 package com.yungnickyoung.minecraft.betterportals.fluid;
 
+import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.init.BPBlocks;
 import com.yungnickyoung.minecraft.betterportals.init.BPItems;
+import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.FlowingFluidBlock;
+import net.minecraft.client.renderer.chunk.ChunkRenderCache;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.fluid.FluidState;
 import net.minecraft.item.Item;
@@ -15,16 +18,17 @@ import net.minecraft.state.StateContainer;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.IWorldReader;
-import net.minecraft.world.World;
+import net.minecraft.world.*;
+import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
+import java.util.Objects;
 import java.util.Random;
+import java.util.function.BiFunction;
 
 @MethodsReturnNonnullByDefault
 public abstract class PortalFluid extends ForgeFlowingFluid {
@@ -172,6 +176,36 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
         @Override
         protected boolean canSourcesMultiply() {
             return false;
+        }
+    }
+
+    public static class PortalFluidAttributes extends FluidAttributes {
+        protected PortalFluidAttributes(Builder builder, Fluid fluid) {
+            super(builder, fluid);
+        }
+
+        @Override
+        public int getColor(IBlockDisplayReader world, BlockPos pos) {
+            // Attempt to get dimension name, e.g. "minecraft:the_nether"
+            String dimensionName;
+            try {
+                dimensionName = Objects.requireNonNull( ((ChunkRenderCache)world).world.getDimensionKey().func_240901_a_()).toString();
+            } catch (Exception e) {
+                BetterPortals.LOGGER.error("ERROR: Unable to get dimension name! Using default portal color...");
+                return 0xEE190040;
+            }
+
+            return PortalLakeVariants.get().getVariantForDimension(dimensionName).getFluidColor();
+        }
+
+        public static Builder builder(ResourceLocation stillTexture, ResourceLocation flowingTexture) {
+            return new PortalBuilder(stillTexture, flowingTexture, PortalFluidAttributes::new);
+        }
+
+        public static class PortalBuilder extends FluidAttributes.Builder {
+            protected PortalBuilder(ResourceLocation stillTexture, ResourceLocation flowingTexture, BiFunction<FluidAttributes.Builder, Fluid, FluidAttributes> factory) {
+                super(stillTexture, flowingTexture, factory);
+            }
         }
     }
 }

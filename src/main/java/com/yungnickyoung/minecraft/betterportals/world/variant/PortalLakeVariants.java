@@ -30,7 +30,7 @@ public class PortalLakeVariants {
                     .addBlock(Blocks.OBSIDIAN.getDefaultState(), .1f)
                     .addBlock(Blocks.CRYING_OBSIDIAN.getDefaultState(), .05f)
             )
-            .setFluidColor(0xFF000000)
+            .setFluidColor(0xEE190040)
             .setMinY(5)
             .setMaxY(15)
             .setPlayerTeleportedMinY(100)
