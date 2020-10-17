@@ -21,7 +21,6 @@ public class RegisterEventHandler {
     @SubscribeEvent
     public static void registerDecoratorHandler(RegistryEvent.Register<Placement<?>> event) {
         registerDecorator(BPFeatures.PORTAL_LAKE_PLACEMENT, "portal_lake");
-        registerDecorator(BPFeatures.MONOLITH_PLACEMENT, "monolith");
     }
 
     private static void registerFeature(Feature<?> feature, String name) {

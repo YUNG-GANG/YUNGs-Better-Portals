@@ -24,9 +24,8 @@ public class MonolithVariants {
         variants.add(new MonolithVariantSettings()
             .setStairSelector(
                 new BlockSetSelector(Blocks.BLACKSTONE_STAIRS.getDefaultState())
-                    .addBlock(Blocks.BLACKSTONE_STAIRS.getDefaultState(), .33f)
-                    .addBlock(Blocks.POLISHED_BLACKSTONE_STAIRS.getDefaultState(), .33f)
-                    .addBlock(Blocks.POLISHED_BLACKSTONE_BRICK_STAIRS.getDefaultState(), .33f)
+                    .addBlock(Blocks.BLACKSTONE_STAIRS.getDefaultState(), .5f)
+                    .addBlock(Blocks.POLISHED_BLACKSTONE_BRICK_STAIRS.getDefaultState(), .5f)
             )
             .setCornerSelector(
                 new BlockSetSelector(Blocks.CHISELED_POLISHED_BLACKSTONE.getDefaultState())
@@ -43,8 +42,8 @@ public class MonolithVariants {
             .setPowerBlock(Blocks.GOLD_BLOCK.getDefaultState())
             .setDecorationBlock(Blocks.YELLOW_GLAZED_TERRACOTTA.getDefaultState())
             .setMinY(35)
-            .setMaxY(80)
-            .setSpawnChance(.5)
+            .setMaxY(110)
+            .setSpawnChance(.1)
             .setSpawnDimension("minecraft:the_nether")
             .setTargetDimension("minecraft:overworld")
         );

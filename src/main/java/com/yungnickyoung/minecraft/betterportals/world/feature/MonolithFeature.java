@@ -52,9 +52,25 @@ public class MonolithFeature extends Feature<NoFeatureConfig> {
             return false;
         }
 
+        // Structure must fall in bounds declared in settings
+        if (pos.getY() < settings.getMinY() || pos.getY() > settings.getMaxY()) {
+            return false;
+        }
+
         int startX = pos.getX();
         int startZ = pos.getZ();
-        int startY = settings.getMinY() + random.nextInt(settings.getMaxY() - settings.getMinY() + 1);
+        int startY = pos.getY();
+
+        // Prevent feature from spawning in positions where corners would be floating
+        BlockPos.Mutable corner = new BlockPos.Mutable();
+        for (int xCorner = 0; xCorner <= 1; xCorner++) {
+            for (int zCorner = 0; zCorner <= 1; zCorner++) {
+                corner.setPos(startX + xCorner * 6, startY - 1, startZ + zCorner * 6);
+                if (world.getBlockState(corner) == Blocks.AIR.getDefaultState() || world.getBlockState(corner) == Blocks.CAVE_AIR.getDefaultState()) {
+                    return false;
+                }
+            }
+        }
 
         // Inside blocks
         fill(world, random, startX + 1, startY, startZ + 1, startX + 5, startY, startZ + 5, settings.getInsideSelector());
