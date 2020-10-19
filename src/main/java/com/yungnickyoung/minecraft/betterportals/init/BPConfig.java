@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class BPConfig {
-    public static void initConfigFiles() {
+    public static void init() {
         createDirectory();
         createJsonReadMe();
         loadRiftVariantSettings();

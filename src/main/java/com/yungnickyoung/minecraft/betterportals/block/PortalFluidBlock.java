@@ -12,7 +12,6 @@ import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.RegistryKey;
@@ -29,7 +28,7 @@ public class PortalFluidBlock extends FlowingFluidBlock {
             AbstractBlock.Properties.create(Material.WATER)
                 .doesNotBlockMovement()
                 .hardnessAndResistance(100.0F)
-                .setLightLevel((state) -> 7)
+                .setLightLevel((state) -> 10)
                 .noDrops()
         );
     }
@@ -48,11 +47,13 @@ public class PortalFluidBlock extends FlowingFluidBlock {
 
             // Prevent crash due to mojang bug that makes mod's json dimensions not exist upload first creation of world on server. A restart fixes this.
             if (targetWorld == null) {
-                BetterPortals.LOGGER.error("UNABLE TO ENTER DIMENSION");
+                BetterPortals.LOGGER.error("Unable to enter dimension.");
+                BetterPortals.LOGGER.error("This is due to a bug in vanilla Minecraft. Please restart the game to fix this.");
                 return;
             }
 
-            // Determine player's spawn point in target dimension
+            // Determine player's spawn point in target dimension, and ...
+            // ... spawn platform under player if necessary.
             int targetMinY = settings.getPlayerTeleportedMinY();
             int targetMaxY = settings.getPlayerTeleportedMaxY();
             BlockState spawnPlatformBlock = settings.getSpawnPlatformBlock();
@@ -73,20 +74,21 @@ public class PortalFluidBlock extends FlowingFluidBlock {
                 targetPos.move(Direction.DOWN);
             }
 
+            // If we didn't find a suitable spawn location...
             if (targetY == -1) {
                 if (foundAir) {
-                    // Air all the way - we need to spawn a platform somewhere
+                    // It's air all the way - we need to spawn a platform somewhere
                     targetY = (targetMaxY + targetMinY) / 2;
                     BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
                     BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
                 } else {
-                    // Solid all the way - we need to carve out a spawn point
+                    // It's solid blocks all the way - we need to carve out a spawn point
                     targetY = (targetMaxY + targetMinY) / 2;
                     BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
                 }
             }
 
-            // Poof
+            // Poof!
             playerEntity.teleport(
                 targetWorld,
                 playerEntity.getPosX(),
