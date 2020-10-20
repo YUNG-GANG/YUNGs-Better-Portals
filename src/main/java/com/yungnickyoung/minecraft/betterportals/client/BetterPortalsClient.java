@@ -6,6 +6,8 @@ import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DeferredWorkQueue;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -17,6 +19,8 @@ public class BetterPortalsClient {
 
     @OnlyIn(Dist.CLIENT)
     public static void onClientSetup(FMLClientSetupEvent event) {
+        ClientRegistry.bindTileEntityRenderer(BPBlocks.RECLAIMER_TILE_ENTITY, ReclaimerTileEntityRenderer::new);
+
         DeferredWorkQueue.runLater(() -> {
             RenderTypeLookup.setRenderLayer(BPBlocks.PORTAL_FLUID_BLOCK, RenderType.getTranslucent());
             RenderTypeLookup.setRenderLayer(BPBlocks.PORTAL_FLUID, RenderType.getTranslucent());

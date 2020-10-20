@@ -24,6 +24,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
@@ -68,6 +70,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     protected void animateTick(World worldIn, BlockPos pos, FluidState state, Random random) {
         if (!state.isSource() && !state.get(FALLING)) {
             if (random.nextInt(100) == 0) {
@@ -82,7 +85,8 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
                     false
                 );
             }
-        } else if (random.nextInt(10) == 0) {
+        }
+        if (random.nextInt(3) == 0) {
             worldIn.addParticle(ParticleTypes.PORTAL,
                 (double) pos.getX() + (double) random.nextFloat(),
                 (double) pos.getY() + (double) random.nextFloat(),
@@ -94,7 +98,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
     }
 
     public int getTickRate(IWorldReader world) {
-        return 5;
+        return 35;
     }
 
     @Override
@@ -103,6 +107,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public IParticleData getDripParticleData() {
         return ParticleTypes.DRIPPING_OBSIDIAN_TEAR;
     }
@@ -148,11 +153,6 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
         public boolean isSource(FluidState state) {
             return false;
         }
-
-        @Override
-        protected boolean canSourcesMultiply() {
-            return true;
-        }
     }
 
     public static class Source extends PortalFluid {
@@ -172,11 +172,6 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
 
         public boolean isSource(FluidState state) {
             return true;
-        }
-
-        @Override
-        protected boolean canSourcesMultiply() {
-            return false;
         }
     }
 

@@ -25,10 +25,10 @@ public class PortalFluidBlock extends FlowingFluidBlock {
     public PortalFluidBlock() {
         super(
             () -> BPBlocks.PORTAL_FLUID,
-            AbstractBlock.Properties.create(Material.WATER)
+            AbstractBlock.Properties.create(Material.LAVA)
                 .doesNotBlockMovement()
                 .hardnessAndResistance(100.0F)
-                .setLightLevel((state) -> 10)
+                .setLightLevel((state) -> 7)
                 .noDrops()
         );
     }

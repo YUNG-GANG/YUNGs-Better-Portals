@@ -1,10 +1,7 @@
 package com.yungnickyoung.minecraft.betterportals.init;
 
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
-import net.minecraft.item.BucketItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
-import net.minecraft.item.Items;
+import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraftforge.event.RegistryEvent;
@@ -12,6 +9,7 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class BPItems {
     public static Item PORTAL_BUCKET;
+    public static Item RECLAIMER;
 
     // Initialization
     public static void init() {
@@ -19,7 +17,7 @@ public class BPItems {
     }
 
     /**
-     * Registers Portal Fluid Bucket item.
+     * Registers Portal Fluid Bucket and Reclaimer items.
      */
     private static void registerItems(RegistryEvent.Register<Item> event) {
         BPItems.PORTAL_BUCKET = Registry.register(
@@ -30,5 +28,11 @@ public class BPItems {
                 new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(ItemGroup.MISC)
             )
         );
+        BPItems.RECLAIMER = Registry.register(
+            Registry.ITEM,
+            new ResourceLocation(BPSettings.MOD_ID, "reclaimer"),
+            new BlockItem(BPBlocks.RECLAIMER, new Item.Properties().group(ItemGroup.MISC))
+        );
+
     }
 }
