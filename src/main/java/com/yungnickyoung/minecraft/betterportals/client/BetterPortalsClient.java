@@ -20,11 +20,11 @@ public class BetterPortalsClient {
     @OnlyIn(Dist.CLIENT)
     public static void onClientSetup(FMLClientSetupEvent event) {
         ClientRegistry.bindTileEntityRenderer(BPBlocks.RECLAIMER_TILE_ENTITY, ReclaimerTileEntityRenderer::new);
-
         DeferredWorkQueue.runLater(() -> {
             RenderTypeLookup.setRenderLayer(BPBlocks.PORTAL_FLUID_BLOCK, RenderType.getTranslucent());
             RenderTypeLookup.setRenderLayer(BPBlocks.PORTAL_FLUID, RenderType.getTranslucent());
             RenderTypeLookup.setRenderLayer(BPBlocks.PORTAL_FLUID_FLOWING, RenderType.getTranslucent());
+            RenderTypeLookup.setRenderLayer(BPBlocks.RECLAIMER, RenderType.getCutout());
         });
     }
 }
