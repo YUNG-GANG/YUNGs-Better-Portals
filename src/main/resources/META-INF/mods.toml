@@ -12,3 +12,17 @@ issueTrackerURL="https://github.com/yungnickyoung/YUNGs-Better-Portals/issues"
 	credits="${modCredits}"
 	authors="${modAuthor}"
 	description="${modDescription}"
+
+[[dependencies.betterportals]]
+    modId="forge"
+    mandatory=true
+    versionRange="[34,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.betterportals]]
+    modId="yungsapi"
+    versionRange="[1.16.3-Forge-1,)"
+    mandatory=true
+    ordering="NONE"
+    side="BOTH"
