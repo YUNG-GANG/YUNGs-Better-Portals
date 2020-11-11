@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.betterportals.block;
 
 import com.yungnickyoung.minecraft.betterportals.init.BPBlocks;
+import com.yungnickyoung.minecraft.betterportals.tileentity.ReclaimerTileEntity;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
 import mcp.MethodsReturnNonnullByDefault;
@@ -86,7 +87,7 @@ public class ReclaimerBlock extends ContainerBlock implements IBeaconBeamColorPr
 
     @Override
     public boolean removedByPlayer(BlockState state, World world, BlockPos pos, PlayerEntity player, boolean willHarvest, FluidState fluid) {
-        if (world.getBlockState(pos).getBlock() == BPBlocks.RECLAIMER) {
+        if (world.getBlockState(pos).getBlock() == BlockModule.RECLAIMER_BLOCK) {
             if (world.getBlockState(pos).get(ReclaimerBlock.POWERED)) {
                 world.playSound(null, pos, SoundEvents.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 1.0F, 1.0F);
             }

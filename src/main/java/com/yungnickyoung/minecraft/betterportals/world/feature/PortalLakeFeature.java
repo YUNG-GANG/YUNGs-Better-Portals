@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.betterportals.world.feature;
 
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
+import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.init.BPBlocks;
 import com.yungnickyoung.minecraft.betterportals.util.BlockUtil;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariantSettings;
@@ -63,7 +64,7 @@ public class PortalLakeFeature extends Feature<NoFeatureConfig> {
 
         BlockUtil.fill(world, random, startX, startY - 8, startZ, startX + 6, startY, startZ + 6, settings.getBlockSelector());
         BlockUtil.fill(world,startX + 1, startY - 7, startZ + 1, startX + 5, startY - 1, startZ + 5, Blocks.CAVE_AIR.getDefaultState());
-        BlockUtil.fill(world,startX + 1, startY - 7, startZ + 1, startX + 5, startY - 3, startZ + 5, BPBlocks.PORTAL_FLUID_BLOCK.getDefaultState());
+        BlockUtil.fill(world,startX + 1, startY - 7, startZ + 1, startX + 5, startY - 3, startZ + 5, BlockModule.PORTAL_FLUID_BLOCK.getDefaultState());
 
         return true;
     }

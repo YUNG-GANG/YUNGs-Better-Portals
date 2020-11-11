@@ -1,7 +1,7 @@
-package com.yungnickyoung.minecraft.betterportals.init;
+package com.yungnickyoung.minecraft.betterportals.config;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
-import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
+import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;
 import com.yungnickyoung.minecraft.yungsapi.io.JSON;
@@ -13,8 +13,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class BPConfig {
-    public static void init() {
+public class ConfigModule implements IModule  {
+    @Override
+    public void init() {
         createDirectory();
         createJsonReadMe();
         loadRiftVariantSettings();

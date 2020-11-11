@@ -1,8 +1,10 @@
 package com.yungnickyoung.minecraft.betterportals.fluid;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
+import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.init.BPBlocks;
 import com.yungnickyoung.minecraft.betterportals.init.BPItems;
+import com.yungnickyoung.minecraft.betterportals.item.ItemModule;
 import com.yungnickyoung.minecraft.betterportals.util.RGBAColor;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;
 import mcp.MethodsReturnNonnullByDefault;
@@ -41,17 +43,17 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
 
     @Override
     public Fluid getFlowingFluid() {
-        return BPBlocks.PORTAL_FLUID_FLOWING;
+        return FluidModule.PORTAL_FLUID_FLOWING;
     }
 
     @Override
     public Fluid getStillFluid() {
-        return BPBlocks.PORTAL_FLUID;
+        return FluidModule.PORTAL_FLUID;
     }
 
     @Override
     public Item getFilledBucket() {
-        return BPItems.PORTAL_BUCKET;
+        return ItemModule.PORTAL_BUCKET;
     }
 
     @Override
@@ -61,7 +63,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
 
     @Override
     public boolean isEquivalentTo(Fluid fluidIn) {
-        return fluidIn == BPBlocks.PORTAL_FLUID || fluidIn == BPBlocks.PORTAL_FLUID_FLOWING;
+        return fluidIn == FluidModule.PORTAL_FLUID || fluidIn == FluidModule.PORTAL_FLUID_FLOWING;
     }
 
     @Override
@@ -130,7 +132,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
 
     @Override
     public BlockState getBlockState(FluidState state) {
-        return BPBlocks.PORTAL_FLUID_BLOCK.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
+        return BlockModule.PORTAL_FLUID_BLOCK.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
     }
 
     public static class Flowing extends PortalFluid {

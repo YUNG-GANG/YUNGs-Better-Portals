@@ -1,9 +1,10 @@
-package com.yungnickyoung.minecraft.betterportals.init;
+package com.yungnickyoung.minecraft.betterportals.world;
 
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
-import com.yungnickyoung.minecraft.betterportals.world.placement.PortalLakePlacement;
+import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import com.yungnickyoung.minecraft.betterportals.world.feature.MonolithFeature;
 import com.yungnickyoung.minecraft.betterportals.world.feature.PortalLakeFeature;
+import com.yungnickyoung.minecraft.betterportals.world.placement.PortalLakePlacement;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.GenerationStage;
@@ -20,7 +21,7 @@ import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-public class BPFeatures {
+public class WorldGenModule implements IModule {
     // Portal Lake
     public static Feature<NoFeatureConfig> PORTAL_LAKE = new PortalLakeFeature(NoFeatureConfig.field_236558_a_);
     public static Placement<NoPlacementConfig> PORTAL_LAKE_PLACEMENT = new PortalLakePlacement(NoPlacementConfig.field_236555_a_);
@@ -30,19 +31,18 @@ public class BPFeatures {
     public static Feature<NoFeatureConfig> MONOLITH = new MonolithFeature(NoFeatureConfig.field_236558_a_);
     public static ConfiguredFeature<?, ?> CONFIGURED_MONOLITH = MONOLITH.withConfiguration(new NoFeatureConfig()).withPlacement(Placement.field_242897_C.configure(new FeatureSpreadConfig(1)));
 
-    // Initialization
-    public static void init() {
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, BPFeatures::registerFeatures);
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Placement.class, BPFeatures::registerDecorators);
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, BPFeatures::onBiomeLoad);
+    public void init() {
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, WorldGenModule::registerFeatures);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Placement.class, WorldGenModule::registerDecorators);
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, WorldGenModule::onBiomeLoad);
     }
 
     /**
      * Registers Portal Lake (aka Rift) and Monolith features.
      */
     private static void registerFeatures(final RegistryEvent.Register<Feature<?>> event) {
-        Registry.register(Registry.FEATURE, new ResourceLocation(BPSettings.MOD_ID, "portal_lake"), BPFeatures.PORTAL_LAKE);
-        Registry.register(Registry.FEATURE, new ResourceLocation(BPSettings.MOD_ID, "monolith"), BPFeatures.MONOLITH);
+        Registry.register(Registry.FEATURE, new ResourceLocation(BPSettings.MOD_ID, "portal_lake"), PORTAL_LAKE);
+        Registry.register(Registry.FEATURE, new ResourceLocation(BPSettings.MOD_ID, "monolith"), MONOLITH);
     }
 
     /**
@@ -57,10 +57,10 @@ public class BPFeatures {
      */
     private static void onBiomeLoad(BiomeLoadingEvent event) {
         event.getGeneration().getFeatures(GenerationStage.Decoration.LAKES).add(
-            () -> BPFeatures.CONFIGURED_PORTAL_LAKE
+            () -> CONFIGURED_PORTAL_LAKE
         );
         event.getGeneration().getFeatures(GenerationStage.Decoration.LAKES).add(
-            () -> BPFeatures.CONFIGURED_MONOLITH
+            () -> CONFIGURED_MONOLITH
         );
     }
 }

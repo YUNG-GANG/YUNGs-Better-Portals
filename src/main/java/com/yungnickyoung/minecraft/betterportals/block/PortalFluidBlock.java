@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.betterportals.block;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
+import com.yungnickyoung.minecraft.betterportals.fluid.FluidModule;
 import com.yungnickyoung.minecraft.betterportals.init.BPBlocks;
 import com.yungnickyoung.minecraft.betterportals.util.BlockUtil;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariantSettings;
@@ -24,7 +25,7 @@ import net.minecraft.world.server.ServerWorld;
 public class PortalFluidBlock extends FlowingFluidBlock {
     public PortalFluidBlock() {
         super(
-            () -> BPBlocks.PORTAL_FLUID,
+            () -> FluidModule.PORTAL_FLUID,
             AbstractBlock.Properties.create(Material.LAVA)
                 .doesNotBlockMovement()
                 .hardnessAndResistance(100.0F)
