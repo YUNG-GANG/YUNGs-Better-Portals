@@ -2,8 +2,6 @@ package com.yungnickyoung.minecraft.betterportals.fluid;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
-import com.yungnickyoung.minecraft.betterportals.init.BPBlocks;
-import com.yungnickyoung.minecraft.betterportals.init.BPItems;
 import com.yungnickyoung.minecraft.betterportals.item.ItemModule;
 import com.yungnickyoung.minecraft.betterportals.util.RGBAColor;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;

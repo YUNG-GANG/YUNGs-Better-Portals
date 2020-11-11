@@ -3,7 +3,6 @@ package com.yungnickyoung.minecraft.betterportals.world.feature;
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
-import com.yungnickyoung.minecraft.betterportals.init.BPBlocks;
 import com.yungnickyoung.minecraft.betterportals.util.BlockUtil;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;

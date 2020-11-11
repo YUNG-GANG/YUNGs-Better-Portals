@@ -31,9 +31,10 @@ public class MonolithVariants {
                 new BlockSetSelector(Blocks.CHISELED_POLISHED_BLACKSTONE.getDefaultState())
             )
             .setInsideSelector(
-                new BlockSetSelector(Blocks.NETHER_BRICKS.getDefaultState())
+                new BlockSetSelector(Blocks.POLISHED_BLACKSTONE_BRICKS.getDefaultState())
+                    .addBlock(Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS.getDefaultState(), .2f)
             )
-            .setTopSelector(
+            .setFenceSelector(
                 new BlockSetSelector(Blocks.BLACKSTONE_WALL.getDefaultState())
                     .addBlock(Blocks.POLISHED_BLACKSTONE_BRICK_WALL.getDefaultState(), .33f)
                     .addBlock(Blocks.BLACKSTONE_WALL.getDefaultState(), .33f)

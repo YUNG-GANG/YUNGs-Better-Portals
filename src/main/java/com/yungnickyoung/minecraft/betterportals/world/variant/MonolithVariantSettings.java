@@ -9,7 +9,7 @@ public class MonolithVariantSettings {
     private BlockSetSelector stairSelector;
     private BlockSetSelector cornerSelector;
     private BlockSetSelector insideSelector;
-    private BlockSetSelector topSelector;
+    private BlockSetSelector fenceSelector;
     private BlockState powerBlock;
     private BlockState decorationBlock;
     private int minY;
@@ -32,8 +32,8 @@ public class MonolithVariantSettings {
         return insideSelector;
     }
 
-    public BlockSetSelector getTopSelector() {
-        return topSelector;
+    public BlockSetSelector getFenceSelector() {
+        return fenceSelector;
     }
 
     public BlockState getPowerBlock() {
@@ -81,8 +81,8 @@ public class MonolithVariantSettings {
         return this;
     }
 
-    public MonolithVariantSettings setTopSelector(BlockSetSelector topSelector) {
-        this.topSelector = topSelector;
+    public MonolithVariantSettings setFenceSelector(BlockSetSelector fenceSelector) {
+        this.fenceSelector = fenceSelector;
         return this;
     }
 

@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.betterportals.block;
 
-import com.yungnickyoung.minecraft.betterportals.init.BPBlocks;
 import com.yungnickyoung.minecraft.betterportals.tileentity.ReclaimerTileEntity;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
