@@ -6,7 +6,6 @@ import com.yungnickyoung.minecraft.betterportals.world.feature.MonolithFeature;
 import com.yungnickyoung.minecraft.betterportals.world.feature.PortalLakeFeature;
 import com.yungnickyoung.minecraft.betterportals.world.placement.PortalLakePlacement;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.ConfiguredFeature;
 import net.minecraft.world.gen.feature.Feature;
@@ -41,15 +40,15 @@ public class WorldGenModule implements IModule {
      * Registers Portal Lake (aka Rift) and Monolith features.
      */
     private static void registerFeatures(final RegistryEvent.Register<Feature<?>> event) {
-        Registry.register(Registry.FEATURE, new ResourceLocation(BPSettings.MOD_ID, "portal_lake"), PORTAL_LAKE);
-        Registry.register(Registry.FEATURE, new ResourceLocation(BPSettings.MOD_ID, "monolith"), MONOLITH);
+        event.getRegistry().register(PORTAL_LAKE.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "portal_lake")));
+        event.getRegistry().register(MONOLITH.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "monolith")));
     }
 
     /**
      * Registers Portal Lake (aka Rift) decorator.
      */
     private static void registerDecorators(RegistryEvent.Register<Placement<?>> event) {
-        Registry.register(Registry.DECORATOR, new ResourceLocation(BPSettings.MOD_ID, "portal_lake"), PORTAL_LAKE_PLACEMENT);
+        event.getRegistry().register(PORTAL_LAKE_PLACEMENT.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "portal_lake")));
     }
 
     /**

@@ -5,13 +5,12 @@ import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class BlockModule implements IModule {
-    public static FlowingFluidBlock PORTAL_FLUID_BLOCK;
-    public static Block RECLAIMER_BLOCK;
+    public static FlowingFluidBlock PORTAL_FLUID_BLOCK = new PortalFluidBlock();
+    public static Block RECLAIMER_BLOCK = new ReclaimerBlock();
 
     @Override
     public void init() {
@@ -22,15 +21,7 @@ public class BlockModule implements IModule {
      * Registers portal block and liquid block.
      */
     private static void registerBlocks(final RegistryEvent.Register<Block> event) {
-        PORTAL_FLUID_BLOCK = Registry.register(
-            Registry.BLOCK,
-            new ResourceLocation(BPSettings.MOD_ID, "portal_fluid_block"),
-            new PortalFluidBlock()
-        );
-        RECLAIMER_BLOCK = Registry.register(
-            Registry.BLOCK,
-            new ResourceLocation(BPSettings.MOD_ID, "reclaimer_block"),
-            new ReclaimerBlock()
-        );
+        event.getRegistry().register(PORTAL_FLUID_BLOCK.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "portal_fluid_block")));
+        event.getRegistry().register(RECLAIMER_BLOCK.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "reclaimer_block")));
     }
 }
