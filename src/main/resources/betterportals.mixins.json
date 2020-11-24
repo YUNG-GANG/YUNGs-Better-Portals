@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.yungnickyoung.minecraft.betterportals.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinPortalSize"
+  ],
+  "client": [],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

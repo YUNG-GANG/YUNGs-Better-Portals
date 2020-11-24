@@ -5,6 +5,8 @@ import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;
 import com.yungnickyoung.minecraft.yungsapi.io.JSON;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.File;
@@ -20,6 +22,8 @@ public class ConfigModule implements IModule  {
         createJsonReadMe();
         loadRiftVariantSettings();
         loadMonolithVariantSettings();
+        // Register config with Forge
+        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, Configuration.SPEC, BPSettings.BASE_CONFIG_NAME);
     }
 
     private static void createDirectory() {
