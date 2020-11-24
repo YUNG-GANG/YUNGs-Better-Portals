@@ -87,7 +87,7 @@ repositories {
 
 dependencies {
     minecraft "net.minecraftforge:forge:" + modMinecraftVersion + "-" + modForgeVersion
-    compile fg.deobf('com.yungnickyoung.minecraft.yungsapi:YungsApi:1.16.3-Forge-1')
+    compile fg.deobf("com.yungnickyoung.minecraft.yungsapi:YungsApi:${yungsApiVersion}")
 
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
@@ -154,7 +154,6 @@ jar {
         ],)
     }
 }
-
 
 // Example configuration to allow publishing using the maven-publish task
 // This is the preferred method to reobfuscate your jar file

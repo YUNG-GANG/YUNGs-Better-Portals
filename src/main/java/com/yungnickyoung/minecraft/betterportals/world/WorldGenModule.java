@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.betterportals.world;
 
+import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import com.yungnickyoung.minecraft.betterportals.world.feature.MonolithFeature;
@@ -7,10 +8,8 @@ import com.yungnickyoung.minecraft.betterportals.world.feature.PortalLakeFeature
 import com.yungnickyoung.minecraft.betterportals.world.placement.PortalLakePlacement;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.FeatureSpreadConfig;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
+import net.minecraft.world.gen.feature.*;
+import net.minecraft.world.gen.placement.ChanceConfig;
 import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.NoPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
@@ -22,9 +21,11 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class WorldGenModule implements IModule {
     // Portal Lake
-    public static Feature<NoFeatureConfig> PORTAL_LAKE = new PortalLakeFeature(NoFeatureConfig.field_236558_a_);
+    public static Feature<BlockStateFeatureConfig> PORTAL_LAKE = new PortalLakeFeature(BlockStateFeatureConfig.field_236455_a_);
     public static Placement<NoPlacementConfig> PORTAL_LAKE_PLACEMENT = new PortalLakePlacement(NoPlacementConfig.field_236555_a_);
-    public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = PORTAL_LAKE.withConfiguration(new NoFeatureConfig()).withPlacement(PORTAL_LAKE_PLACEMENT.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
+//    public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = PORTAL_LAKE.withConfiguration(new NoFeatureConfig()).withPlacement(PORTAL_LAKE_PLACEMENT.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
+//    public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = Feature.LAKE.withConfiguration(new BlockStateFeatureConfig(BlockModule.PORTAL_FLUID_BLOCK.getDefaultState())).withPlacement(Placement.LAVA_LAKE.configure(new ChanceConfig(80)));
+    public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = PORTAL_LAKE.withConfiguration(new BlockStateFeatureConfig(BlockModule.PORTAL_FLUID_BLOCK.getDefaultState())).withPlacement(Placement.LAVA_LAKE.configure(new ChanceConfig(80)));
 
     // Monolith
     public static Feature<NoFeatureConfig> MONOLITH = new MonolithFeature(NoFeatureConfig.field_236558_a_);
