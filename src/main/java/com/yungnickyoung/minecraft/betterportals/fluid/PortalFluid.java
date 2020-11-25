@@ -27,6 +27,7 @@ import net.minecraft.world.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 import java.util.Objects;
@@ -180,6 +181,8 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
             super(builder, fluid);
         }
 
+        private int currColor = 0xFFFFFFFF;
+
         @Override
         public int getColor(IBlockDisplayReader world, BlockPos pos) {
             // Attempt to get dimension name, e.g. "minecraft:the_nether"
@@ -192,7 +195,13 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
             }
 
             RGBAColor fluidColor = PortalLakeVariants.get().getVariantForDimension(dimensionName).getFluidColor();
+            currColor = fluidColor.toInt();
             return fluidColor.toInt();
+        }
+
+        @Override
+        public int getColor(FluidStack stack) {
+            return currColor;
         }
 
         public static Builder builder(ResourceLocation stillTexture, ResourceLocation flowingTexture) {

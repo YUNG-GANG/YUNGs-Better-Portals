@@ -24,6 +24,9 @@ public class ItemModule implements IModule {
         }
     };
 
+    /**
+     * Items
+     */
     public static Item PORTAL_BUCKET = new BucketItem (
         () -> FluidModule.PORTAL_FLUID,
         new Item.Properties().containerItem(Items.BUCKET).maxStackSize(1).group(BETTERPORTALS_CREATIVE_TAB)
