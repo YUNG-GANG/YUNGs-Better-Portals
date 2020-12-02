@@ -3,7 +3,6 @@ package com.yungnickyoung.minecraft.betterportals.block;
 import com.yungnickyoung.minecraft.betterportals.tileentity.ReclaimerTileEntity;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
-import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialColor;
@@ -23,11 +22,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.function.ToIntFunction;
 
 @SuppressWarnings("deprecation")
-@MethodsReturnNonnullByDefault
 public class ReclaimerBlock extends ContainerBlock implements IBeaconBeamColorProvider {
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
@@ -100,10 +99,11 @@ public class ReclaimerBlock extends ContainerBlock implements IBeaconBeamColorPr
     }
 
     @Override
-    public TileEntity createNewTileEntity(IBlockReader world) {
+    public TileEntity createNewTileEntity(@Nonnull IBlockReader world) {
         return new ReclaimerTileEntity();
     }
 
+    @Nonnull
     @Override
     public DyeColor getColor() {
         return DyeColor.WHITE;
@@ -114,17 +114,21 @@ public class ReclaimerBlock extends ContainerBlock implements IBeaconBeamColorPr
     }
 
     private boolean shouldBePowered(World world, BlockPos pos, BlockState powerBlock) {
-        boolean powered = true;
+        // If no power block is set for this dimension, the reclaimer cannot be powered.
+        if (powerBlock == null) {
+            return false;
+        }
+
         // Determine if block should be powered
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             if (world.getBlockState(pos.offset(direction)) != powerBlock) {
-                powered = false;
-                break;
+                return false;
             }
         }
-        return powered;
+        return true;
     }
 
+    @Nonnull
     @Override
     public BlockRenderType getRenderType(BlockState p_149645_1_) {
         return BlockRenderType.MODEL;
@@ -133,6 +137,6 @@ public class ReclaimerBlock extends ContainerBlock implements IBeaconBeamColorPr
     private BlockState getPowerBlock(World world) {
         String dimensionName = world.getDimensionKey().func_240901_a_().toString();
         MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(dimensionName);
-        return settings.getPowerBlock();
+        return settings == null ? null : settings.getPowerBlock();
     }
 }
