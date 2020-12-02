@@ -11,6 +11,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.FluidContainerColorer;
 import net.minecraftforge.client.event.ColorHandlerEvent;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.DeferredWorkQueue;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -29,13 +30,12 @@ public class ClientModule implements IModule {
 
     @OnlyIn(Dist.CLIENT)
     private static void addColorHandlers(ColorHandlerEvent.Item event) {
-        event.getItemColors().register(new FluidContainerColorer(), ItemModule.PORTAL_BUCKET);
-//        event.getItemColors().register((stack, index) -> {
-//            int color = FluidUtil.getFluidContained(stack)
-//                .map(fstack -> fstack.getFluid().getAttributes().getColor(fstack))
-//                .orElse(0xFFFFFFFF);
-//            return color;
-//        }, ItemModule.PORTAL_BUCKET);
+        event.getItemColors().register(
+            (stack, index) -> FluidUtil.getFluidContained(stack)
+                .map(fstack -> fstack.getFluid().getAttributes().getColor(fstack))
+                .orElse(0xFFFFFFFF),
+            ItemModule.PORTAL_BUCKET
+        );
     }
 
     @OnlyIn(Dist.CLIENT)
