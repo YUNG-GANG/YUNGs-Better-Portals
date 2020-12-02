@@ -56,10 +56,16 @@ public class WorldGenModule implements IModule {
      * Adds configured Portal Lake (aka Rift) and Monolith features to biomes.
      */
     private static void onBiomeLoad(BiomeLoadingEvent event) {
+        // Add dimensional rift features
         event.getGeneration().getFeatures(GenerationStage.Decoration.LAKES).add(
             () -> CONFIGURED_PORTAL_LAKE
         );
-        event.getGeneration().getFeatures(GenerationStage.Decoration.LAKES).add(
+        // Don't add monoliths to basalt deltas biome (there isn't really enough room for them to spawn)
+        if (event.getName().equals("minecraft:basalt_deltas")) {
+            return;
+        }
+        // Add monolith features
+        event.getGeneration().getFeatures(GenerationStage.Decoration.UNDERGROUND_STRUCTURES).add(
             () -> CONFIGURED_MONOLITH
         );
     }

@@ -22,6 +22,8 @@ import java.util.Random;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class MonolithFeature extends Feature<NoFeatureConfig> {
+    private static final BlockState CAVE_AIR = Blocks.CAVE_AIR.getDefaultState();
+
     private MonolithVariantSettings settings;
 
     public MonolithFeature(Codec<NoFeatureConfig> codec) {
@@ -62,13 +64,25 @@ public class MonolithFeature extends Feature<NoFeatureConfig> {
         int startZ = pos.getZ();
         int startY = pos.getY();
 
-        // Prevent feature from spawning in positions where corners would be floating
+        // Validate position
         BlockPos.Mutable corner = new BlockPos.Mutable();
+        int invalidCornerCounter = 0;
         for (int xCorner = 0; xCorner <= 1; xCorner++) {
             for (int zCorner = 0; zCorner <= 1; zCorner++) {
-                corner.setPos(startX + xCorner * 6, startY - 1, startZ + zCorner * 6);
-                if (world.getBlockState(corner) == Blocks.AIR.getDefaultState() || world.getBlockState(corner) == Blocks.CAVE_AIR.getDefaultState()) {
+                // Prevent feature from spawning in positions where corners would be floating
+                corner.setPos(startX + xCorner * 8, startY - 1, startZ + zCorner * 8);
+                if (world.getBlockState(corner) == Blocks.AIR.getDefaultState() || world.getBlockState(corner) == CAVE_AIR) {
                     return false;
+                }
+                // Prevent feature from getting buried (spawning in walls, etc).
+                // A corner is marked as invalid if some of its blocks are not air.
+                if (!world.getBlockState(corner.move(Direction.UP, 2)).isAir()
+                    && !world.getBlockState(corner.move(Direction.UP, 1)).isAir()
+                ) {
+                    invalidCornerCounter++;
+                    if (invalidCornerCounter > 1) {
+                        return false;
+                    }
                 }
             }
         }
@@ -114,7 +128,7 @@ public class MonolithFeature extends Feature<NoFeatureConfig> {
 
         // Power blocks
         BlockUtil.fill(world, startX + 4, startY + 1, startZ + 3, startX + 4, startY + 1, startZ + 3, settings.getPowerBlock()); // One block guaranteed placed
-        BlockUtil.fill(world, startX + 3, startY + 1, startZ + 4, startX + 3, startY + 1, startZ + 4, random.nextFloat() < .3f ? settings.getPowerBlock() :Blocks.AIR.getDefaultState());
+        BlockUtil.fill(world, startX + 3, startY + 1, startZ + 4, startX + 3, startY + 1, startZ + 4, random.nextFloat() < .3f ? settings.getPowerBlock() : Blocks.AIR.getDefaultState());
         BlockUtil.fill(world, startX + 5, startY + 1, startZ + 4, startX + 5, startY + 1, startZ + 4, random.nextFloat() < .3f ? settings.getPowerBlock() : Blocks.AIR.getDefaultState());
         BlockUtil.fill(world, startX + 4, startY + 1, startZ + 5, startX + 4, startY + 1, startZ + 5, Blocks.AIR.getDefaultState()); // One block guaranteed missing
 
