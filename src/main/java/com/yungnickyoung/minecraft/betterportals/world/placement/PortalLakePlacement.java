@@ -19,7 +19,7 @@ public class PortalLakePlacement extends Placement<NoPlacementConfig> {
     }
 
     @Override
-    public Stream<BlockPos> func_241857_a(WorldDecoratingHelper worldDecoratingHelper, Random random, NoPlacementConfig config, BlockPos pos) {
+    public Stream<BlockPos> getPositions(WorldDecoratingHelper worldDecoratingHelper, Random random, NoPlacementConfig config, BlockPos pos) {
         int x = random.nextInt(16) + pos.getX();
         int z = random.nextInt(16) + pos.getZ();
         int y = random.nextInt(16);

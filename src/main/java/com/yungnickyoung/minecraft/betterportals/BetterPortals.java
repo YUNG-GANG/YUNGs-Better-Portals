@@ -14,7 +14,7 @@ public class BetterPortals {
     public static CommonProxy proxy;
 
     public BetterPortals() {
-        proxy = DistExecutor.runForDist(() -> ClientProxy::new, () -> CommonProxy::new);
+        proxy = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
         proxy.init();
     }
 }

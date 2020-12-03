@@ -31,11 +31,11 @@ public class MonolithFeature extends Feature<NoFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader world, ChunkGenerator chunkGenerator, Random random, BlockPos pos, NoFeatureConfig config) {
+    public boolean generate(ISeedReader world, ChunkGenerator chunkGenerator, Random random, BlockPos pos, NoFeatureConfig config) {
         // Attempt to get dimension name, e.g. "minecraft:the_nether"
         String dimensionName;
         try {
-            dimensionName = Objects.requireNonNull(world.getWorld().getDimensionKey().func_240901_a_()).toString();
+            dimensionName = Objects.requireNonNull(world.getWorld().getDimensionKey().getLocation()).toString();
         } catch (NullPointerException e) {
             BetterPortals.LOGGER.error("ERROR: Unable to get dimension name!");
             return false;

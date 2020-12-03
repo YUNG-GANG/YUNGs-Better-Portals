@@ -38,12 +38,12 @@ public class PortalFluidBlock extends FlowingFluidBlock {
             ServerPlayerEntity playerEntity = ((ServerPlayerEntity) entity);
 
             // Find target dimension for this fluid
-            String sourceDimension = worldIn.getDimensionKey().func_240901_a_().toString();
+            String sourceDimension = worldIn.getDimensionKey().getLocation().toString();
             PortalLakeVariantSettings settings = PortalLakeVariants.get().getVariantForDimension(sourceDimension);
             String targetDimension = settings.getTargetDimension();
 
             MinecraftServer minecraftServer = playerEntity.getServer(); // the server itself
-            ServerWorld targetWorld = minecraftServer.getWorld(RegistryKey.func_240903_a_(Registry.WORLD_KEY, new ResourceLocation(targetDimension)));
+            ServerWorld targetWorld = minecraftServer.getWorld(RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(targetDimension)));
 
             // Prevent crash due to mojang bug that makes mod's json dimensions not exist upload first creation of world on server. A restart fixes this.
             if (targetWorld == null) {

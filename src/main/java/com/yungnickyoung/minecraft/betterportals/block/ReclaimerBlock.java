@@ -135,7 +135,7 @@ public class ReclaimerBlock extends ContainerBlock implements IBeaconBeamColorPr
     }
 
     private BlockState getPowerBlock(World world) {
-        String dimensionName = world.getDimensionKey().func_240901_a_().toString();
+        String dimensionName = world.getDimensionKey().getLocation().toString();
         MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(dimensionName);
         return settings == null ? null : settings.getPowerBlock();
     }

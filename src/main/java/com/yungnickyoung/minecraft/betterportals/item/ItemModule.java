@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.betterportals.item;
 
-import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.fluid.FluidModule;

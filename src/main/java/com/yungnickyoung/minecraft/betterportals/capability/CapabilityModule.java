@@ -131,12 +131,12 @@ public class CapabilityModule implements IModule {
 
         ServerPlayerEntity playerEntity = (ServerPlayerEntity) entity;
         // Find target dimension for this reclaimer
-        String sourceDimension = playerEntity.world.getDimensionKey().func_240901_a_().toString();
+        String sourceDimension = playerEntity.world.getDimensionKey().getLocation().toString();
         MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(sourceDimension);
         String targetDimension = settings.getTargetDimension();
 
         MinecraftServer minecraftServer = playerEntity.getServer(); // the server itself
-        ServerWorld targetWorld = minecraftServer.getWorld(RegistryKey.func_240903_a_(Registry.WORLD_KEY, new ResourceLocation(targetDimension)));
+        ServerWorld targetWorld = minecraftServer.getWorld(RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(targetDimension)));
 
         // Prevent crash due to mojang bug that makes mod's json dimensions not exist upload first creation of world on server. A restart fixes this.
         if (targetWorld == null) {

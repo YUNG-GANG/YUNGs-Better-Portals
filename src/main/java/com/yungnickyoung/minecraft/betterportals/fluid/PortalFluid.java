@@ -30,6 +30,7 @@ import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
+import javax.annotation.Nonnull;
 import java.util.Objects;
 import java.util.Random;
 import java.util.function.BiFunction;
@@ -151,7 +152,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
         }
 
         @Override
-        public boolean isSource(FluidState state) {
+        public boolean isSource(@Nonnull FluidState state) {
             return false;
         }
     }
@@ -167,11 +168,11 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
             builder.add(LEVEL_1_8);
         }
 
-        public int getLevel(FluidState state) {
+        public int getLevel(@Nonnull FluidState state) {
             return 8;
         }
 
-        public boolean isSource(FluidState state) {
+        public boolean isSource(@Nonnull FluidState state) {
             return true;
         }
     }
@@ -188,7 +189,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
             // Attempt to get dimension name, e.g. "minecraft:the_nether"
             String dimensionName;
             try {
-                dimensionName = Objects.requireNonNull( ((ChunkRenderCache)world).world.getDimensionKey().func_240901_a_()).toString();
+                dimensionName = Objects.requireNonNull( ((ChunkRenderCache)world).world.getDimensionKey().getLocation()).toString();
             } catch (Exception e) {
                 BetterPortals.LOGGER.error("ERROR: Unable to get dimension name! Using default portal color...");
                 return 0xEE190040;

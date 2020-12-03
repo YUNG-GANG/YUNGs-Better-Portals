@@ -35,11 +35,11 @@ public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
     }
 
     @Override
-    public boolean func_241855_a(ISeedReader world, ChunkGenerator chunkGenerator, Random random, BlockPos pos, BlockStateFeatureConfig config) {
+    public boolean generate(ISeedReader world, ChunkGenerator chunkGenerator, Random random, BlockPos pos, BlockStateFeatureConfig config) {
         // Attempt to get dimension name, e.g. "minecraft:the_nether"
         String dimensionName;
         try {
-            dimensionName = Objects.requireNonNull(world.getWorld().getDimensionKey().func_240901_a_()).toString();
+            dimensionName = Objects.requireNonNull(world.getWorld().getDimensionKey().getLocation()).toString();
         } catch (NullPointerException e) {
             BetterPortals.LOGGER.error("ERROR: Unable to get dimension name!");
             return false;
@@ -54,7 +54,7 @@ public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
             return false;
         }
 
-        /**
+        /*
          * Vanilla lake gen logic starts here.
          */
         while(pos.getY() > 5 && world.isAirBlock(pos)) {
@@ -66,7 +66,7 @@ public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
         }
 
         pos = pos.down(4);
-        if (world.func_241827_a(SectionPos.from(pos), Structure.field_236381_q_).findAny().isPresent()) {
+        if (world.func_241827_a(SectionPos.from(pos), Structure.VILLAGE).findAny().isPresent()) {
             return false;
         }
 
@@ -137,7 +137,7 @@ public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
                         BlockPos blockpos = pos.add(x, y - 1, z);
                         if (isDirt(world.getBlockState(blockpos).getBlock()) && world.getLightFor(LightType.SKY, pos.add(x, y, z)) > 0) {
                             Biome biome = world.getBiome(blockpos);
-                            if (biome.func_242440_e().func_242502_e().getTop().isIn(Blocks.MYCELIUM)) {
+                            if (biome.getGenerationSettings().getSurfaceBuilderConfig().getTop().isIn(Blocks.MYCELIUM)) {
                                 world.setBlockState(blockpos, Blocks.MYCELIUM.getDefaultState(), 2);
                             } else {
                                 world.setBlockState(blockpos, Blocks.GRASS_BLOCK.getDefaultState(), 2);

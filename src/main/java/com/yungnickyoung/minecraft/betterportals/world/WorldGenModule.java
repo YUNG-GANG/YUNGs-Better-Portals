@@ -10,7 +10,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.ChanceConfig;
-import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.NoPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.common.MinecraftForge;
@@ -22,14 +21,14 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class WorldGenModule implements IModule {
     // Portal Lake
     public static Feature<BlockStateFeatureConfig> PORTAL_LAKE = new PortalLakeFeature(BlockStateFeatureConfig.field_236455_a_);
-    public static Placement<NoPlacementConfig> PORTAL_LAKE_PLACEMENT = new PortalLakePlacement(NoPlacementConfig.field_236555_a_);
+    public static Placement<NoPlacementConfig> PORTAL_LAKE_PLACEMENT = new PortalLakePlacement(NoPlacementConfig.CODEC);
 //    public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = PORTAL_LAKE.withConfiguration(new NoFeatureConfig()).withPlacement(PORTAL_LAKE_PLACEMENT.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
 //    public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = Feature.LAKE.withConfiguration(new BlockStateFeatureConfig(BlockModule.PORTAL_FLUID_BLOCK.getDefaultState())).withPlacement(Placement.LAVA_LAKE.configure(new ChanceConfig(80)));
     public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = PORTAL_LAKE.withConfiguration(new BlockStateFeatureConfig(BlockModule.PORTAL_FLUID_BLOCK.getDefaultState())).withPlacement(Placement.LAVA_LAKE.configure(new ChanceConfig(80)));
 
     // Monolith
     public static Feature<NoFeatureConfig> MONOLITH = new MonolithFeature(NoFeatureConfig.field_236558_a_);
-    public static ConfiguredFeature<?, ?> CONFIGURED_MONOLITH = MONOLITH.withConfiguration(new NoFeatureConfig()).withPlacement(Placement.field_242897_C.configure(new FeatureSpreadConfig(1)));
+    public static ConfiguredFeature<?, ?> CONFIGURED_MONOLITH = MONOLITH.withConfiguration(new NoFeatureConfig()).withPlacement(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(1)));
 
     public void init() {
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, WorldGenModule::registerFeatures);
@@ -61,7 +60,7 @@ public class WorldGenModule implements IModule {
             () -> CONFIGURED_PORTAL_LAKE
         );
         // Don't add monoliths to basalt deltas biome (there isn't really enough room for them to spawn)
-        if (event.getName().equals("minecraft:basalt_deltas")) {
+        if (event.getName().toString().equals("minecraft:basalt_deltas")) {
             return;
         }
         // Add monolith features
