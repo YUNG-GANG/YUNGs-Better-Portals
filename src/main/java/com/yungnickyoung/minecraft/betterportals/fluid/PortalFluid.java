@@ -196,8 +196,8 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
             }
 
             RGBAColor fluidColor = PortalLakeVariants.get().getVariantForDimension(dimensionName).getFluidColor();
-            currColor = fluidColor.toInt();
-            return fluidColor.toInt();
+            currColor = fluidColor.getColorValue();
+            return fluidColor.getColorValue();
         }
 
         @Override

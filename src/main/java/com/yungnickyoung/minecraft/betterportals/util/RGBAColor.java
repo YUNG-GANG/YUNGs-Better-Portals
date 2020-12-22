@@ -53,13 +53,28 @@ public class RGBAColor {
         this.alpha = alpha;
     }
 
-    public int toInt() {
+    /**
+     * Returns a vanilla-compatible integer representation of this color.
+     */
+    public int getColorValue() {
         String stringColor =  (alpha + red + green + blue).toLowerCase();
         try {
             return (int) Long.parseLong(stringColor, 16); // Long is necessary here since int overflows after 0x7FFFFFFF
         } catch (Exception e) {
             BetterPortals.LOGGER.error("Unable to parse color string {} as base 16 int. Using default color...", stringColor);
-            return 0xEE190040;
+            return 0xFFFFFFFF;
         }
+    }
+
+    /**
+     * Returns a vanilla-compatible float[] representation of this color.
+     * Note that this does not include the alpha channel.
+     */
+    public float[] getColorComponentValues() {
+        int colorValue = this.getColorValue();
+        int r = (colorValue & 16711680) >> 16;
+        int g = (colorValue & '\uff00') >> 8;
+        int b = colorValue & 255;
+        return new float[] { (float)r / 255f, (float)g / 255f, (float)b / 255f };
     }
 }

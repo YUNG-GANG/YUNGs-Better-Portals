@@ -9,24 +9,16 @@ import com.yungnickyoung.minecraft.betterportals.fluid.FluidModule;
 import com.yungnickyoung.minecraft.betterportals.item.ItemModule;
 import com.yungnickyoung.minecraft.betterportals.tileentity.TileEntityModule;
 import com.yungnickyoung.minecraft.betterportals.world.WorldGenModule;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Map;
 
 public class ModuleLoader {
-    // Singleton stuff
+    // Singleton instance
     private static final ModuleLoader instance = new ModuleLoader();
 
     private ModuleLoader() {
-        commonModules.put(ConfigModule.class, new ConfigModule());
-        commonModules.put(BlockModule.class, new BlockModule());
-        commonModules.put(CapabilityModule.class, new CapabilityModule());
-        commonModules.put(FluidModule.class, new FluidModule());
-        commonModules.put(ItemModule.class, new ItemModule());
-        commonModules.put(TileEntityModule.class, new TileEntityModule());
-        commonModules.put(WorldGenModule.class, new WorldGenModule());
-        clientModules.put(ClientModule.class, new ClientModule());
+        registerCommonModules();
+        registerClientModules();
     }
 
     public static ModuleLoader instance() {
@@ -38,14 +30,35 @@ public class ModuleLoader {
     Map<Class<? extends IModule>, IModule> clientModules = Maps.newHashMap();
 
     /**
-     * Initializes all modules.
+     * Initializes all common modules.
      */
-    public void initModules() {
+    public void initCommonModules() {
         commonModules.values().forEach(IModule::init);
     }
 
-    @OnlyIn(Dist.CLIENT)
     public void initClientModules() {
         clientModules.values().forEach(IModule::init);
+    }
+
+    private void registerCommonModules() {
+        registerCommonModule(new ConfigModule());
+        registerCommonModule(new BlockModule());
+        registerCommonModule(new CapabilityModule());
+        registerCommonModule(new FluidModule());
+        registerCommonModule(new ItemModule());
+        registerCommonModule(new TileEntityModule());
+        registerCommonModule(new WorldGenModule());
+    }
+
+    private void registerClientModules() {
+        registerClientModule(new ClientModule());
+    }
+
+    private <T extends IModule> void registerCommonModule(T module) {
+        commonModules.put(module.getClass(), module);
+    }
+
+    private <T extends IModule> void registerClientModule(T module) {
+        clientModules.put(module.getClass(), module);
     }
 }

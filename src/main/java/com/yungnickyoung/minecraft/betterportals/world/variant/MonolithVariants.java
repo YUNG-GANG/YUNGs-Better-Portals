@@ -1,5 +1,7 @@
 package com.yungnickyoung.minecraft.betterportals.world.variant;
 
+import com.google.common.collect.Lists;
+import com.yungnickyoung.minecraft.betterportals.util.RGBAColor;
 import com.yungnickyoung.minecraft.yungsapi.world.BlockSetSelector;
 import net.minecraft.block.Blocks;
 
@@ -42,8 +44,21 @@ public class MonolithVariants {
             )
             .setPowerBlock(Blocks.GOLD_BLOCK.getDefaultState())
             .setDecorationBlock(Blocks.YELLOW_GLAZED_TERRACOTTA.getDefaultState())
+            .setBeamStopBlocks(
+                Lists.newArrayList(
+                    Blocks.OBSIDIAN.getDefaultState()
+                )
+            )
+            .setUnpoweredBeamColor(new RGBAColor(
+                "14", "0c", "24", "FF"
+            ))
+            .setPoweredBeamColor(new RGBAColor(
+                "FF", "DC", "73", "FF"
+            ))
             .setMinY(35)
             .setMaxY(110)
+            .setPlayerTeleportedMinY(6)
+            .setPlayerTeleportedMaxY(30)
             .setSpawnChance(.1)
             .setSpawnDimension("minecraft:the_nether")
             .setTargetDimension("minecraft:overworld")

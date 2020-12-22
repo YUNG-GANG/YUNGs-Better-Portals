@@ -27,7 +27,7 @@ import javax.annotation.Nullable;
 import java.util.function.ToIntFunction;
 
 @SuppressWarnings("deprecation")
-public class ReclaimerBlock extends ContainerBlock implements IBeaconBeamColorProvider {
+public class ReclaimerBlock extends ContainerBlock {
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     public ReclaimerBlock() {
@@ -59,7 +59,7 @@ public class ReclaimerBlock extends ContainerBlock implements IBeaconBeamColorPr
     }
 
     @Override
-    public void neighborChanged(BlockState blockState, World world, BlockPos pos, Block p_220069_4_, BlockPos p_220069_5_, boolean p_220069_6_) {
+    public void neighborChanged(BlockState blockState, World world, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         if (!world.isRemote) {
             boolean wasPowered = false;
             try {
@@ -103,10 +103,15 @@ public class ReclaimerBlock extends ContainerBlock implements IBeaconBeamColorPr
         return new ReclaimerTileEntity();
     }
 
-    @Nonnull
-    @Override
-    public DyeColor getColor() {
-        return DyeColor.WHITE;
+    public float[] getColor(World world, boolean isPowered) {
+        String dimensionName = world.getDimensionKey().getLocation().toString();
+        MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(dimensionName);
+        if (settings == null) {
+            return DyeColor.WHITE.getColorComponentValues(); // Use white as default if no monolith config exists for this dimension
+        }
+        return isPowered
+            ? settings.getPoweredBeamColor().getColorComponentValues()
+            : settings.getUnpoweredBeamColor().getColorComponentValues();
     }
 
     private static ToIntFunction<BlockState> getLightValue(int lightValue) {

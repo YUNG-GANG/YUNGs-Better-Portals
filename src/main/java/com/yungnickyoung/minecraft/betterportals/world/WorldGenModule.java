@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.betterportals.world;
 
+import com.google.common.collect.ImmutableSet;
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.module.IModule;
@@ -7,6 +8,7 @@ import com.yungnickyoung.minecraft.betterportals.world.feature.MonolithFeature;
 import com.yungnickyoung.minecraft.betterportals.world.feature.PortalLakeFeature;
 import com.yungnickyoung.minecraft.betterportals.world.placement.PortalLakePlacement;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.*;
 import net.minecraft.world.gen.placement.ChanceConfig;
@@ -25,6 +27,12 @@ public class WorldGenModule implements IModule {
 //    public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = PORTAL_LAKE.withConfiguration(new NoFeatureConfig()).withPlacement(PORTAL_LAKE_PLACEMENT.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
 //    public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = Feature.LAKE.withConfiguration(new BlockStateFeatureConfig(BlockModule.PORTAL_FLUID_BLOCK.getDefaultState())).withPlacement(Placement.LAVA_LAKE.configure(new ChanceConfig(80)));
     public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = PORTAL_LAKE.withConfiguration(new BlockStateFeatureConfig(BlockModule.PORTAL_FLUID_BLOCK.getDefaultState())).withPlacement(Placement.LAVA_LAKE.configure(new ChanceConfig(80)));
+    public static PointOfInterestType PORTAL_LAKE_POI = PointOfInterestType.registerBlockStates(new PointOfInterestType(
+        "portal_lake",
+        ImmutableSet.copyOf(BlockModule.PORTAL_FLUID_BLOCK.getStateContainer().getValidStates()),
+        0,
+        1
+    ));
 
     // Monolith
     public static Feature<NoFeatureConfig> MONOLITH = new MonolithFeature(NoFeatureConfig.field_236558_a_);
@@ -33,6 +41,7 @@ public class WorldGenModule implements IModule {
     public void init() {
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, WorldGenModule::registerFeatures);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Placement.class, WorldGenModule::registerDecorators);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(PointOfInterestType.class, WorldGenModule::registerPointsofInterest);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, WorldGenModule::onBiomeLoad);
     }
 
@@ -49,6 +58,13 @@ public class WorldGenModule implements IModule {
      */
     private static void registerDecorators(RegistryEvent.Register<Placement<?>> event) {
         event.getRegistry().register(PORTAL_LAKE_PLACEMENT.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "portal_lake")));
+    }
+
+    /**
+     * Registers Portal Lake (aka Rift) decorator.
+     */
+    private static void registerPointsofInterest(RegistryEvent.Register<PointOfInterestType> event) {
+        event.getRegistry().register(PORTAL_LAKE_POI.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "portal_lake")));
     }
 
     /**

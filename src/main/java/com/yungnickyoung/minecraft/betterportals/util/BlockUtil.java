@@ -22,6 +22,22 @@ public class BlockUtil {
         }
     }
 
+    public static void replaceAir(ISeedReader world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, BlockState blockState) {
+        BlockPos.Mutable currPos = new BlockPos.Mutable();
+        BlockState currBlock;
+        for (int x = minX; x <= maxX; ++x) {
+            for (int y = minY; y <= maxY; ++y) {
+                for (int z = minZ; z <= maxZ; ++z) {
+                    currPos.setPos(x, y, z);
+                    currBlock = world.getBlockState(currPos);
+                    if (currBlock == Blocks.AIR.getDefaultState() || currBlock == Blocks.CAVE_AIR.getDefaultState()) {
+                        world.setBlockState(currPos, blockState, 2);
+                    }
+                }
+            }
+        }
+    }
+
     public static void fillRandom(ISeedReader world, Random random, float chance, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, BlockState blockState) {
         for (int x = minX; x <= maxX; ++x) {
             for (int y = minY; y <= maxY; ++y) {

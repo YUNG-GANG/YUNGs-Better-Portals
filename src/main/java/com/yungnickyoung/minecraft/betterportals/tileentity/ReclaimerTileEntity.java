@@ -5,7 +5,11 @@ import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.block.ReclaimerBlock;
 import com.yungnickyoung.minecraft.betterportals.capability.CapabilityModule;
 import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
+import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
+import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
 import net.minecraft.block.BlockState;
+import net.minecraft.entity.CreatureEntity;
+import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
@@ -27,9 +31,11 @@ import java.util.List;
 
 public class ReclaimerTileEntity extends TileEntity implements ITickableTileEntity {
     private List<BeamPiece> beamSegments = Lists.newArrayList();
-    private List<BeamPiece> beamColorSegments = Lists.newArrayList();
-    private int beaconSize = -1;
-    List<PlayerEntity> prevPlayersInBeam = Lists.newArrayList();
+    private List<BeamPiece> tempBeamSegments = Lists.newArrayList(); // temporary list used for building the beamSegments
+    private int tempBeamMaxY = -1; // temporary value to store the top beam y position as we build the list of beamSegments
+    private int beamMaxY; // stored value for topmost y-coordinate of beam
+    public int ticksExisted;
+    private float activeRotation;
 
     public ReclaimerTileEntity() {
         super(TileEntityModule.RECLAIMER_TILE_ENTITY);
@@ -37,6 +43,11 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
 
     @Override
     public void tick() {
+        this.ticksExisted++;
+        if (this.world != null && this.world.isRemote) {
+            ++this.activeRotation;
+        }
+
         // Play ambient sound if powered
         if (this.world.getBlockState(this.pos).getBlock() == BlockModule.RECLAIMER_BLOCK) {
             if (this.world.getBlockState(this.pos).get(ReclaimerBlock.POWERED)) {
@@ -51,92 +62,130 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
         int posZ = this.pos.getZ();
         BlockPos currPos;
 
-        if (this.beaconSize < posY) {
+        // Generate beams
+        if (this.tempBeamMaxY < posY) {
             currPos = this.pos;
-            this.beamColorSegments = Lists.newArrayList();
-            this.beaconSize = currPos.getY() - 1;
+            this.tempBeamSegments = Lists.newArrayList();
+            this.tempBeamMaxY = currPos.getY() - 1;
         } else {
-            currPos = new BlockPos(posX, this.beaconSize + 1, posZ);
+            currPos = new BlockPos(posX, this.tempBeamMaxY + 1, posZ);
         }
 
-        BeamPiece beacontileentity$beamsegment = this.beamColorSegments.isEmpty() ? null : this.beamColorSegments.get(this.beamColorSegments.size() - 1);
+        boolean hasHitBeamBlocker = false;
+
+        BeamPiece beamSegment = this.tempBeamSegments.isEmpty() ? null : this.tempBeamSegments.get(this.tempBeamSegments.size() - 1);
         int surfaceHeight = this.world.getHeight(Heightmap.Type.WORLD_SURFACE, posX, posZ);
 
         for (int i = 0; i < 10 && currPos.getY() <= surfaceHeight; i++) {
             BlockState blockstate = this.world.getBlockState(currPos);
-            float[] colors = blockstate.getBeaconColorMultiplier(this.world, currPos, this.pos);
+
+            // Determine color of this piece
+            float[] colors;
+            if (blockstate.getBlock() == BlockModule.RECLAIMER_BLOCK) {
+                // Reclaimers use a special method that allows for dimension-specific beam coloring
+                colors = ((ReclaimerBlock)blockstate.getBlock()).getColor(world, this.isPowered());
+            } else {
+                colors = blockstate.getBeaconColorMultiplier(this.world, currPos, this.pos);
+            }
+
+            // Check for beam blockers
+            String dimensionName = world.getDimensionKey().getLocation().toString();
+            MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(dimensionName);
+            if (settings != null) {
+                List<BlockState> beamBlockers = settings.getBeamStopBlocks();
+                if (beamBlockers.contains(blockstate)) {
+                    hasHitBeamBlocker = true;
+                    break;
+                }
+            }
+
+            // If this block is colored, we need to use its colors
             if (colors != null) {
-                if (this.beamColorSegments.size() <= 1) {
-                    beacontileentity$beamsegment = new BeamPiece(colors);
-                    this.beamColorSegments.add(beacontileentity$beamsegment);
-                } else if (beacontileentity$beamsegment != null) {
-                    if (Arrays.equals(colors, beacontileentity$beamsegment.colors)) {
-                        beacontileentity$beamsegment.incrementHeight();
+                if (this.tempBeamSegments.size() <= 1) { // No beam yet -> create new piece with these colors
+                    beamSegment = new BeamPiece(colors);
+                    this.tempBeamSegments.add(beamSegment);
+                } else if (beamSegment != null) { // Beam already exists -> new beam's color is average of curr color with new color
+                    if (Arrays.equals(colors, beamSegment.colors)) { // Curr beam color equals new color -> no need to compute average
+                        beamSegment.incrementHeight();
                     } else {
-                        beacontileentity$beamsegment = new BeamPiece(new float[]{(beacontileentity$beamsegment.colors[0] + colors[0]) / 2.0F, (beacontileentity$beamsegment.colors[1] + colors[1]) / 2.0F, (beacontileentity$beamsegment.colors[2] + colors[2]) / 2.0F});
-                        this.beamColorSegments.add(beacontileentity$beamsegment);
+                        beamSegment = new BeamPiece(new float[] {
+                            (beamSegment.colors[0] + colors[0]) / 2.0F, // Red
+                            (beamSegment.colors[1] + colors[1]) / 2.0F, // Green
+                            (beamSegment.colors[2] + colors[2]) / 2.0F  // Blue
+                        });
+                        this.tempBeamSegments.add(beamSegment);
                     }
                 }
             } else {
-                beacontileentity$beamsegment.incrementHeight();
+                beamSegment.incrementHeight();
             }
 
             currPos = currPos.up();
-            ++this.beaconSize;
+            ++this.tempBeamMaxY;
         }
 
-        if (this.beaconSize >= surfaceHeight) {
-            this.beaconSize = -1;
-            this.beamSegments = this.beamColorSegments;
+        if (this.tempBeamMaxY >= surfaceHeight || hasHitBeamBlocker) {
+            // If the beam didn't hit a beam blocker, extend its height into the sky
+            if (!hasHitBeamBlocker) {
+                this.tempBeamMaxY = 1024;
+                this.tempBeamSegments.get(this.tempBeamSegments.size() - 1).setHeight(1024);
+            }
+            this.beamMaxY = this.tempBeamMaxY;
+            this.tempBeamMaxY = -1;
+            this.beamSegments = this.tempBeamSegments;
         }
 
         boolean isPowered = this.isPowered();
+        int floatAmp = isPowered ? 5 : 2; // Powered beams levitate entities more quickly
         List<PlayerEntity> playersInBeam = getPlayersInBeam();
+        List<CreatureEntity> nonPlayersInBeam = getNonPlayersInBeam();
+        List<ItemEntity> itemsInBeam = getItemsInBeam();
+
+        // Float up items in beam
+        for (ItemEntity entity : itemsInBeam) {
+            double floatSpeed = isPowered() ? .2 : .08;
+            entity.setMotion(entity.getMotion().getX() / 1.5, floatSpeed, entity.getMotion().getZ() / 1.5);
+        }
+
+        // Float up non player entities in beam
+        for (CreatureEntity entity : nonPlayersInBeam) {
+            entity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, floatAmp, false, false));
+        }
 
         // Effects and teleportation for players in beam
-        int floatAmp = isPowered ? 5 : 2; // Powered beams levitate the player more quickly
         for (PlayerEntity playerEntity : playersInBeam) {
-            // Float player up
-            playerEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, floatAmp, false, false));
+            // Float player up if not crouching, or down if crouching
+            if (playerEntity.isCrouching()) {
+                playerEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, -5, false, false));
+            } else {
+                playerEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, floatAmp, false, false));
+            }
 
             // Powered reclaimers act as teleporters
             if (isPowered) {
-                // Get portal info capability for player
                 IPlayerPortalInfo playerPortalInfo = playerEntity.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).resolve().orElse(null);
-                if (playerPortalInfo == null) continue;
-
-                // New player in beam -> set initial teleportation state
-                if (!prevPlayersInBeam.contains(playerEntity)) {
-                    setPortal(playerPortalInfo);
+                if (playerPortalInfo == null) {
+                    continue;
                 }
+                playerPortalInfo.enterReclaimer();
             }
         }
-
-        // If player was in beam and no longer is, set in portal to false
-        prevPlayersInBeam.stream().filter(player -> !playersInBeam.contains(player)).forEach(player -> {
-            // Get portal info capability for player
-            IPlayerPortalInfo playerPortalInfo = player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).resolve().orElse(null);
-            if (playerPortalInfo != null) {
-                playerPortalInfo.setInPortal(false);
-            }
-        });
-
-        // Update list of players previously in portal
-        prevPlayersInBeam = playersInBeam;
     }
 
     // TODO - use Server-side entity instead?
     private List<PlayerEntity> getPlayersInBeam() {
-        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, this.world.getHeight(), pos.getZ() + 1);
+        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, this.beamMaxY, pos.getZ() + 1);
         return this.world.getEntitiesWithinAABB(PlayerEntity.class, axisAlignedBB);
     }
 
-    private void setPortal(IPlayerPortalInfo playerPortalInfo) {
-        if (playerPortalInfo.getPortalCooldown() > 0) {
-            playerPortalInfo.setPortalCooldown(300);
-        } else {
-            playerPortalInfo.setInPortal(true);
-        }
+    private List<CreatureEntity> getNonPlayersInBeam() {
+        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, this.beamMaxY, pos.getZ() + 1);
+        return this.world.getEntitiesWithinAABB(CreatureEntity.class, axisAlignedBB);
+    }
+
+    private List<ItemEntity> getItemsInBeam() {
+        AxisAlignedBB axisAlignedBB = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, this.beamMaxY, pos.getZ() + 1);
+        return this.world.getEntitiesWithinAABB(ItemEntity.class, axisAlignedBB);
     }
 
     public void read(BlockState state, @Nonnull CompoundNBT nbt) {
@@ -189,6 +238,12 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
         return INFINITE_EXTENT_AABB;
     }
 
+
+    @OnlyIn(Dist.CLIENT)
+    public float getActiveRotation(float partialTicks) {
+        return (this.activeRotation + partialTicks) * -0.0375F;
+    }
+
     public static class BeamPiece {
         /** RGB (0 to 1.0) colors of this beam segment */
         private final float[] colors;
@@ -201,6 +256,10 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
 
         protected void incrementHeight() {
             ++this.height;
+        }
+
+        protected void setHeight(int height) {
+            this.height = height;
         }
 
         /**
