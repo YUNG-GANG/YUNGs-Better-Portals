@@ -9,6 +9,7 @@ import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.SectionPos;
 import net.minecraft.world.ISeedReader;
@@ -54,19 +55,28 @@ public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
             return false;
         }
 
-        /*
-         * Vanilla lake gen logic starts here.
-         */
-        while(pos.getY() > 5 && world.isAirBlock(pos)) {
-            pos = pos.down();
-        }
-
-        if (pos.getY() <= 4) {
+        // Determine if we should spawn
+        if (random.nextFloat() > settings.getSpawnChance()) {
             return false;
         }
 
-        pos = pos.down(4);
-        if (world.func_241827_a(SectionPos.from(pos), Structure.VILLAGE).findAny().isPresent()) {
+        // Set position
+        BlockPos.Mutable mutable = pos.toMutable();
+        mutable.setY((settings.getMaxY() - settings.getMinY()) + settings.getMinY());
+
+        /*
+         * Vanilla lake gen logic starts here.
+         */
+        while(mutable.getY() > 5 && world.isAirBlock(mutable)) {
+            mutable.move(Direction.DOWN);
+        }
+
+        if (mutable.getY() <= 4) {
+            return false;
+        }
+
+        mutable.move(Direction.DOWN, 4);
+        if (world.func_241827_a(SectionPos.from(mutable), Structure.VILLAGE).findAny().isPresent()) {
             return false;
         }
 
@@ -103,12 +113,12 @@ public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
                 for (int y = 0; y < 8; ++y) {
                     boolean flag = !liquidMask[(x * 16 + z) * 8 + y] && (x < 15 && liquidMask[((x + 1) * 16 + z) * 8 + y] || x > 0 && liquidMask[((x - 1) * 16 + z) * 8 + y] || z < 15 && liquidMask[(x * 16 + z + 1) * 8 + y] || z > 0 && liquidMask[(x * 16 + (z - 1)) * 8 + y] || y < 7 && liquidMask[(x * 16 + z) * 8 + y + 1] || y > 0 && liquidMask[(x * 16 + z) * 8 + (y - 1)]);
                     if (flag) {
-                        Material material = world.getBlockState(pos.add(x, y, z)).getMaterial();
+                        Material material = world.getBlockState(mutable.add(x, y, z)).getMaterial();
                         if (y >= 4 && material.isLiquid()) {
                             return false;
                         }
 
-                        if (y < 4 && !material.isSolid() && world.getBlockState(pos.add(x, y, z)) != PORTAL_FLUID) {
+                        if (y < 4 && !material.isSolid() && world.getBlockState(mutable.add(x, y, z)) != PORTAL_FLUID) {
                             return false;
                         }
                     }
@@ -121,7 +131,7 @@ public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
             for(int z = 0; z < 16; ++z) {
                 for(int y = 0; y < 8; ++y) {
                     if (liquidMask[(x * 16 + z) * 8 + y]) {
-                        BlockPos newPos = pos.add(x, y, z);
+                        BlockPos newPos = mutable.add(x, y, z);
                         world.setBlockState(newPos, y >= 4 ? AIR : PORTAL_FLUID, 2);
                         world.getPendingFluidTicks().scheduleTick(newPos, PORTAL_FLUID.getFluidState().getFluid(), PORTAL_FLUID.getFluidState().getFluid().getTickRate(world));
                     }
@@ -134,8 +144,8 @@ public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
             for(int z = 0; z < 16; ++z) {
                 for(int y = 4; y < 8; ++y) {
                     if (liquidMask[(x * 16 + z) * 8 + y]) {
-                        BlockPos blockpos = pos.add(x, y - 1, z);
-                        if (isDirt(world.getBlockState(blockpos).getBlock()) && world.getLightFor(LightType.SKY, pos.add(x, y, z)) > 0) {
+                        BlockPos blockpos = mutable.add(x, y - 1, z);
+                        if (isDirt(world.getBlockState(blockpos).getBlock()) && world.getLightFor(LightType.SKY, mutable.add(x, y, z)) > 0) {
                             Biome biome = world.getBiome(blockpos);
                             if (biome.getGenerationSettings().getSurfaceBuilderConfig().getTop().isIn(Blocks.MYCELIUM)) {
                                 world.setBlockState(blockpos, Blocks.MYCELIUM.getDefaultState(), 2);
@@ -153,8 +163,8 @@ public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
             for(int z = 0; z < 16; ++z) {
                 for(int y = 0; y < 8; ++y) {
                     boolean flag1 = !liquidMask[(x * 16 + z) * 8 + y] && (x < 15 && liquidMask[((x + 1) * 16 + z) * 8 + y] || x > 0 && liquidMask[((x - 1) * 16 + z) * 8 + y] || z < 15 && liquidMask[(x * 16 + z + 1) * 8 + y] || z > 0 && liquidMask[(x * 16 + (z - 1)) * 8 + y] || y < 7 && liquidMask[(x * 16 + z) * 8 + y + 1] || y > 0 && liquidMask[(x * 16 + z) * 8 + (y - 1)]);
-                    if (flag1 && (y < 4 || random.nextInt(2) != 0) && world.getBlockState(pos.add(x, y, z)).getMaterial().isSolid()) {
-                        world.setBlockState(pos.add(x, y, z), settings.getBlockSelector().get(random), 2);
+                    if (flag1 && (y < 4 || random.nextInt(2) != 0) && world.getBlockState(mutable.add(x, y, z)).getMaterial().isSolid()) {
+                        world.setBlockState(mutable.add(x, y, z), settings.getBlockSelector().get(random), 2);
                     }
                 }
             }
