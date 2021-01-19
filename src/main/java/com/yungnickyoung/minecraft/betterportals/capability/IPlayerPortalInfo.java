@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundEvents;
 
+import java.util.Random;
 import java.util.function.BiConsumer;
 
 public interface IPlayerPortalInfo {
@@ -186,7 +187,7 @@ public interface IPlayerPortalInfo {
             }
 
             if (this.getTimeInPortalFluid() == 0.0F) {
-                Minecraft.getInstance().getSoundHandler().play(SimpleSound.ambientWithoutAttenuation(SoundEvents.BLOCK_PORTAL_TRIGGER, 0.5F * 0.4F + 0.8F, 0.25F));
+                Minecraft.getInstance().getSoundHandler().play(SimpleSound.ambientWithoutAttenuation(SoundEvents.BLOCK_PORTAL_TRIGGER, (new Random()).nextFloat() * 0.4F + 0.8F, 0.25F));
             }
 
             this.offsetTimeInPortalFluid(0.0125F);
@@ -221,7 +222,7 @@ public interface IPlayerPortalInfo {
             }
 
             if (this.getTimeInReclaimer() == 0.0F) {
-                Minecraft.getInstance().getSoundHandler().play(SimpleSound.ambientWithoutAttenuation(SoundEvents.BLOCK_PORTAL_TRIGGER, 0.8F * 0.4F + 0.8F, 0.25F));
+                Minecraft.getInstance().getSoundHandler().play(SimpleSound.ambientWithoutAttenuation(SoundEvents.BLOCK_PORTAL_TRIGGER, 0.4F + 0.8F, 0.25F));
             }
 
             this.offsetTimeInReclaimer(0.0125F);

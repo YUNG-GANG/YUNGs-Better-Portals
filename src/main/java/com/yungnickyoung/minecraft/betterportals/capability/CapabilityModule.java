@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.betterportals.capability;
 
-import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import com.yungnickyoung.minecraft.betterportals.world.MonolithTeleporter;
@@ -91,7 +90,6 @@ public class CapabilityModule implements IModule {
             if (event.player instanceof ClientPlayerEntity) {
                 playerPortalInfo.clientTick(event.player);
             }
-            BetterPortals.LOGGER.info("");
         }
     }
 }
