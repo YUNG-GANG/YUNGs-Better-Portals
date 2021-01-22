@@ -21,7 +21,7 @@ public class ClientModule implements IModule {
 
     private static void registerClientListeners() {
         FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientModule::onClientSetup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientModule::addColorHandlers);
+//        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientModule::addColorHandlers);
         MinecraftForge.EVENT_BUS.addListener(OverlayRenderer::renderUnderwaterOverlay);
         MinecraftForge.EVENT_BUS.addListener(OverlayRenderer::renderPortalOverlay);
         MinecraftForge.EVENT_BUS.addListener(OverlayRenderer::renderReclaimerOverlay);
@@ -32,14 +32,14 @@ public class ClientModule implements IModule {
     /**
      * Adds color mask to the dimensional plasma fluid bucket item.
      */
-    private static void addColorHandlers(ColorHandlerEvent.Item event) {
-        event.getItemColors().register(
-            (stack, index) -> FluidUtil.getFluidContained(stack)
-                .map(fstack -> fstack.getFluid().getAttributes().getColor(fstack))
-                .orElse(0xFFFFFFFF),
-            ItemModule.PORTAL_BUCKET
-        );
-    }
+//    private static void addColorHandlers(ColorHandlerEvent.Item event) {
+//        event.getItemColors().register(
+//            (stack, index) -> FluidUtil.getFluidContained(stack)
+//                .map(fstack -> fstack.getFluid().getAttributes().getColor(fstack))
+//                .orElse(0xFFFFFFFF),
+//            ItemModule.PORTAL_BUCKET
+//        );
+//    }
 
     /**
      * Binds TE renderer(s) and adds necessary render layers for portal fluid and reclaimer blocks.
