@@ -99,6 +99,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
         }
     }
 
+    @Override
     public int getTickRate(IWorldReader world) {
         return 35;
     }
