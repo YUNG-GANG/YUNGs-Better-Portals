@@ -241,7 +241,7 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
 
     @OnlyIn(Dist.CLIENT)
     public float getActiveRotation(float partialTicks) {
-        return (this.activeRotation + partialTicks) * -0.0375F;
+        return (this.activeRotation + partialTicks) * (this.isPowered() ? -.2F : -0.0375F);
     }
 
     public static class BeamPiece {

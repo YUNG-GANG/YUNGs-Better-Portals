@@ -54,7 +54,9 @@ public class ReclaimerTileEntityRenderer extends TileEntityRenderer<ReclaimerTil
         Vector3f rotVec = new Vector3f(0.5f, 1.0f, 0.5f);
         rotVec.normalize();
         matrixStack.rotate(new Quaternion(rotVec, rotDegrees, true)); // Rotate animation
+
         this.smallCubeRenderer.render(matrixStack, renderTypeBuffer.getBuffer(RenderType.getEntityCutoutNoCull(SMALL_CUBE_TEXTURE)), combinedLightIn, combinedOverlayIn);
+
         matrixStack.pop();
     }
 
