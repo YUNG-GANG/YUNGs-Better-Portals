@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.betterportals.world;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
+import com.yungnickyoung.minecraft.betterportals.capability.IEntityPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.util.BlockUtil;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariantSettings;
@@ -99,7 +100,7 @@ public class PortalLakeTeleporter implements ITeleporter {
     }
 
     /**
-     * Static method for initializing teleportation.
+     * Static method for initializing player teleportation.
      */
     public static void initTeleport(Entity entity, IPlayerPortalInfo playerPortalInfo) {
         // Must not be riding anything
@@ -119,13 +120,41 @@ public class PortalLakeTeleporter implements ITeleporter {
 
         // Prevent crash due to mojang bug that makes mod's json dimensions not exist upload first creation of world on server. A restart fixes this.
         if (targetWorld == null) {
-            BetterPortals.LOGGER.error("Unable to enter dimension.");
-            BetterPortals.LOGGER.error("This is due to a bug in vanilla Minecraft. Please restart the game to fix this.");
+            BetterPortals.LOGGER.error("Unable to enter dimension. You may have entered the dimension name incorrectly: {}", targetDimension);
+            BetterPortals.LOGGER.error("Alternatively, this could be due to a bug in vanilla Minecraft. Please restart the game to fix this.");
             return;
         }
 
         // Update player teleportation state and teleport the player
         playerEntity.changeDimension(targetWorld, new PortalLakeTeleporter());
         playerPortalInfo.reset();
+    }
+
+    /**
+     * Static method for initializing non-player teleportation.
+     */
+    public static void initTeleport(Entity entity, IEntityPortalInfo entityPortalInfo) {
+        // Must not be riding anything
+        if (entity.isPassenger() || entity.isBeingRidden() || !entity.isNonBoss()) {
+            return;
+        }
+
+        // Find target dimension for this fluid
+        String sourceDimension = entity.world.getDimensionKey().getLocation().toString();
+        PortalLakeVariantSettings settings = PortalLakeVariants.get().getVariantForDimension(sourceDimension);
+        String targetDimension = settings.getTargetDimension();
+
+        MinecraftServer minecraftServer = entity.getServer(); // the server itself
+        ServerWorld targetWorld = minecraftServer.getWorld(RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(targetDimension)));
+
+        // Prevent crash due to mojang bug that makes mod's json dimensions not exist upload first creation of world on server. A restart fixes this.
+        if (targetWorld == null) {
+            BetterPortals.LOGGER.error("Unable to enter dimension. You may have entered the dimension name incorrectly: {}", targetDimension);
+            BetterPortals.LOGGER.error("Alternatively, this could be due to a bug in vanilla Minecraft. Please restart the game to fix this.");
+            return;
+        }
+
+        // Teleport entity
+        entity.changeDimension(targetWorld, new PortalLakeTeleporter());
     }
 }

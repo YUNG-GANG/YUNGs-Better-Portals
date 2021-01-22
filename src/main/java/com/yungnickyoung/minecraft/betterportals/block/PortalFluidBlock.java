@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.betterportals.block;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.capability.CapabilityModule;
+import com.yungnickyoung.minecraft.betterportals.capability.IEntityPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.fluid.FluidModule;
 import net.minecraft.block.*;
@@ -38,7 +39,12 @@ public class PortalFluidBlock extends FlowingFluidBlock {
             }
             playerPortalInfo.setDEBUGportalCounter(playerPortalInfo.getDEBUGportalCounter() + 1);
             playerPortalInfo.enterPortalFluid();
-            BetterPortals.LOGGER.info("");
+        } else if (!entity.isPassenger() && !entity.isBeingRidden() && entity.isNonBoss()) { // Non-player entities get insta-teleported
+            IEntityPortalInfo entityPortalInfo = entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).resolve().orElse(null);
+            if (entityPortalInfo == null) {
+                return;
+            }
+            entityPortalInfo.setInPortal(true);
         }
     }
 
@@ -67,7 +73,6 @@ public class PortalFluidBlock extends FlowingFluidBlock {
                 BlockPos blockpos = pos.offset(direction);
                 Fluid fluid = worldIn.getFluidState(blockpos).getFluidState().getFluid();
                 if (fluid != Fluids.EMPTY && fluid != FluidModule.PORTAL_FLUID && fluid != FluidModule.PORTAL_FLUID_FLOWING) {
-                    BetterPortals.LOGGER.info(worldIn.getFluidState(blockpos).getFluid());
                     Block replacementBlock = worldIn.getFluidState(pos).isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE;
                     worldIn.setBlockState(pos, net.minecraftforge.event.ForgeEventFactory.fireFluidPlaceBlockEvent(worldIn, pos, pos, replacementBlock.getDefaultState()));
                     this.triggerMixEffects(worldIn, pos);

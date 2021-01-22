@@ -1,8 +1,8 @@
 package com.yungnickyoung.minecraft.betterportals.world;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
-import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
+import com.yungnickyoung.minecraft.betterportals.fluid.FluidModule;
 import com.yungnickyoung.minecraft.betterportals.util.BlockUtil;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
@@ -12,6 +12,8 @@ import net.minecraft.block.PortalInfo;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Direction;
 import net.minecraft.util.RegistryKey;
@@ -35,7 +37,7 @@ import java.util.function.Function;
 public class MonolithTeleporter implements ITeleporter {
     @Override
     public Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
-        return repositionEntity.apply(false); // pass in false to avoid attempting to spawn a portal
+        return repositionEntity.apply(false); // pass in false to avoid attempting to spawn a vanilla portal
     }
 
     @Nullable
@@ -60,18 +62,24 @@ public class MonolithTeleporter implements ITeleporter {
 
         // First check if there is a portal fluid to teleport to
         PointOfInterestManager pointofinterestmanager = targetWorld.getPointOfInterestManager();
-        int blockSearchRange = 128; // TODO - make depend on scale
+        int blockSearchRange = 20; // TODO - make depend on scale
         pointofinterestmanager.ensureLoadedAndValid(targetWorld, targetPos, blockSearchRange);
 
-        Optional<PointOfInterest> optional = pointofinterestmanager
-            .getInSquare(poiType -> poiType == WorldGenModule.PORTAL_LAKE_POI, targetPos, blockSearchRange, PointOfInterestManager.Status.ANY)
-            .sorted(Comparator.<PointOfInterest>comparingDouble(poi -> poi.getPos().distanceSq(targetPos))
-                .thenComparingInt(poi -> poi.getPos().getY()))
-            .filter(poi -> targetWorld.getBlockState(poi.getPos()).getBlock() == BlockModule.PORTAL_FLUID_BLOCK)
-            .findFirst();
+        Optional<BlockPos> optional = pointofinterestmanager
+            .func_219146_b(poiType -> poiType == WorldGenModule.PORTAL_LAKE_POI, targetPos, blockSearchRange, PointOfInterestManager.Status.ANY)
+            .map(PointOfInterest::getPos)
+            .filter(pos -> {
+                Fluid fluid = targetWorld.getBlockState(pos).getFluidState().getFluid();
+                return fluid == FluidModule.PORTAL_FLUID_FLOWING || fluid == FluidModule.PORTAL_FLUID;
+            })
+            .filter(pos -> {
+                BlockState above = targetWorld.getBlockState(pos.up());
+                return above.getMaterial() == Material.AIR || above.getFluidState().getFluid() != Fluids.EMPTY;
+            })
+            .min(Comparator.comparingDouble(pos -> pos.distanceSq(targetPos)));
 
         if (optional.isPresent()) {
-            return new PortalInfo(Vector3d.copy(optional.get().getPos()), Vector3d.ZERO, entity.rotationYaw, entity.rotationPitch);
+            return new PortalInfo(Vector3d.copy(optional.get()), Vector3d.ZERO, entity.rotationYaw, entity.rotationPitch);
         }
 
         // Get settings for this dimension
@@ -138,10 +146,10 @@ public class MonolithTeleporter implements ITeleporter {
         MinecraftServer minecraftServer = playerEntity.getServer(); // the server itself
         ServerWorld targetWorld = minecraftServer.getWorld(RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(targetDimension)));
 
-        // Prevent crash due to mojang bug that makes mod's json dimensions not exist upload first creation of world on server. A restart fixes this.
+        // Prevent crash due to mojang bug that makes modded json dimensions not exist upon first creation of world on server. A restart fixes this.
         if (targetWorld == null) {
-            BetterPortals.LOGGER.error("Unable to enter dimension.");
-            BetterPortals.LOGGER.error("This is due to a bug in vanilla Minecraft. Please restart the game to fix this.");
+            BetterPortals.LOGGER.error("Unable to enter dimension. You may have entered the dimension name incorrectly: {}", targetDimension);
+            BetterPortals.LOGGER.error("Alternatively, this could be due to a bug in vanilla Minecraft. Please restart the game to fix this.");
             return;
         }
 
