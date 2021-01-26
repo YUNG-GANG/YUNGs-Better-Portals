@@ -21,6 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
+import net.minecraft.util.math.vector.Vector3i;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.village.PointOfInterest;
 import net.minecraft.village.PointOfInterestManager;
@@ -31,11 +32,8 @@ import net.minecraftforge.common.util.ITeleporter;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MonolithTeleporter implements ITeleporter {
     @Override
@@ -65,36 +63,11 @@ public class MonolithTeleporter implements ITeleporter {
 
         // First check if there is a portal fluid to teleport to
         PointOfInterestManager pointofinterestmanager = targetWorld.getPointOfInterestManager();
-        int blockSearchRange = 100; // TODO - make depend on scale?
+        int blockSearchRange = 128;
         pointofinterestmanager.ensureLoadedAndValid(targetWorld, targetPos, blockSearchRange);
 
-//        Stream<PointOfInterest> stream = pointofinterestmanager.func_219146_b(poiType -> poiType == WorldGenModule.PORTAL_LAKE_POI, targetPos, blockSearchRange, PointOfInterestManager.Status.ANY);
-//        List list1 = stream.collect(Collectors.toList());
-//        BetterPortals.LOGGER.info(list1);
-
-//        Stream<BlockPos> posStream = stream.map(PointOfInterest::getPos);
-//        List list2 = posStream.collect(Collectors.toList());
-//        BetterPortals.LOGGER.info(list2);
-
-//        posStream = posStream.filter(pos -> {
-//            Fluid fluid = targetWorld.getBlockState(pos).getFluidState().getFluid();
-//            return fluid == FluidModule.PORTAL_FLUID_FLOWING || fluid == FluidModule.PORTAL_FLUID;
-//        });
-//        List list3 = posStream.collect(Collectors.toList());
-//        BetterPortals.LOGGER.info(list3);
-
-
-//        posStream = posStream.filter(pos -> {
-//            BlockState above = targetWorld.getBlockState(pos.up());
-//            return above.getMaterial() == Material.AIR || above.getFluidState().getFluid() != Fluids.EMPTY;
-//        });
-//        List list4 = posStream.collect(Collectors.toList());
-//        BetterPortals.LOGGER.info(list4);
-//        Optional<BlockPos> result = posStream.min(Comparator.comparingDouble(pos -> pos.distanceSq(targetPos)));
-
-
         Optional<BlockPos> optional = pointofinterestmanager
-            .func_219146_b(poiType -> poiType == WorldGenModule.PORTAL_LAKE_POI, targetPos, blockSearchRange, PointOfInterestManager.Status.ANY)
+            .getInSquare(poiType -> poiType == WorldGenModule.PORTAL_LAKE_POI, targetPos, blockSearchRange, PointOfInterestManager.Status.ANY)
             .map(PointOfInterest::getPos)
             .filter(pos -> {
                 Fluid fluid = targetWorld.getBlockState(pos).getFluidState().getFluid();
@@ -104,7 +77,7 @@ public class MonolithTeleporter implements ITeleporter {
                 BlockState above = targetWorld.getBlockState(pos.up());
                 return above.getMaterial() == Material.AIR || above.getFluidState().getFluid() != Fluids.EMPTY;
             })
-            .min(Comparator.comparingDouble(pos -> pos.distanceSq(targetPos)));
+            .min(Comparator.comparingDouble(pos -> xzDist(pos, targetPos)));
 
         if (optional.isPresent()) {
             return new PortalInfo(Vector3d.copy(optional.get()), Vector3d.ZERO, entity.rotationYaw, entity.rotationPitch);
@@ -184,5 +157,11 @@ public class MonolithTeleporter implements ITeleporter {
         // Update player teleportation state and teleport the player
         playerEntity.changeDimension(targetWorld, new MonolithTeleporter());
         playerPortalInfo.reset();
+    }
+
+    private int xzDist(Vector3i pos1, Vector3i pos2) {
+        int xDiff = pos1.getX() - pos2.getX();
+        int zDiff = pos1.getZ() - pos2.getZ();
+        return xDiff * xDiff + zDiff * zDiff;
     }
 }
