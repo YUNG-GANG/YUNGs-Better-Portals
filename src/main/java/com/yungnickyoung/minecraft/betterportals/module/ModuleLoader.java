@@ -25,9 +25,9 @@ public class ModuleLoader {
         return instance;
     }
 
-    // List of Modules
-    Map<Class<? extends IModule>, IModule> commonModules = Maps.newHashMap();
-    Map<Class<? extends IModule>, IModule> clientModules = Maps.newHashMap();
+    // List of Modules. We use linked hash maps to preserve insertion order.
+    Map<Class<? extends IModule>, IModule> commonModules = Maps.newLinkedHashMap();
+    Map<Class<? extends IModule>, IModule> clientModules = Maps.newLinkedHashMap();
 
     /**
      * Initializes all common modules.

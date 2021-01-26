@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.betterportals.world;
 
 import com.google.common.collect.ImmutableSet;
+import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.module.IModule;

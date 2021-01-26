@@ -31,8 +31,11 @@ import net.minecraftforge.common.util.ITeleporter;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MonolithTeleporter implements ITeleporter {
     @Override
@@ -53,17 +56,42 @@ public class MonolithTeleporter implements ITeleporter {
         // Dimension scale factor
         double scale = DimensionType.getCoordinateDifference(entity.getEntityWorld().getDimensionType(), targetWorld.getDimensionType());
 
-        // Set position
+        // Set position. Note we cast the x/z to ints before multiplying to ensure consistency in the destination
         BlockPos.Mutable targetPos = new BlockPos.Mutable(
-            MathHelper.clamp(entity.getPosX() * scale, minX, maxX),
+            MathHelper.clamp(((int) entity.getPosX()) * scale, minX, maxX),
             entity.getPosY(),
-            MathHelper.clamp(entity.getPosZ() * scale, minZ, maxZ)
+            MathHelper.clamp(((int) entity.getPosZ()) * scale, minZ, maxZ)
         );
 
         // First check if there is a portal fluid to teleport to
         PointOfInterestManager pointofinterestmanager = targetWorld.getPointOfInterestManager();
-        int blockSearchRange = 20; // TODO - make depend on scale
+        int blockSearchRange = 100; // TODO - make depend on scale?
         pointofinterestmanager.ensureLoadedAndValid(targetWorld, targetPos, blockSearchRange);
+
+//        Stream<PointOfInterest> stream = pointofinterestmanager.func_219146_b(poiType -> poiType == WorldGenModule.PORTAL_LAKE_POI, targetPos, blockSearchRange, PointOfInterestManager.Status.ANY);
+//        List list1 = stream.collect(Collectors.toList());
+//        BetterPortals.LOGGER.info(list1);
+
+//        Stream<BlockPos> posStream = stream.map(PointOfInterest::getPos);
+//        List list2 = posStream.collect(Collectors.toList());
+//        BetterPortals.LOGGER.info(list2);
+
+//        posStream = posStream.filter(pos -> {
+//            Fluid fluid = targetWorld.getBlockState(pos).getFluidState().getFluid();
+//            return fluid == FluidModule.PORTAL_FLUID_FLOWING || fluid == FluidModule.PORTAL_FLUID;
+//        });
+//        List list3 = posStream.collect(Collectors.toList());
+//        BetterPortals.LOGGER.info(list3);
+
+
+//        posStream = posStream.filter(pos -> {
+//            BlockState above = targetWorld.getBlockState(pos.up());
+//            return above.getMaterial() == Material.AIR || above.getFluidState().getFluid() != Fluids.EMPTY;
+//        });
+//        List list4 = posStream.collect(Collectors.toList());
+//        BetterPortals.LOGGER.info(list4);
+//        Optional<BlockPos> result = posStream.min(Comparator.comparingDouble(pos -> pos.distanceSq(targetPos)));
+
 
         Optional<BlockPos> optional = pointofinterestmanager
             .func_219146_b(poiType -> poiType == WorldGenModule.PORTAL_LAKE_POI, targetPos, blockSearchRange, PointOfInterestManager.Status.ANY)
