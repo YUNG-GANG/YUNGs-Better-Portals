@@ -12,6 +12,9 @@ import java.util.Random;
 import java.util.function.BiConsumer;
 
 public interface IPlayerPortalInfo {
+    int PORTAL_COOLDOWN = 10;
+    int RECLAIMER_COOLDOWN = 10;
+
     /*
      * Common getters (both sides)
      */
@@ -90,7 +93,7 @@ public interface IPlayerPortalInfo {
 
     default void enterReclaimer() {
         if (this.getReclaimerCooldown() > 0) {
-            this.setReclaimerCooldown(300);
+            this.setReclaimerCooldown(RECLAIMER_COOLDOWN);
         } else {
             this.setInReclaimer(true);
         }
@@ -98,7 +101,7 @@ public interface IPlayerPortalInfo {
 
     default void enterPortalFluid() {
         if (this.getPortalFluidCooldown() > 0) {
-            this.setPortalFluidCooldown(300);
+            this.setPortalFluidCooldown(PORTAL_COOLDOWN);
         } else {
             this.setInPortalFluid(true);
         }
@@ -106,10 +109,10 @@ public interface IPlayerPortalInfo {
 
     default void reset() {
         setReclaimerCounter(0);
-        setReclaimerCooldown(300);
+        setReclaimerCooldown(RECLAIMER_COOLDOWN);
         setInReclaimer(false);
         setPortalFluidCounter(0);
-        setPortalFluidCooldown(300);
+        setPortalFluidCooldown(PORTAL_COOLDOWN);
         setInPortalFluid(false);
     }
 
@@ -125,7 +128,7 @@ public interface IPlayerPortalInfo {
             this.offsetReclaimerCounter(1); // Increment counter
             if (!player.isPassenger() && this.getReclaimerCounter() >= 80) {
                 this.setReclaimerCounter(80);
-                this.setReclaimerCooldown(300); // Reset cooldown
+                this.setReclaimerCooldown(RECLAIMER_COOLDOWN); // Reset cooldown
                 reclaimerTeleportHandler.accept(player, this);
             }
             this.setInReclaimer(false);
@@ -144,7 +147,7 @@ public interface IPlayerPortalInfo {
             this.offsetPortalFluidCounter(1); // Increment counter
             if (!player.isPassenger() && this.getPortalFluidCounter() >= 80) {
                 this.setPortalFluidCounter(80);
-                this.setPortalFluidCooldown(300); // Reset cooldown
+                this.setPortalFluidCooldown(PORTAL_COOLDOWN); // Reset cooldown
                 portalTeleportHandler.accept(player, this);
             }
             this.setInPortalFluid(false);
