@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.betterportals.util;
 
 import com.yungnickyoung.minecraft.yungsapi.world.BlockSetSelector;
 import net.minecraft.block.*;
+import net.minecraft.fluid.Fluids;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
@@ -31,6 +32,34 @@ public class BlockUtil {
                     currPos.setPos(x, y, z);
                     currBlock = world.getBlockState(currPos);
                     if (currBlock == Blocks.AIR.getDefaultState() || currBlock == Blocks.CAVE_AIR.getDefaultState()) {
+                        world.setBlockState(currPos, blockState, 2);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void replaceLiquid(ISeedReader world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, BlockState blockState) {
+        BlockPos.Mutable currPos = new BlockPos.Mutable();
+        for (int x = minX; x <= maxX; ++x) {
+            for (int y = minY; y <= maxY; ++y) {
+                for (int z = minZ; z <= maxZ; ++z) {
+                    currPos.setPos(x, y, z);
+                    if (world.getBlockState(currPos).getFluidState().getFluid() != Fluids.EMPTY) {
+                        world.setBlockState(currPos, blockState, 2);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void replaceFallingBlock(ISeedReader world, int minX, int minY, int minZ, int maxX, int maxY, int maxZ, BlockState blockState) {
+        BlockPos.Mutable currPos = new BlockPos.Mutable();
+        for (int x = minX; x <= maxX; ++x) {
+            for (int y = minY; y <= maxY; ++y) {
+                for (int z = minZ; z <= maxZ; ++z) {
+                    currPos.setPos(x, y, z);
+                    if (world.getBlockState(currPos).getBlock() instanceof FallingBlock) {
                         world.setBlockState(currPos, blockState, 2);
                     }
                 }

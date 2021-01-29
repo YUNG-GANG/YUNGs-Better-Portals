@@ -51,9 +51,9 @@ public class PortalLakeTeleporter implements ITeleporter {
 
         // Set position
         BlockPos.Mutable targetPos = new BlockPos.Mutable(
-            MathHelper.clamp(entity.getPosX() * scale, minX, maxX),
+            MathHelper.clamp(entity.getPosX() * scale, minX, maxX) + 0.5,
             entity.getPosY(),
-            MathHelper.clamp(entity.getPosZ() * scale, minZ, maxZ)
+            MathHelper.clamp(entity.getPosZ() * scale, minZ, maxZ) + 0.5
         );
 
         // Get settings for this dimension
@@ -69,37 +69,60 @@ public class PortalLakeTeleporter implements ITeleporter {
         targetPos.setY(targetMaxY);
 
         boolean foundAir = false;
+        int blocksSinceAir = 0;
         for (int y = targetMaxY; y >= targetMinY; y--) {
             BlockState blockState = targetWorld.getBlockState(targetPos);
             if (blockState.getMaterial() == Material.AIR) {
                 foundAir = true;
             } else if (blockState.getMaterial().isSolid() && foundAir) {
-                targetY = y + 1;
-                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
-                BlockUtil.replaceAir(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
-                break;
+//                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
+//                BlockUtil.replaceAir(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
+                if (blocksSinceAir >= 2) {
+                    targetY = y + 1;
+                    break;
+                } else {
+                    // Reset the air tracking
+                    foundAir = false;
+                    blocksSinceAir = 0;
+                }
             }
             targetPos.move(Direction.DOWN);
+            if (foundAir) blocksSinceAir++;
         }
 
         // If we didn't find a suitable spawn location...
         if (targetY == -1) {
-            if (foundAir) {
-                // It's air all the way - we need to spawn a platform somewhere
-                targetY = (targetMaxY + targetMinY) / 2;
-                BlockUtil.replaceAir(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
-                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
-            } else {
-                // It's solid blocks all the way - we need to carve out a spawn point
-                targetY = (targetMaxY + targetMinY) / 2;
-                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
-            }
+//            if (foundAir) {
+//                // It's air all the way (or there's no air slots 2 tall) - we'll spawn a small platform at the min Y
+//                targetY = targetMinY + 1;
+////                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
+//                BlockUtil.replaceLiquid(targetWorld, targetPos.getX() - 2, targetY, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
+//                BlockUtil.replaceAir(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
+//            } else {
+//                // It's solid blocks all the way - we need to carve out a spawn point
+//                targetY = (targetMaxY + targetMinY) / 2;
+//                // Replace liquid in shell around player to make sure they don't spawn in water/lava
+//                BlockUtil.replaceLiquid(targetWorld, targetPos.getX() - 2, targetY, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
+//                // Fill surrounding area with air
+//                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
+//                // Ensure platform is under player
+//                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
+//            }
+            targetY = (targetMaxY + targetMinY) / 2;
+            // Replace liquid in shell around player to make sure they don't spawn in water/lava
+            BlockUtil.replaceLiquid(targetWorld, targetPos.getX() - 2, targetY, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
+            // Replace falling blocks around player to make sure they don't suffocate
+            BlockUtil.replaceFallingBlock(targetWorld, targetPos.getX() - 2, targetY, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
+            // Fill surrounding area with air
+            BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
+            // Ensure platform is under player
+            BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
         }
 
         targetPos.setY(targetY);
 
         // Schedule ticket to force load the target chunk + surrounding chunks
-        targetWorld.getChunkProvider().registerTicket(TicketType.PORTAL, new ChunkPos(optional.get()), 3, optional.get());
+        targetWorld.getChunkProvider().registerTicket(TicketType.PORTAL, new ChunkPos(targetPos), 3, targetPos);
 
         return new PortalInfo(Vector3d.copy(targetPos), Vector3d.ZERO, entity.rotationYaw, entity.rotationPitch);
     }

@@ -58,9 +58,9 @@ public class MonolithTeleporter implements ITeleporter {
 
         // Set position. Note we cast the x/z to ints before multiplying to ensure consistency in the destination
         BlockPos.Mutable targetPos = new BlockPos.Mutable(
-            MathHelper.clamp(((int) entity.getPosX()) * scale, minX, maxX),
+            MathHelper.clamp(((int) entity.getPosX()) * scale, minX, maxX) + 0.5,
             entity.getPosY(),
-            MathHelper.clamp(((int) entity.getPosZ()) * scale, minZ, maxZ)
+            MathHelper.clamp(((int) entity.getPosZ()) * scale, minZ, maxZ) + 0.5
         );
 
         // First check if there is a portal fluid to teleport to
@@ -100,31 +100,49 @@ public class MonolithTeleporter implements ITeleporter {
         targetPos.setY(targetMaxY);
 
         boolean foundAir = false;
+        int blocksSinceAir = 0;
         for (int y = targetMaxY; y >= targetMinY; y--) {
             BlockState blockState = targetWorld.getBlockState(targetPos);
             if (blockState.getMaterial() == Material.AIR) {
                 foundAir = true;
             } else if (blockState.getMaterial().isSolid() && foundAir) {
-                targetY = y + 1;
-                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
-                BlockUtil.replaceAir(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
-                break;
+//                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
+//                BlockUtil.replaceAir(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
+                if (blocksSinceAir >= 2) {
+                    targetY = y + 1;
+                    break;
+                } else {
+                    // Reset the air tracking
+                    foundAir = false;
+                    blocksSinceAir = 0;
+                }
             }
             targetPos.move(Direction.DOWN);
+            if (foundAir) blocksSinceAir++;
         }
 
         // If we didn't find a suitable spawn location...
         if (targetY == -1) {
-            if (foundAir) {
-                // It's air all the way - we need to spawn a platform somewhere
-                targetY = (targetMaxY + targetMinY) / 2;
-                BlockUtil.replaceAir(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
-                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
-            } else {
-                // It's solid blocks all the way - we need to carve out a spawn point
-                targetY = (targetMaxY + targetMinY) / 2;
-                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
-            }
+//            if (foundAir) {
+//                // It's air all the way - we need to spawn a platform somewhere
+//                targetY = (targetMaxY + targetMinY) / 2;
+//                BlockUtil.replaceAir(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
+//                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
+//            } else {
+//                // It's solid blocks all the way - we need to carve out a spawn point
+//                targetY = (targetMaxY + targetMinY) / 2;
+//                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
+//            }
+            targetY = (targetMaxY + targetMinY) / 2;
+            // Replace liquid in shell around player to make sure they don't spawn in water/lava
+            BlockUtil.replaceLiquid(targetWorld, targetPos.getX() - 2, targetY, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
+            // Replace falling blocks around player to make sure they don't suffocate
+            BlockUtil.replaceFallingBlock(targetWorld, targetPos.getX() - 2, targetY, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
+            // Fill surrounding area with air
+            BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
+            // Ensure platform is under player
+            BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
+
         }
 
         targetPos.setY(targetY);

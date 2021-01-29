@@ -56,7 +56,7 @@ public class MonolithVariants {
                 "FF", "DC", "73", "FF"
             ))
             .setMinY(35)
-            .setMaxY(60)
+            .setMaxY(70)
             .setPlayerTeleportedMinY(6)
             .setPlayerTeleportedMaxY(30)
             .setSpawnChance(.1)
