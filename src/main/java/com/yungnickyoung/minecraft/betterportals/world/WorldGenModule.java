@@ -23,9 +23,9 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class WorldGenModule implements IModule {
     // Portal Lake
-    public static Feature<BlockStateFeatureConfig> PORTAL_LAKE = new PortalLakeFeature(BlockStateFeatureConfig.field_236455_a_);
+    public static Feature<NoFeatureConfig> PORTAL_LAKE = new PortalLakeFeature(NoFeatureConfig.field_236558_a_);
     public static Placement<NoPlacementConfig> PORTAL_LAKE_PLACEMENT = new PortalLakePlacement(NoPlacementConfig.CODEC);
-    public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = PORTAL_LAKE.withConfiguration(new BlockStateFeatureConfig(BlockModule.PORTAL_FLUID_BLOCK.getDefaultState())).withPlacement(PORTAL_LAKE_PLACEMENT.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
+    public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = PORTAL_LAKE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(PORTAL_LAKE_PLACEMENT.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
     public static PointOfInterestType PORTAL_LAKE_POI = PointOfInterestType.registerBlockStates(new PointOfInterestType(
         "portal_lake",
         ImmutableSet.copyOf(BlockModule.PORTAL_FLUID_BLOCK.getStateContainer().getValidStates()),
@@ -74,7 +74,7 @@ public class WorldGenModule implements IModule {
         event.getGeneration().getFeatures(GenerationStage.Decoration.LAKES).add(
             () -> CONFIGURED_PORTAL_LAKE
         );
-        // Don't add monoliths to basalt deltas biome (there isn't really enough room for them to spawn)
+        // Don't add monoliths to basalt deltas biome (there isn't really enough room for them to spawn properly)
         if (event.getName().toString().equals("minecraft:basalt_deltas")) {
             return;
         }

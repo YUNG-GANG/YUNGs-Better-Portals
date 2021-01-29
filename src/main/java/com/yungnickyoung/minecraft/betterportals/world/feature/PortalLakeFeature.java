@@ -17,8 +17,8 @@ import net.minecraft.world.ISeedReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.BlockStateFeatureConfig;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -27,17 +27,17 @@ import java.util.Random;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
+public class PortalLakeFeature extends Feature<NoFeatureConfig> {
     private PortalLakeVariantSettings settings;
     private static final BlockState AIR = Blocks.CAVE_AIR.getDefaultState();
     private static final BlockState PORTAL_FLUID = BlockModule.PORTAL_FLUID_BLOCK.getDefaultState();
 
-    public PortalLakeFeature(Codec<BlockStateFeatureConfig> codec) {
+    public PortalLakeFeature(Codec<NoFeatureConfig> codec) {
         super(codec);
     }
 
     @Override
-    public boolean generate(ISeedReader world, ChunkGenerator chunkGenerator, Random random, BlockPos pos, BlockStateFeatureConfig config) {
+    public boolean generate(ISeedReader world, ChunkGenerator chunkGenerator, Random random, BlockPos pos, NoFeatureConfig config) {
         // Attempt to get dimension name, e.g. "minecraft:the_nether"
         String dimensionName;
         try {
