@@ -10,6 +10,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.util.Direction;
+import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.SectionPos;
 import net.minecraft.world.ISeedReader;
@@ -56,7 +57,9 @@ public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
         }
 
         // Determine if we should spawn
-        if (random.nextFloat() > settings.getSpawnChance()) {
+        SharedSeedRandom sharedSeedRandom = new SharedSeedRandom();
+        sharedSeedRandom.setLargeFeatureSeed(world.getSeed(), pos.getX() / 16, pos.getZ() / 16);
+        if (sharedSeedRandom.nextFloat() > settings.getSpawnChance()) {
             return false;
         }
 
@@ -81,16 +84,16 @@ public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
         }
 
         boolean[] liquidMask = new boolean[2048]; // Keeps track of where liquid blocks should be placed at
-        int i = random.nextInt(4) + 4;
+        int i = sharedSeedRandom.nextInt(4) + 4;
 
         // Determine where to place liquids
         for (int j = 0; j < i; ++j) {
-            double d0 = random.nextDouble() * 6.0D + 3.0D;
-            double d1 = random.nextDouble() * 4.0D + 2.0D;
-            double d2 = random.nextDouble() * 6.0D + 3.0D;
-            double d3 = random.nextDouble() * (16.0D - d0 - 2.0D) + 1.0D + d0 / 2.0D;
-            double d4 = random.nextDouble() * (8.0D - d1 - 4.0D) + 2.0D + d1 / 2.0D;
-            double d5 = random.nextDouble() * (16.0D - d2 - 2.0D) + 1.0D + d2 / 2.0D;
+            double d0 = sharedSeedRandom.nextDouble() * 6.0D + 3.0D;
+            double d1 = sharedSeedRandom.nextDouble() * 4.0D + 2.0D;
+            double d2 = sharedSeedRandom.nextDouble() * 6.0D + 3.0D;
+            double d3 = sharedSeedRandom.nextDouble() * (16.0D - d0 - 2.0D) + 1.0D + d0 / 2.0D;
+            double d4 = sharedSeedRandom.nextDouble() * (8.0D - d1 - 4.0D) + 2.0D + d1 / 2.0D;
+            double d5 = sharedSeedRandom.nextDouble() * (16.0D - d2 - 2.0D) + 1.0D + d2 / 2.0D;
 
             for (int x = 1; x < 15; ++x) {
                 for (int z = 1; z < 15; ++z) {
@@ -163,36 +166,13 @@ public class PortalLakeFeature extends Feature<BlockStateFeatureConfig> {
             for(int z = 0; z < 16; ++z) {
                 for(int y = 0; y < 8; ++y) {
                     boolean flag1 = !liquidMask[(x * 16 + z) * 8 + y] && (x < 15 && liquidMask[((x + 1) * 16 + z) * 8 + y] || x > 0 && liquidMask[((x - 1) * 16 + z) * 8 + y] || z < 15 && liquidMask[(x * 16 + z + 1) * 8 + y] || z > 0 && liquidMask[(x * 16 + (z - 1)) * 8 + y] || y < 7 && liquidMask[(x * 16 + z) * 8 + y + 1] || y > 0 && liquidMask[(x * 16 + z) * 8 + (y - 1)]);
-                    if (flag1 && (y < 4 || random.nextInt(2) != 0) && world.getBlockState(mutable.add(x, y, z)).getMaterial().isSolid()) {
-                        world.setBlockState(mutable.add(x, y, z), settings.getBlockSelector().get(random), 2);
+                    if (flag1 && (y < 4 || sharedSeedRandom.nextInt(2) != 0) && world.getBlockState(mutable.add(x, y, z)).getMaterial().isSolid()) {
+                        world.setBlockState(mutable.add(x, y, z), settings.getBlockSelector().get(sharedSeedRandom), 2);
                     }
                 }
             }
         }
 
         return true;
-
-
-        // Old gen stuff
-//
-//        // Determine if we should spawn
-//        if (random.nextFloat() > settings.getSpawnChance()) {
-//            return false;
-//        }
-//
-//        // Prevent floating lakes
-//        while(world.getBlockState(pos) == Blocks.CAVE_AIR.getDefaultState()) {
-//            pos = pos.down();
-//        }
-//
-//        int startX = pos.getX();
-//        int startZ = pos.getZ();
-//        int startY = settings.getMinY() + random.nextInt(settings.getMaxY() - settings.getMinY() + 1);
-//
-//        BlockUtil.fill(world, random, startX, startY - 8, startZ, startX + 6, startY, startZ + 6, settings.getBlockSelector());
-//        BlockUtil.fill(world,startX + 1, startY - 7, startZ + 1, startX + 5, startY - 1, startZ + 5, Blocks.CAVE_AIR.getDefaultState());
-//        BlockUtil.fill(world,startX + 1, startY - 7, startZ + 1, startX + 5, startY - 3, startZ + 5, BlockModule.PORTAL_FLUID_BLOCK.getDefaultState());
-//
-//        return true;
     }
 }

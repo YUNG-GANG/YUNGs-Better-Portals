@@ -135,6 +135,8 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
             this.beamSegments = this.tempBeamSegments;
         }
 
+        // TODO - limit remaining logic to server side only?
+
         boolean isPowered = this.isPowered();
         int floatAmp = isPowered ? 5 : 2; // Powered beams levitate entities more quickly
         List<PlayerEntity> playersInBeam = getPlayersInBeam();
@@ -155,10 +157,12 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
         // Effects and teleportation for players in beam
         for (PlayerEntity playerEntity : playersInBeam) {
             // Float player up if not crouching, or down if crouching
-            if (playerEntity.isCrouching()) {
-                playerEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, -5, false, false));
-            } else {
-                playerEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, floatAmp, false, false));
+            if (!playerEntity.isPotionActive(Effects.LEVITATION) || (playerEntity.isPotionActive(Effects.LEVITATION) && playerEntity.getActivePotionEffect(Effects.LEVITATION).getDuration() <= 2)) { // Don't overwrite existing levitation effect from potion
+                if (playerEntity.isCrouching()) {
+                    playerEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, -5, false, false));
+                } else {
+                    playerEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, floatAmp, false, false));
+                }
             }
 
             // Powered reclaimers act as teleporters

@@ -17,12 +17,14 @@ import net.minecraft.util.Direction;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.border.WorldBorder;
 import net.minecraft.world.server.ServerWorld;
+import net.minecraft.world.server.TicketType;
 import net.minecraftforge.common.util.ITeleporter;
 
 import javax.annotation.Nullable;
@@ -95,6 +97,9 @@ public class PortalLakeTeleporter implements ITeleporter {
         }
 
         targetPos.setY(targetY);
+
+        // Schedule ticket to force load the target chunk + surrounding chunks
+        targetWorld.getChunkProvider().registerTicket(TicketType.PORTAL, new ChunkPos(optional.get()), 3, optional.get());
 
         return new PortalInfo(Vector3d.copy(targetPos), Vector3d.ZERO, entity.rotationYaw, entity.rotationPitch);
     }
