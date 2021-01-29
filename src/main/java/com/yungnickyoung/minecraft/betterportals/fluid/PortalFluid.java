@@ -74,19 +74,17 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
     @Override
     @OnlyIn(Dist.CLIENT)
     protected void animateTick(World worldIn, BlockPos pos, FluidState state, Random random) {
-        if (!state.isSource() && !state.get(FALLING)) {
-            if (random.nextInt(100) == 0) {
-                worldIn.playSound(
-                    (double) pos.getX() + 0.5D,
-                    (double) pos.getY() + 0.5D,
-                    (double) pos.getZ() + 0.5D,
-                    SoundEvents.BLOCK_PORTAL_AMBIENT,
-                    SoundCategory.BLOCKS,
-                    .5f,
-                    random.nextFloat() * 0.4F + 0.8F,
-                    false
-                );
-            }
+        if (random.nextInt(100) == 0) {
+            worldIn.playSound(
+                (double) pos.getX() + 0.5D,
+                (double) pos.getY() + 0.5D,
+                (double) pos.getZ() + 0.5D,
+                SoundEvents.BLOCK_PORTAL_AMBIENT,
+                SoundCategory.BLOCKS,
+                random.nextFloat() * .8f + .2f,
+                random.nextFloat() * 0.4F + 0.8F,
+                false
+            );
         }
         if (random.nextInt(3) == 0) {
             worldIn.addParticle(ParticleTypes.PORTAL,

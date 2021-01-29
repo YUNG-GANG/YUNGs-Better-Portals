@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.betterportals.block;
 
-import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.capability.CapabilityModule;
 import com.yungnickyoung.minecraft.betterportals.capability.IEntityPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
