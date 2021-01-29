@@ -32,7 +32,7 @@ public class PortalLakeVariants {
                     .addBlock(Blocks.CRYING_OBSIDIAN.getDefaultState(), .05f)
             )
             .setFluidColor(new RGBAColor(
-                "19", "00", "40", "EE"
+                "19", "00", "40", "FC"
             ))
             .setMinY(5)
             .setMaxY(15)
