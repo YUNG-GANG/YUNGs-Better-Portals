@@ -1,7 +1,6 @@
 package com.yungnickyoung.minecraft.betterportals.world;
 
 import com.google.common.collect.ImmutableSet;
-import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.module.IModule;
@@ -60,7 +59,7 @@ public class WorldGenModule implements IModule {
     }
 
     /**
-     * Registers Portal Lake (aka Rift) decorator.
+     * Registers Portal Lake (aka Rift) Point of Interest for quickly locating the nearest portal fluid block when teleporting.
      */
     private static void registerPointsofInterest(RegistryEvent.Register<PointOfInterestType> event) {
         event.getRegistry().register(PORTAL_LAKE_POI.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "portal_lake")));
@@ -68,6 +67,8 @@ public class WorldGenModule implements IModule {
 
     /**
      * Adds configured Portal Lake (aka Rift) and Monolith features to biomes.
+     * Features are added to just about all biomes by default.
+     * Spawning is handled later on when we have access to the dimension the feature is attempting to spawn in.
      */
     private static void onBiomeLoad(BiomeLoadingEvent event) {
         // Add dimensional rift features

@@ -24,8 +24,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.*;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidAttributes;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
@@ -72,7 +70,6 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     protected void animateTick(World worldIn, BlockPos pos, FluidState state, Random random) {
         if (random.nextInt(100) == 0) {
             worldIn.playSound(
@@ -108,7 +105,6 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public IParticleData getDripParticleData() {
         return ParticleTypes.DRIPPING_OBSIDIAN_TEAR;
     }

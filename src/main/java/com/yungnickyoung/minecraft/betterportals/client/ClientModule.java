@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.betterportals.client;
 
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
+import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.fluid.FluidModule;
 import com.yungnickyoung.minecraft.betterportals.item.ItemModule;
 import com.yungnickyoung.minecraft.betterportals.module.IModule;
@@ -25,7 +26,10 @@ public class ClientModule implements IModule {
         MinecraftForge.EVENT_BUS.addListener(OverlayRenderer::renderPortalOverlay);
         MinecraftForge.EVENT_BUS.addListener(OverlayRenderer::renderReclaimerOverlay);
 //        MinecraftForge.EVENT_BUS.addListener(PortalPerturbRenderer::renderPortalPerturb);
-        MinecraftForge.EVENT_BUS.addListener(OverlayRenderer::renderDebugOverlay);
+
+        if (BPSettings.DEBUG_MODE) {
+            MinecraftForge.EVENT_BUS.addListener(OverlayRenderer::renderDebugOverlay);
+        }
     }
 
     /**

@@ -75,8 +75,6 @@ public class PortalLakeTeleporter implements ITeleporter {
             if (blockState.getMaterial() == Material.AIR) {
                 foundAir = true;
             } else if (blockState.getMaterial().isSolid() && foundAir) {
-//                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
-//                BlockUtil.replaceAir(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
                 if (blocksSinceAir >= 2) {
                     targetY = y + 1;
                     break;
@@ -92,22 +90,6 @@ public class PortalLakeTeleporter implements ITeleporter {
 
         // If we didn't find a suitable spawn location...
         if (targetY == -1) {
-//            if (foundAir) {
-//                // It's air all the way (or there's no air slots 2 tall) - we'll spawn a small platform at the min Y
-//                targetY = targetMinY + 1;
-////                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
-//                BlockUtil.replaceLiquid(targetWorld, targetPos.getX() - 2, targetY, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
-//                BlockUtil.replaceAir(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
-//            } else {
-//                // It's solid blocks all the way - we need to carve out a spawn point
-//                targetY = (targetMaxY + targetMinY) / 2;
-//                // Replace liquid in shell around player to make sure they don't spawn in water/lava
-//                BlockUtil.replaceLiquid(targetWorld, targetPos.getX() - 2, targetY, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
-//                // Fill surrounding area with air
-//                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
-//                // Ensure platform is under player
-//                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
-//            }
             targetY = (targetMaxY + targetMinY) / 2;
             // Replace liquid in shell around player to make sure they don't spawn in water/lava
             BlockUtil.replaceLiquid(targetWorld, targetPos.getX() - 2, targetY, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
@@ -148,7 +130,7 @@ public class PortalLakeTeleporter implements ITeleporter {
 
         // Prevent crash due to mojang bug that makes mod's json dimensions not exist upload first creation of world on server. A restart fixes this.
         if (targetWorld == null) {
-            BetterPortals.LOGGER.error("Unable to enter dimension. You may have entered the dimension name incorrectly: {}", targetDimension);
+            BetterPortals.LOGGER.error("Unable to enter dimension. You may have entered the dimension name {} incorrectly in your rifts.json file.", targetDimension);
             BetterPortals.LOGGER.error("Alternatively, this could be due to a bug in vanilla Minecraft. Please restart the game to fix this.");
             return;
         }

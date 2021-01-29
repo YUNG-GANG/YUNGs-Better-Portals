@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.betterportals.module;
 
-import com.google.common.collect.Maps;
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.capability.CapabilityModule;
 import com.yungnickyoung.minecraft.betterportals.client.ClientModule;
@@ -10,6 +9,7 @@ import com.yungnickyoung.minecraft.betterportals.item.ItemModule;
 import com.yungnickyoung.minecraft.betterportals.tileentity.TileEntityModule;
 import com.yungnickyoung.minecraft.betterportals.world.WorldGenModule;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ModuleLoader {
@@ -26,8 +26,8 @@ public class ModuleLoader {
     }
 
     // List of Modules. We use linked hash maps to preserve insertion order.
-    Map<Class<? extends IModule>, IModule> commonModules = Maps.newLinkedHashMap();
-    Map<Class<? extends IModule>, IModule> clientModules = Maps.newLinkedHashMap();
+    Map<Class<? extends IModule>, IModule> commonModules = new LinkedHashMap<>();
+    Map<Class<? extends IModule>, IModule> clientModules = new LinkedHashMap<>();
 
     /**
      * Initializes all common modules.

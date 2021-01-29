@@ -187,20 +187,20 @@ public class OverlayRenderer {
             return;
         }
 
-        event.getLeft().add("Reclaimer: ");
-        event.getLeft().add("  isIn: " + playerPortalInfo.isInReclaimer());
-        event.getLeft().add("  counter: " + playerPortalInfo.getReclaimerCounter());
-        event.getLeft().add("  cooldown: " + playerPortalInfo.getReclaimerCooldown());
-
-        event.getRight().add("Portal Fluid: ");
-        event.getRight().add("  isIn: " + playerPortalInfo.isInPortalFluid());
-        event.getRight().add("  counter: " + playerPortalInfo.getPortalFluidCounter());
-        event.getRight().add("  cooldown: " + playerPortalInfo.getPortalFluidCooldown());
-
-        event.getRight().add("");
-        event.getRight().add("");
-        event.getRight().add("");
-        event.getRight().add("");
+//        event.getLeft().add("Reclaimer: ");
+//        event.getLeft().add("  isIn: " + playerPortalInfo.isInReclaimer());
+//        event.getLeft().add("  counter: " + playerPortalInfo.getReclaimerCounter());
+//        event.getLeft().add("  cooldown: " + playerPortalInfo.getReclaimerCooldown());
+//
+//        event.getRight().add("Portal Fluid: ");
+//        event.getRight().add("  isIn: " + playerPortalInfo.isInPortalFluid());
+//        event.getRight().add("  counter: " + playerPortalInfo.getPortalFluidCounter());
+//        event.getRight().add("  cooldown: " + playerPortalInfo.getPortalFluidCooldown());
+//
+//        event.getRight().add("");
+//        event.getRight().add("");
+//        event.getRight().add("");
+//        event.getRight().add("");
 
         event.getRight().add("Render time: " + playerPortalInfo.getTimeInPortalFluid());
         event.getRight().add("Prev render time: " + playerPortalInfo.getPrevTimeInPortalFluid());

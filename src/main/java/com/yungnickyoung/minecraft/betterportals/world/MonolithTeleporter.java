@@ -106,8 +106,6 @@ public class MonolithTeleporter implements ITeleporter {
             if (blockState.getMaterial() == Material.AIR) {
                 foundAir = true;
             } else if (blockState.getMaterial().isSolid() && foundAir) {
-//                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
-//                BlockUtil.replaceAir(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
                 if (blocksSinceAir >= 2) {
                     targetY = y + 1;
                     break;
@@ -123,16 +121,6 @@ public class MonolithTeleporter implements ITeleporter {
 
         // If we didn't find a suitable spawn location...
         if (targetY == -1) {
-//            if (foundAir) {
-//                // It's air all the way - we need to spawn a platform somewhere
-//                targetY = (targetMaxY + targetMinY) / 2;
-//                BlockUtil.replaceAir(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY - 1, targetPos.getZ() + 1, spawnPlatformBlock);
-//                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
-//            } else {
-//                // It's solid blocks all the way - we need to carve out a spawn point
-//                targetY = (targetMaxY + targetMinY) / 2;
-//                BlockUtil.fill(targetWorld, targetPos.getX() - 1, targetY - 1, targetPos.getZ() - 1, targetPos.getX() + 1, targetY + 2, targetPos.getZ() + 1, Blocks.CAVE_AIR.getDefaultState());
-//            }
             targetY = (targetMaxY + targetMinY) / 2;
             // Replace liquid in shell around player to make sure they don't spawn in water/lava
             BlockUtil.replaceLiquid(targetWorld, targetPos.getX() - 2, targetY, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
@@ -174,7 +162,7 @@ public class MonolithTeleporter implements ITeleporter {
 
         // Prevent crash due to mojang bug that makes modded json dimensions not exist upon first creation of world on server. A restart fixes this.
         if (targetWorld == null) {
-            BetterPortals.LOGGER.error("Unable to enter dimension. You may have entered the dimension name incorrectly: {}", targetDimension);
+            BetterPortals.LOGGER.error("Unable to enter dimension. You may have entered the dimension name {} incorrectly in your monoliths.json file.", targetDimension);
             BetterPortals.LOGGER.error("Alternatively, this could be due to a bug in vanilla Minecraft. Please restart the game to fix this.");
             return;
         }

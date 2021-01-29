@@ -23,8 +23,6 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
-import java.util.stream.Stream;
-
 public class CapabilityModule implements IModule {
     // Capabilities
     @CapabilityInject(IPlayerPortalInfo.class)

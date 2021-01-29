@@ -7,6 +7,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+/**
+ * Mixin to prevent creating vanilla nether portals, if enabled.
+ */
 @Mixin(PortalSize.class)
 public class MixinPortalSize {
     @Inject(at = @At("INVOKE"), method="func_242974_d()I", cancellable = true)

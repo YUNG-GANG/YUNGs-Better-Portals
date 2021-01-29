@@ -6,8 +6,6 @@ import com.yungnickyoung.minecraft.betterportals.fluid.FluidModule;
 import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import net.minecraft.item.*;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
@@ -17,7 +15,6 @@ public class ItemModule implements IModule {
      */
     public static final ItemGroup BETTERPORTALS_CREATIVE_TAB = new ItemGroup(ItemGroup.GROUPS.length, BPSettings.MOD_ID) {
         @Override
-        @OnlyIn(Dist.CLIENT)
         public ItemStack createIcon() {
             return new ItemStack(BlockModule.RECLAIMER_BLOCK);
         }

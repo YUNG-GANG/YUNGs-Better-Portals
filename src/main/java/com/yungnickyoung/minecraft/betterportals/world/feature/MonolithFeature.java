@@ -47,6 +47,7 @@ public class MonolithFeature extends Feature<NoFeatureConfig> {
             settings = MonolithVariants.get().getVariantForDimension(dimensionName);
         }
 
+        // Settings are null -> no variant for this dimension
         if (settings == null) {
             return false;
         }

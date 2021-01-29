@@ -55,6 +55,7 @@ public class RGBAColor {
 
     /**
      * Returns a vanilla-compatible integer representation of this color.
+     * Includes the alpha channel.
      */
     public int getColorValue() {
         String stringColor =  (alpha + red + green + blue).toLowerCase();
@@ -68,7 +69,7 @@ public class RGBAColor {
 
     /**
      * Returns a vanilla-compatible float[] representation of this color.
-     * Note that this does not include the alpha channel.
+     * Does not include the alpha channel.
      */
     public float[] getColorComponentValues() {
         int colorValue = this.getColorValue();

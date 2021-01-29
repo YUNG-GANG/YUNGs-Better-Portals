@@ -22,7 +22,7 @@ public class PortalLakePlacement extends Placement<NoPlacementConfig> {
     public Stream<BlockPos> getPositions(WorldDecoratingHelper worldDecoratingHelper, Random random, NoPlacementConfig config, BlockPos pos) {
         int x = random.nextInt(16) + pos.getX();
         int z = random.nextInt(16) + pos.getZ();
-        int y = random.nextInt(16);
+        int y = 0; // y-value is configured during placement
         return Stream.of(new BlockPos(x, y, z));
     }
 }

@@ -21,8 +21,6 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.Heightmap;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -202,7 +200,6 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
         return compound;
     }
 
-    @OnlyIn(Dist.CLIENT)
     public List<BeamPiece> getBeamPieces() {
         return this.beamSegments;
     }
@@ -228,7 +225,6 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
         return this.write(new CompoundNBT());
     }
 
-    @OnlyIn(Dist.CLIENT)
     public double getMaxRenderDistanceSquared() {
         return 256.0D;
     }
@@ -237,13 +233,10 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
      * Ensures the beam will always render, regardless of whether or not
      * we can see the source block.
      */
-    @OnlyIn(Dist.CLIENT)
     public AxisAlignedBB getRenderBoundingBox() {
         return INFINITE_EXTENT_AABB;
     }
 
-
-    @OnlyIn(Dist.CLIENT)
     public float getActiveRotation(float partialTicks) {
         return (this.activeRotation + partialTicks) * (this.isPowered() ? -.2F : -0.0375F);
     }
@@ -269,12 +262,10 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
         /**
          * Returns RGB (0 to 1.0) colors of this beam segment
          */
-        @OnlyIn(Dist.CLIENT)
         public float[] getColors() {
             return this.colors;
         }
 
-        @OnlyIn(Dist.CLIENT)
         public int getHeight() {
             return this.height;
         }
