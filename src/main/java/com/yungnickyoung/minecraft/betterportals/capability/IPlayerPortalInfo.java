@@ -1,11 +1,11 @@
 package com.yungnickyoung.minecraft.betterportals.capability;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.potion.Effects;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
 
 import java.util.Random;
@@ -172,7 +172,6 @@ public interface IPlayerPortalInfo {
         }
     }
 
-
     default void clientTick(PlayerEntity player) {
         this.setDEBUGclientTickCounter(this.getDEBUGclientTickCounter() + 1);
 
@@ -190,7 +189,7 @@ public interface IPlayerPortalInfo {
             }
 
             if (this.getTimeInPortalFluid() == 0.0F) {
-                Minecraft.getInstance().getSoundHandler().play(SimpleSound.ambientWithoutAttenuation(SoundEvents.BLOCK_PORTAL_TRIGGER, (new Random()).nextFloat() * 0.4F + 0.8F, 0.25F));
+                player.world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.AMBIENT, 0.25F, (new Random()).nextFloat() * 0.4F + 0.8F);
             }
 
             this.offsetTimeInPortalFluid(0.0125F);
@@ -225,7 +224,7 @@ public interface IPlayerPortalInfo {
             }
 
             if (this.getTimeInReclaimer() == 0.0F) {
-                Minecraft.getInstance().getSoundHandler().play(SimpleSound.ambientWithoutAttenuation(SoundEvents.BLOCK_PORTAL_TRIGGER, 0.4F + 0.8F, 0.25F));
+                player.world.playSound(player, player.getPosX(), player.getPosY(), player.getPosZ(), SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.AMBIENT, 0.25F, .8F);
             }
 
             this.offsetTimeInReclaimer(0.0125F);

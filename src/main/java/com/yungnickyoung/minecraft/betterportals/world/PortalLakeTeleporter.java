@@ -51,9 +51,9 @@ public class PortalLakeTeleporter implements ITeleporter {
 
         // Set position
         BlockPos.Mutable targetPos = new BlockPos.Mutable(
-            MathHelper.clamp(entity.getPosX() * scale, minX, maxX) + 0.5,
+            MathHelper.clamp(((int) entity.getPosX()) * scale, minX, maxX),
             entity.getPosY(),
-            MathHelper.clamp(entity.getPosZ() * scale, minZ, maxZ) + 0.5
+            MathHelper.clamp(((int) entity.getPosZ()) * scale, minZ, maxZ)
         );
 
         // Get settings for this dimension
@@ -106,7 +106,9 @@ public class PortalLakeTeleporter implements ITeleporter {
         // Schedule ticket to force load the target chunk + surrounding chunks
         targetWorld.getChunkProvider().registerTicket(TicketType.PORTAL, new ChunkPos(targetPos), 3, targetPos);
 
-        return new PortalInfo(Vector3d.copy(targetPos), Vector3d.ZERO, entity.rotationYaw, entity.rotationPitch);
+        Vector3d playerPos = new Vector3d(targetPos.getX(), targetPos.getY(), targetPos.getZ());
+        playerPos = playerPos.add(0.5, 0, 0.5);
+        return new PortalInfo(playerPos, Vector3d.ZERO, entity.rotationYaw, entity.rotationPitch);
     }
 
     /**

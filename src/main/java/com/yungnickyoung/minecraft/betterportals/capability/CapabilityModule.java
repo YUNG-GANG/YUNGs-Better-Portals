@@ -96,10 +96,10 @@ public class CapabilityModule implements IModule {
 
         IPlayerPortalInfo playerPortalInfo = event.player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).resolve().orElse(null);
         if (playerPortalInfo != null) {
-            if (event.player instanceof ServerPlayerEntity) {
+            if (event.side == LogicalSide.SERVER) {
                 playerPortalInfo.serverTick(event.player, PortalLakeTeleporter::initTeleport, MonolithTeleporter::initTeleport);
             }
-            if (event.player instanceof ClientPlayerEntity) {
+            if (event.side == LogicalSide.CLIENT) {
                 playerPortalInfo.clientTick(event.player);
             }
         }
