@@ -9,7 +9,6 @@ import net.minecraft.block.material.MaterialColor;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.fluid.FluidState;
-import net.minecraft.item.DyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.state.BooleanProperty;
 import net.minecraft.state.StateContainer;
@@ -107,7 +106,10 @@ public class ReclaimerBlock extends ContainerBlock {
         String dimensionName = world.getDimensionKey().getLocation().toString();
         MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(dimensionName);
         if (settings == null) {
-            return DyeColor.WHITE.getColorComponentValues(); // Use white as default if no monolith config exists for this dimension
+            // Use default if no monolith config exists for this dimension
+            return isPowered
+                ? new float[] {(float)0xFF / 255f, (float)0xDC / 255f, (float)0x73 / 255f}
+                : new float[] {(float)0x14 / 255f, (float)0x0C / 255f, (float)0x24 / 255f};
         }
         return isPowered
             ? settings.getPoweredBeamColor().getColorComponentValues()

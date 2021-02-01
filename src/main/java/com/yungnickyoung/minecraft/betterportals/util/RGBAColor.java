@@ -73,9 +73,9 @@ public class RGBAColor {
      */
     public float[] getColorComponentValues() {
         int colorValue = this.getColorValue();
-        int r = (colorValue & 16711680) >> 16;
-        int g = (colorValue & '\uff00') >> 8;
-        int b = colorValue & 255;
+        int r = (colorValue & 0xFF0000) >> 16;
+        int g = (colorValue & 0xFF00) >> 8;
+        int b = colorValue & 0xFF;
         return new float[] { (float)r / 255f, (float)g / 255f, (float)b / 255f };
     }
 }

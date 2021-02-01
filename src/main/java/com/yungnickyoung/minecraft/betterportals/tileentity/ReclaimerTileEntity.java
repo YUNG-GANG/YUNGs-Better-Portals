@@ -8,6 +8,7 @@ import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
 import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -60,7 +61,7 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
         int posZ = this.pos.getZ();
         BlockPos currPos;
 
-        // Generate beams
+        // Begin generating beams
         if (this.tempBeamMaxY < posY) {
             currPos = this.pos;
             this.tempBeamSegments = Lists.newArrayList();
@@ -89,12 +90,12 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
             // Check for beam blockers
             String dimensionName = world.getDimensionKey().getLocation().toString();
             MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(dimensionName);
-            if (settings != null) {
-                List<BlockState> beamBlockers = settings.getBeamStopBlocks();
-                if (beamBlockers.contains(blockstate)) {
-                    hasHitBeamBlocker = true;
-                    break;
-                }
+            List<BlockState> beamBlockers = settings == null
+                ? Lists.newArrayList(Blocks.OBSIDIAN.getDefaultState()) // Use obsidian by default
+                : settings.getBeamStopBlocks();
+            if (beamBlockers.contains(blockstate)) {
+                hasHitBeamBlocker = true;
+                break;
             }
 
             // If this block is colored, we need to use its colors
