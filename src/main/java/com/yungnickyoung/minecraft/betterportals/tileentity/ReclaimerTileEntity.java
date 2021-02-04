@@ -12,6 +12,7 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.potion.EffectInstance;
@@ -34,7 +35,7 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
     private int tempBeamMaxY = -1; // temporary value to store the top beam y position as we build the list of beamSegments
     private int beamMaxY; // stored value for topmost y-coordinate of beam
     public int ticksExisted;
-    private float activeRotation;
+    private float activeRotation; // keep track of beam rotation for rendering
 
     public ReclaimerTileEntity() {
         super(TileEntityModule.RECLAIMER_TILE_ENTITY);
@@ -134,37 +135,42 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
             this.beamSegments = this.tempBeamSegments;
         }
 
-        // TODO - limit remaining logic to server side only?
-
         boolean isPowered = this.isPowered();
         int floatAmp = isPowered ? 5 : 2; // Powered beams levitate entities more quickly
-        List<PlayerEntity> playersInBeam = getPlayersInBeam();
-        List<CreatureEntity> nonPlayersInBeam = getNonPlayersInBeam();
-        List<ItemEntity> itemsInBeam = getItemsInBeam();
 
         // Float up items in beam
-        for (ItemEntity entity : itemsInBeam) {
-            double floatSpeed = isPowered() ? .2 : .08;
-            entity.setMotion(entity.getMotion().getX() / 1.5, floatSpeed, entity.getMotion().getZ() / 1.5);
+        if (!this.world.isRemote) {
+            List<ItemEntity> itemsInBeam = getItemsInBeam();
+            for (ItemEntity entity : itemsInBeam) {
+                double floatSpeed = isPowered() ? .2 : .08;
+                entity.setMotion(entity.getMotion().getX() / 1.5, floatSpeed, entity.getMotion().getZ() / 1.5);
+            }
         }
 
         // Float up non player entities in beam
-        for (CreatureEntity entity : nonPlayersInBeam) {
-            entity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, floatAmp, false, false));
+        if (!this.world.isRemote) {
+            List<CreatureEntity> nonPlayersInBeam = getNonPlayersInBeam();
+            for (CreatureEntity entity : nonPlayersInBeam) {
+                entity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, floatAmp, false, false));
+            }
         }
 
         // Effects and teleportation for players in beam
+        List<PlayerEntity> playersInBeam = getPlayersInBeam();
         for (PlayerEntity playerEntity : playersInBeam) {
             // Float player up if not crouching, or down if crouching
-            if (!playerEntity.isPotionActive(Effects.LEVITATION) || (playerEntity.isPotionActive(Effects.LEVITATION) && playerEntity.getActivePotionEffect(Effects.LEVITATION).getDuration() <= 2)) { // Don't overwrite existing levitation effect from potion
-                if (playerEntity.isCrouching()) {
-                    playerEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, -5, false, false));
-                } else {
-                    playerEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, floatAmp, false, false));
+            if (!this.world.isRemote) {
+                if (!playerEntity.isPotionActive(Effects.LEVITATION) || (playerEntity.isPotionActive(Effects.LEVITATION) && playerEntity.getActivePotionEffect(Effects.LEVITATION).getDuration() <= 2)) { // Don't overwrite existing levitation effect from potion
+                    if (playerEntity.isCrouching()) {
+                        playerEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, -5, false, false));
+                    } else {
+                        playerEntity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, floatAmp, false, false));
+                    }
                 }
             }
 
             // Powered reclaimers act as teleporters
+            // Note that we don't check for world.isRemote here - we need to update the capability on the client side for rendering
             if (isPowered) {
                 IPlayerPortalInfo playerPortalInfo = playerEntity.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).resolve().orElse(null);
                 if (playerPortalInfo == null) {
@@ -175,7 +181,6 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
         }
     }
 
-    // TODO - use Server-side entity instead?
     private List<PlayerEntity> getPlayersInBeam() {
         AxisAlignedBB axisAlignedBB = new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, this.beamMaxY, pos.getZ() + 1);
         return this.world.getEntitiesWithinAABB(PlayerEntity.class, axisAlignedBB);

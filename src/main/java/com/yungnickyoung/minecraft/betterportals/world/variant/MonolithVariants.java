@@ -57,7 +57,7 @@ public class MonolithVariants {
             ))
             .setMinY(35)
             .setMaxY(70)
-            .setPlayerTeleportedMinY(6)
+            .setPlayerTeleportedMinY(11)
             .setPlayerTeleportedMaxY(30)
             .setSpawnChance(.1)
             .setSpawnDimension("minecraft:the_nether")

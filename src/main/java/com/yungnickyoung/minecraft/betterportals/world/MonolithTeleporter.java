@@ -123,7 +123,7 @@ public class MonolithTeleporter implements ITeleporter {
         if (targetY == -1) {
             targetY = (targetMaxY + targetMinY) / 2;
             // Replace liquid in shell around player to make sure they don't spawn in water/lava
-            BlockUtil.replaceLiquid(targetWorld, targetPos.getX() - 2, targetY, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
+            BlockUtil.replaceLiquid(targetWorld, targetPos.getX() - 2, targetY - 1, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
             // Replace falling blocks around player to make sure they don't suffocate
             BlockUtil.replaceFallingBlock(targetWorld, targetPos.getX() - 2, targetY, targetPos.getZ() - 2, targetPos.getX() + 2, targetY + 3, targetPos.getZ() + 2, spawnPlatformBlock);
             // Fill surrounding area with air

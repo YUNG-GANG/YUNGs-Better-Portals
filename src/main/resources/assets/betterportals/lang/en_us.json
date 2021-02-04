@@ -7,5 +7,6 @@
 
   "itemGroup.betterportals": "YUNG's Better Portals",
 
-  "betterportals.portal_fluid_bucket.altitude_error": "Dimensional Plasma can only be placed deep underground!"
+  "betterportals.portal_fluid_bucket.altitude_error": "Dimensional Plasma can only be placed deep underground!",
+  "betterportals.portal_fluid_bucket.cannot_place_fluid": "You can't use that in this dimension!"
 }

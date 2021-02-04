@@ -52,8 +52,12 @@ public class ReclaimerBlock extends ContainerBlock {
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, BlockState blockState, @Nullable LivingEntity placer, ItemStack itemStack) {
         if (shouldBePowered(world, pos, getPowerBlock(world))) {
-            world.setBlockState(pos, blockState.func_235896_a_(POWERED), 2);
             world.playSound(null, pos, SoundEvents.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
+            if (!world.isRemote) {
+                blockState = blockState.func_235896_a_(POWERED);
+                world.setBlockState(pos, blockState, 3);
+                world.notifyNeighborsOfStateChange(pos, this);
+            }
         }
     }
 
@@ -139,6 +143,16 @@ public class ReclaimerBlock extends ContainerBlock {
     @Override
     public BlockRenderType getRenderType(BlockState p_149645_1_) {
         return BlockRenderType.MODEL;
+    }
+
+    @Override
+    public boolean canProvidePower(BlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getWeakPower(BlockState blockState, IBlockReader blockAccess, BlockPos pos, Direction side) {
+        return 15;
     }
 
     private BlockState getPowerBlock(World world) {
