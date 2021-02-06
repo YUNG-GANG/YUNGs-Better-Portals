@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
@@ -169,6 +170,11 @@ public interface IPlayerPortalInfo {
         // Decrement time until teleport via portal fluid available
         if (this.getPortalFluidCooldown() > 0) {
             this.offsetPortalFluidCooldown(-1);
+        }
+
+        // Reset levitationStartPos to avoid giving player Shulker achievement
+        if (player instanceof ServerPlayerEntity) {
+            ((ServerPlayerEntity)player).levitationStartPos = null;
         }
     }
 
