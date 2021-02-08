@@ -34,7 +34,7 @@ public class PortalLakeVariants {
             .setFluidColor(new RGBAColor(
                 "19", "00", "40", "FC"
             ))
-            .setMinY(5)
+            .setMinY(10)
             .setMaxY(15)
             .setPlayerTeleportedMinY(100)
             .setPlayerTeleportedMaxY(120)

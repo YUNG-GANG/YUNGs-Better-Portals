@@ -5,6 +5,7 @@ import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import com.yungnickyoung.minecraft.betterportals.world.feature.MonolithFeature;
+import com.yungnickyoung.minecraft.betterportals.world.feature.PortalLake2Feature;
 import com.yungnickyoung.minecraft.betterportals.world.feature.PortalLakeFeature;
 import com.yungnickyoung.minecraft.betterportals.world.placement.PortalLakePlacement;
 import net.minecraft.util.ResourceLocation;
@@ -21,10 +22,14 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class WorldGenModule implements IModule {
-    // Portal Lake
+    // Portal Lake features
     public static Feature<NoFeatureConfig> PORTAL_LAKE = new PortalLakeFeature(NoFeatureConfig.field_236558_a_);
+    public static Feature<NoFeatureConfig> PORTAL_LAKE_2 = new PortalLake2Feature(NoFeatureConfig.field_236558_a_);
     public static Placement<NoPlacementConfig> PORTAL_LAKE_PLACEMENT = new PortalLakePlacement(NoPlacementConfig.CODEC);
     public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE = PORTAL_LAKE.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(PORTAL_LAKE_PLACEMENT.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
+    public static ConfiguredFeature<?, ?> CONFIGURED_PORTAL_LAKE_2 = PORTAL_LAKE_2.withConfiguration(IFeatureConfig.NO_FEATURE_CONFIG).withPlacement(PORTAL_LAKE_PLACEMENT.configure(IPlacementConfig.NO_PLACEMENT_CONFIG));
+
+    // Portal Lake POI
     public static PointOfInterestType PORTAL_LAKE_POI = PointOfInterestType.registerBlockStates(new PointOfInterestType(
         "portal_lake",
         ImmutableSet.copyOf(BlockModule.PORTAL_FLUID_BLOCK.getStateContainer().getValidStates()),
@@ -48,6 +53,7 @@ public class WorldGenModule implements IModule {
      */
     private static void registerFeatures(final RegistryEvent.Register<Feature<?>> event) {
         event.getRegistry().register(PORTAL_LAKE.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "portal_lake")));
+        event.getRegistry().register(PORTAL_LAKE_2.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "portal_lake_2")));
         event.getRegistry().register(MONOLITH.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "monolith")));
     }
 
@@ -72,9 +78,8 @@ public class WorldGenModule implements IModule {
      */
     private static void onBiomeLoad(BiomeLoadingEvent event) {
         // Add dimensional rift features
-        event.getGeneration().getFeatures(GenerationStage.Decoration.LAKES).add(
-            () -> CONFIGURED_PORTAL_LAKE
-        );
+        event.getGeneration().getFeatures(GenerationStage.Decoration.LAKES).add(() -> CONFIGURED_PORTAL_LAKE);
+        event.getGeneration().getFeatures(GenerationStage.Decoration.LAKES).add(() -> CONFIGURED_PORTAL_LAKE_2);
         // Don't add monoliths to basalt deltas biome (there isn't really enough room for them to spawn properly)
         if (event.getName().toString().equals("minecraft:basalt_deltas")) {
             return;
