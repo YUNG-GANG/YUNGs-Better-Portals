@@ -1,8 +1,6 @@
 package com.yungnickyoung.minecraft.betterportals.block;
 
 import com.yungnickyoung.minecraft.betterportals.capability.CapabilityModule;
-import com.yungnickyoung.minecraft.betterportals.capability.IEntityPortalInfo;
-import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.fluid.FluidModule;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -32,18 +30,14 @@ public class PortalFluidBlock extends FlowingFluidBlock {
     @Override
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entity) {
         if (entity instanceof PlayerEntity && !entity.isPassenger() && !entity.isBeingRidden()) {
-            IPlayerPortalInfo playerPortalInfo = entity.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).resolve().orElse(null);
-            if (playerPortalInfo == null) {
-                return;
-            }
-            playerPortalInfo.setDEBUGportalCounter(playerPortalInfo.getDEBUGportalCounter() + 1);
-            playerPortalInfo.enterPortalFluid();
+            entity.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
+                playerPortalInfo.setDEBUGportalCounter(playerPortalInfo.getDEBUGportalCounter() + 1);
+                playerPortalInfo.enterPortalFluid();
+            });
         } else if (!entity.isPassenger() && !entity.isBeingRidden() && entity.isNonBoss()) { // Non-player entities get insta-teleported
-            IEntityPortalInfo entityPortalInfo = entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).resolve().orElse(null);
-            if (entityPortalInfo == null) {
-                return;
-            }
-            entityPortalInfo.setInPortal(true);
+            entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).ifPresent(entityPortalInfo -> {
+                entityPortalInfo.setInPortal(true);
+            });
         }
     }
 

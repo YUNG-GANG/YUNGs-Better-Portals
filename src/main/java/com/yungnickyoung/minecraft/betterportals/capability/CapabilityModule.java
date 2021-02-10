@@ -92,15 +92,14 @@ public class CapabilityModule implements IModule {
             return;
         }
 
-        IPlayerPortalInfo playerPortalInfo = event.player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).resolve().orElse(null);
-        if (playerPortalInfo != null) {
+        event.player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
             if (event.side == LogicalSide.SERVER) {
                 playerPortalInfo.serverTick(event.player, PortalLakeTeleporter::initTeleport, MonolithTeleporter::initTeleport);
             }
             if (event.side == LogicalSide.CLIENT) {
                 playerPortalInfo.clientTick(event.player);
             }
-        }
+        });
     }
 
     /**
@@ -116,14 +115,12 @@ public class CapabilityModule implements IModule {
         Iterable<Entity> entities = serverWorld.func_241136_z_();
         entities.forEach(entity -> {
             if (!(entity instanceof PlayerEntity)) {
-                IEntityPortalInfo entityPortalInfo = entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).resolve().orElse(null);
-                if (entityPortalInfo != null) {
-                    // Tick
+                entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).ifPresent(entityPortalInfo -> {
                     if (entityPortalInfo.getInPortal()) {
                         entityPortalInfo.setInPortal(false);
                         PortalLakeTeleporter.initTeleport(entity, entityPortalInfo);
                     }
-                }
+                });
             }
         });
     }

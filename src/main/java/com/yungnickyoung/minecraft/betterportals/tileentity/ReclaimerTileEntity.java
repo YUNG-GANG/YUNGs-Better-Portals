@@ -12,7 +12,6 @@ import net.minecraft.block.Blocks;
 import net.minecraft.entity.CreatureEntity;
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.potion.EffectInstance;
@@ -172,11 +171,7 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
             // Powered reclaimers act as teleporters
             // Note that we don't check for world.isRemote here - we need to update the capability on the client side for rendering
             if (isPowered) {
-                IPlayerPortalInfo playerPortalInfo = playerEntity.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).resolve().orElse(null);
-                if (playerPortalInfo == null) {
-                    continue;
-                }
-                playerPortalInfo.enterReclaimer();
+                playerEntity.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(IPlayerPortalInfo::enterReclaimer);
             }
         }
     }

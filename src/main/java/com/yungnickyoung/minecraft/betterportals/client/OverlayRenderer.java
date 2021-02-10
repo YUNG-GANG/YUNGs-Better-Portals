@@ -3,7 +3,6 @@ package com.yungnickyoung.minecraft.betterportals.client;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.capability.CapabilityModule;
-import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
@@ -67,8 +66,7 @@ public class OverlayRenderer {
             return;
         }
 
-        IPlayerPortalInfo playerPortalInfo = Minecraft.getInstance().player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).resolve().orElse(null);
-        if (playerPortalInfo != null) {
+        Minecraft.getInstance().player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
             // Current amount of time in portal
             float portalTime = playerPortalInfo.getPrevTimeInPortalFluid() + (playerPortalInfo.getTimeInPortalFluid() - playerPortalInfo.getPrevTimeInPortalFluid()) * event.getPartialTicks();
 
@@ -115,7 +113,7 @@ public class OverlayRenderer {
             bufferbuilder.pos(0.0D, 0.0D, -90.0D).color(colors[0], colors[1], colors[2], portalTime).tex(minU, minV).endVertex();
             tessellator.draw();
             RenderSystem.disableBlend();
-        }
+        });
     }
 
     public static void renderReclaimerOverlay(RenderGameOverlayEvent.Pre event) {
@@ -123,8 +121,7 @@ public class OverlayRenderer {
             return;
         }
 
-        IPlayerPortalInfo playerPortalInfo = Minecraft.getInstance().player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).resolve().orElse(null);
-        if (playerPortalInfo != null) {
+        Minecraft.getInstance().player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
             // Current amount of time in reclaimer
             float reclaimerTime = playerPortalInfo.getPrevTimeInReclaimer() + (playerPortalInfo.getTimeInReclaimer() - playerPortalInfo.getPrevTimeInReclaimer()) * event.getPartialTicks();
 
@@ -176,33 +173,29 @@ public class OverlayRenderer {
             bufferbuilder.pos(0.0D, 0.0D, -90.0D).color(colors[0], colors[1], colors[2], alpha).tex(4.0F, yOffset).endVertex();
             tessellator.draw();
             RenderSystem.disableBlend();
-        }
+        });
     }
 
     public static void renderDebugOverlay(RenderGameOverlayEvent.Text event) {
         PlayerEntity player = Minecraft.getInstance().player;
-        IPlayerPortalInfo playerPortalInfo = player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).resolve().orElse(null);
-
-        if (playerPortalInfo == null) {
-            return;
-        }
-
-//        event.getLeft().add("Reclaimer: ");
-//        event.getLeft().add("  isIn: " + playerPortalInfo.isInReclaimer());
-//        event.getLeft().add("  counter: " + playerPortalInfo.getReclaimerCounter());
-//        event.getLeft().add("  cooldown: " + playerPortalInfo.getReclaimerCooldown());
+        player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
+//            event.getLeft().add("Reclaimer: ");
+//            event.getLeft().add("  isIn: " + playerPortalInfo.isInReclaimer());
+//            event.getLeft().add("  counter: " + playerPortalInfo.getReclaimerCounter());
+//            event.getLeft().add("  cooldown: " + playerPortalInfo.getReclaimerCooldown());
 //
-//        event.getRight().add("Portal Fluid: ");
-//        event.getRight().add("  isIn: " + playerPortalInfo.isInPortalFluid());
-//        event.getRight().add("  counter: " + playerPortalInfo.getPortalFluidCounter());
-//        event.getRight().add("  cooldown: " + playerPortalInfo.getPortalFluidCooldown());
+//            event.getRight().add("Portal Fluid: ");
+//            event.getRight().add("  isIn: " + playerPortalInfo.isInPortalFluid());
+//            event.getRight().add("  counter: " + playerPortalInfo.getPortalFluidCounter());
+//            event.getRight().add("  cooldown: " + playerPortalInfo.getPortalFluidCooldown());
 //
-//        event.getRight().add("");
-//        event.getRight().add("");
-//        event.getRight().add("");
-//        event.getRight().add("");
+//            event.getRight().add("");
+//            event.getRight().add("");
+//            event.getRight().add("");
+//            event.getRight().add("");
 
-        event.getRight().add("Render time: " + playerPortalInfo.getTimeInPortalFluid());
-        event.getRight().add("Prev render time: " + playerPortalInfo.getPrevTimeInPortalFluid());
+            event.getRight().add("Render time: " + playerPortalInfo.getTimeInPortalFluid());
+            event.getRight().add("Prev render time: " + playerPortalInfo.getPrevTimeInPortalFluid());
+        });
     }
 }
