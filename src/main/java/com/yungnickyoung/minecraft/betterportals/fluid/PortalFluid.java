@@ -2,6 +2,7 @@ package com.yungnickyoung.minecraft.betterportals.fluid;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
+import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.item.ItemModule;
 import com.yungnickyoung.minecraft.betterportals.util.RGBAColor;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariantSettings;
@@ -187,17 +188,16 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
             try {
                 dimensionName = Objects.requireNonNull( ((ChunkRenderCache)world).world.getDimensionKey().getLocation()).toString();
             } catch (Exception e) {
-                BetterPortals.LOGGER.error("ERROR: Unable to get dimension name! Using default portal color...");
-                this.currColor = 0xFC190040;
-                return 0xFC190040;
+                this.currColor = BPSettings.DEFAULT_FLUID_COLOR;
+                return BPSettings.DEFAULT_FLUID_COLOR;
             }
 
             PortalLakeVariantSettings settings = PortalLakeVariants.get().getVariantForDimension(dimensionName);
 
             // If no variant for this dimension, fallback to default fluid color to avoid NPE crash
             if (settings == null) {
-                this.currColor = 0xFC190040;
-                return 0xFC190040;
+                this.currColor = BPSettings.DEFAULT_FLUID_COLOR;
+                return BPSettings.DEFAULT_FLUID_COLOR;
             }
 
             RGBAColor fluidColor = settings.getFluidColor();

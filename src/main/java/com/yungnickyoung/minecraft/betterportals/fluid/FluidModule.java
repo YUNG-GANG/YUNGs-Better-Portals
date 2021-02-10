@@ -31,7 +31,7 @@ public class FluidModule implements IModule {
                 .overlay(new ResourceLocation(BPSettings.MOD_ID, "block/portal_fluid_overlay"))
                 .viscosity(6000)
                 .translationKey("block.betterportals.portal_fluid")
-                .color(0xFC190040)
+                .color(BPSettings.DEFAULT_FLUID_COLOR)
                 .luminosity(7)
                 .rarity(Rarity.RARE)
         )
