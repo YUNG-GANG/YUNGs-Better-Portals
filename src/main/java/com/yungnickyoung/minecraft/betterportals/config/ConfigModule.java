@@ -53,7 +53,7 @@ public class ConfigModule implements IModule  {
                 "Each dimensional rift in rifts.json is an object with the following properties:\n" +
                 " - blockSelector: A BlockSetSelector describing the blocks this rift is made of.\n" +
                 "       See the bottom of this README for documentation on BlockSetSelectors.\n" +
-                " - fluidColor: The color of ANY DIMENSIONAL PLASMA IN THIS DIMENSION.\n" +
+                " - fluidColor: The color of ANY DIMENSIONAL PLASMA IN THIS DIMENSION. Keep in mind this hue is added to the base purple hue\n" +
                 "   - red: Any hex string from 00 to FF.\n" +
                 "   - green: Any hex string from 00 to FF.\n" +
                 "   - blue: Any hex string from 00 to FF.\n" +
