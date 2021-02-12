@@ -38,7 +38,7 @@ public class ClientModule implements IModule {
     private static void onClientSetup(FMLClientSetupEvent event) {
         ClientRegistry.bindTileEntityRenderer(TileEntityModule.RECLAIMER_TILE_ENTITY, ReclaimerTileEntityRenderer::new);
         event.enqueueWork(() -> {
-            RenderTypeLookup.setRenderLayer(BlockModule.PORTAL_FLUID_BLOCK, RenderType.getTranslucent());
+//            RenderTypeLookup.setRenderLayer(BlockModule.PORTAL_FLUID_BLOCK, RenderType.getTranslucent());
             RenderTypeLookup.setRenderLayer(FluidModule.PORTAL_FLUID, RenderType.getTranslucent());
             RenderTypeLookup.setRenderLayer(FluidModule.PORTAL_FLUID_FLOWING, RenderType.getTranslucent());
             RenderTypeLookup.setRenderLayer(BlockModule.RECLAIMER_BLOCK, RenderType.getCutout()); // Cutout renders the TE even when the block is out of sight
