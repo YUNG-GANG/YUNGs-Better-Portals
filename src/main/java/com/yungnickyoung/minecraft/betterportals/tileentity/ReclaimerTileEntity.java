@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.block.ReclaimerBlock;
 import com.yungnickyoung.minecraft.betterportals.capability.CapabilityModule;
+import com.yungnickyoung.minecraft.betterportals.capability.IEntityPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
@@ -151,6 +152,11 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
             List<CreatureEntity> nonPlayersInBeam = getNonPlayersInBeam();
             for (CreatureEntity entity : nonPlayersInBeam) {
                 entity.addPotionEffect(new EffectInstance(Effects.LEVITATION, 2, floatAmp, false, false));
+
+                // Powered reclaimers insta-teleport non-player entities
+                if (isPowered && !entity.isPassenger() && !entity.isBeingRidden() && entity.isNonBoss()) {
+                    entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).ifPresent(IEntityPortalInfo::enterReclaimer);
+                }
             }
         }
 

@@ -112,9 +112,9 @@ public class PortalLakeTeleporter implements ITeleporter {
     }
 
     /**
-     * Static method for initializing player teleportation.
+     * Static method for teleporting player.
      */
-    public static void initTeleport(Entity entity, IPlayerPortalInfo playerPortalInfo) {
+    public static void teleportPlayer(Entity entity, IPlayerPortalInfo playerPortalInfo) {
         // Must not be riding anything
         if (entity.isPassenger() || entity.isBeingRidden() || !(entity instanceof ServerPlayerEntity)) {
             return;
@@ -143,9 +143,9 @@ public class PortalLakeTeleporter implements ITeleporter {
     }
 
     /**
-     * Static method for initializing non-player teleportation.
+     * Static method for teleporting non-player entities.
      */
-    public static void initTeleport(Entity entity, IEntityPortalInfo entityPortalInfo) {
+    public static void teleportNonPlayer(Entity entity, IEntityPortalInfo entityPortalInfo) {
         // Must not be riding anything
         if (entity.isPassenger() || entity.isBeingRidden() || !entity.isNonBoss()) {
             return;
@@ -167,6 +167,7 @@ public class PortalLakeTeleporter implements ITeleporter {
         }
 
         // Teleport entity
+        entityPortalInfo.reset();
         entity.changeDimension(targetWorld, new PortalLakeTeleporter());
     }
 }

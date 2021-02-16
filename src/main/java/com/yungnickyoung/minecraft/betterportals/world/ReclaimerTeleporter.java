@@ -1,6 +1,7 @@
 package com.yungnickyoung.minecraft.betterportals.world;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
+import com.yungnickyoung.minecraft.betterportals.capability.IEntityPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.fluid.FluidModule;
 import com.yungnickyoung.minecraft.betterportals.util.BlockUtil;
@@ -37,7 +38,7 @@ import java.util.Comparator;
 import java.util.Optional;
 import java.util.function.Function;
 
-public class MonolithTeleporter implements ITeleporter {
+public class ReclaimerTeleporter implements ITeleporter {
     @Override
     public Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
         return repositionEntity.apply(false); // pass in false to avoid attempting to spawn a vanilla portal
@@ -144,7 +145,7 @@ public class MonolithTeleporter implements ITeleporter {
     }
 
     /**
-     * Static method for initializing teleportation.
+     * Static method for teleporting player.
      */
     public static void initTeleport(Entity entity, IPlayerPortalInfo playerPortalInfo) {
         // Must not be riding anything
@@ -170,8 +171,37 @@ public class MonolithTeleporter implements ITeleporter {
         }
 
         // Update player teleportation state and teleport the player
-        playerEntity.changeDimension(targetWorld, new MonolithTeleporter());
+        playerEntity.changeDimension(targetWorld, new ReclaimerTeleporter());
         playerPortalInfo.reset();
+    }
+
+    /**
+     * Static method for teleporting non-player entities.
+     */
+    public static void teleportNonPlayer(Entity entity, IEntityPortalInfo entityPortalInfo) {
+        // Must not be riding anything
+        if (entity.isPassenger() || entity.isBeingRidden() || !entity.isNonBoss()) {
+            return;
+        }
+
+        // Find target dimension for this fluid
+        String sourceDimension = entity.world.getDimensionKey().getLocation().toString();
+        MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(sourceDimension);
+        String targetDimension = settings.getTargetDimension();
+
+        MinecraftServer minecraftServer = entity.getServer(); // the server itself
+        ServerWorld targetWorld = minecraftServer.getWorld(RegistryKey.getOrCreateKey(Registry.WORLD_KEY, new ResourceLocation(targetDimension)));
+
+        // Prevent crash due to mojang bug that makes mod's json dimensions not exist upload first creation of world on server. A restart fixes this.
+        if (targetWorld == null) {
+            BetterPortals.LOGGER.error("Unable to enter dimension. You may have entered the dimension name incorrectly: {}", targetDimension);
+            BetterPortals.LOGGER.error("Alternatively, this could be due to a bug in vanilla Minecraft. Please restart the game to fix this.");
+            return;
+        }
+
+        // Teleport entity
+        entityPortalInfo.reset();
+        entity.changeDimension(targetWorld, new ReclaimerTeleporter());
     }
 
     private int xzDist(Vector3i pos1, Vector3i pos2) {

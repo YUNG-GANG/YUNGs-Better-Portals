@@ -2,9 +2,10 @@ package com.yungnickyoung.minecraft.betterportals.capability;
 
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.module.IModule;
-import com.yungnickyoung.minecraft.betterportals.world.MonolithTeleporter;
+import com.yungnickyoung.minecraft.betterportals.world.ReclaimerTeleporter;
 import com.yungnickyoung.minecraft.betterportals.world.PortalLakeTeleporter;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
@@ -18,6 +19,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
@@ -94,7 +96,7 @@ public class CapabilityModule implements IModule {
 
         event.player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
             if (event.side == LogicalSide.SERVER) {
-                playerPortalInfo.serverTick(event.player, PortalLakeTeleporter::initTeleport, MonolithTeleporter::initTeleport);
+                playerPortalInfo.serverTick(event.player, PortalLakeTeleporter::teleportPlayer, ReclaimerTeleporter::initTeleport);
             }
             if (event.side == LogicalSide.CLIENT) {
                 playerPortalInfo.clientTick(event.player);
@@ -104,24 +106,14 @@ public class CapabilityModule implements IModule {
 
     /**
      * Entity tick event.
-     * Handles non-player portal teleportation (portal fluid only).
+     * Handles non-player portal teleportation.
      */
-    private static void onEntityTick(TickEvent.WorldTickEvent event) {
-        if (event.side != LogicalSide.SERVER) return;
-        if (event.phase != TickEvent.Phase.END) return;
-        if (!(event.world instanceof ServerWorld)) return;
-
-        ServerWorld serverWorld = (ServerWorld) event.world;
-        Iterable<Entity> entities = serverWorld.func_241136_z_();
-        entities.forEach(entity -> {
-            if (!(entity instanceof PlayerEntity)) {
-                entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).ifPresent(entityPortalInfo -> {
-                    if (entityPortalInfo.getInPortal()) {
-                        entityPortalInfo.setInPortal(false);
-                        PortalLakeTeleporter.initTeleport(entity, entityPortalInfo);
-                    }
-                });
-            }
-        });
+    private static void onEntityTick(LivingEvent.LivingUpdateEvent event) {
+        LivingEntity entity = event.getEntityLiving();
+        if (!(entity instanceof PlayerEntity) && entity.isServerWorld()) {
+            entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).ifPresent(entityPortalInfo -> {
+                entityPortalInfo.serverTick(entity, PortalLakeTeleporter::teleportNonPlayer, ReclaimerTeleporter::teleportNonPlayer);
+            });
+        }
     }
 }

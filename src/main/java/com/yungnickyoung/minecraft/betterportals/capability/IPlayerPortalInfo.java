@@ -19,7 +19,6 @@ public interface IPlayerPortalInfo {
     /*
      * Common getters (both sides)
      */
-
     int getReclaimerCounter();
     int getReclaimerCooldown();
     boolean isInReclaimer();
@@ -30,7 +29,6 @@ public interface IPlayerPortalInfo {
     /*
      * Common setters (both sides)
      */
-
     void setReclaimerCounter(int counter);
     void setReclaimerCooldown(int cooldown);
     void setInReclaimer(boolean inPortal);
@@ -41,7 +39,6 @@ public interface IPlayerPortalInfo {
     /*
      * Client getters
      */
-
     float getTimeInPortalFluid();
     float getPrevTimeInPortalFluid();
     float getTimeInReclaimer();
@@ -50,7 +47,6 @@ public interface IPlayerPortalInfo {
     /*
      * Client setters
      */
-
     void setTimeInPortalFluid(float time);
     void setPrevTimeInPortalFluid(float time);
     void setTimeInReclaimer(float time);
@@ -59,7 +55,6 @@ public interface IPlayerPortalInfo {
     /*
      * Common offset methods (both sides)
      */
-
     default void offsetReclaimerCounter(int offset) {
         setReclaimerCounter(getReclaimerCounter() + offset);
     }
@@ -79,7 +74,6 @@ public interface IPlayerPortalInfo {
     /*
      * Client offset methods
      */
-
     default void offsetTimeInPortalFluid(float offset) {
         setTimeInPortalFluid(getTimeInPortalFluid() + offset);
     }
@@ -91,7 +85,6 @@ public interface IPlayerPortalInfo {
     /*
      * Common behavior methods (both sides)
      */
-
     default void enterReclaimer() {
         if (this.getReclaimerCooldown() > 0) {
             this.setReclaimerCooldown(RECLAIMER_COOLDOWN);
@@ -268,7 +261,6 @@ public interface IPlayerPortalInfo {
     /*
      * DEBUG
      */
-
     int getDEBUGclientTickCounter();
     int getDEBUGserverTickCounter();
     int getDEBUGportalCounter();

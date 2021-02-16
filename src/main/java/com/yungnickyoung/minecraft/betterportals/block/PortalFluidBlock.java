@@ -34,9 +34,9 @@ public class PortalFluidBlock extends FlowingFluidBlock {
                 playerPortalInfo.setDEBUGportalCounter(playerPortalInfo.getDEBUGportalCounter() + 1);
                 playerPortalInfo.enterPortalFluid();
             });
-        } else if (!entity.isPassenger() && !entity.isBeingRidden() && entity.isNonBoss()) { // Non-player entities get insta-teleported
+        } else if (!entity.isPassenger() && !entity.isBeingRidden() && entity.isNonBoss() && !worldIn.isRemote) { // Non-player entities get insta-teleported
             entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).ifPresent(entityPortalInfo -> {
-                entityPortalInfo.setInPortal(true);
+                entityPortalInfo.enterPortalFluid();
             });
         }
     }

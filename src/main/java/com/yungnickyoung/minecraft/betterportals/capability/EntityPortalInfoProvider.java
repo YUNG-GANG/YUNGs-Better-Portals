@@ -27,12 +27,16 @@ public class EntityPortalInfoProvider implements ICapabilitySerializable<Compoun
     @Override
     public CompoundNBT serializeNBT() {
         CompoundNBT nbt = new CompoundNBT();
-        nbt.putBoolean("entityIsInPortal", entityPortalInfo.getInPortal());
+        nbt.putBoolean("entityIsInPortal", entityPortalInfo.isInPortalFluid());
+        nbt.putBoolean("entityIsInReclaimer", entityPortalInfo.isInReclaimer());
+        nbt.putInt("teleportCooldown", entityPortalInfo.getTeleportCooldown());
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundNBT nbt) {
-        entityPortalInfo.setInPortal(nbt.getBoolean("entityIsInPortal"));
+        entityPortalInfo.setInPortalFluid(nbt.getBoolean("entityIsInPortal"));
+        entityPortalInfo.setInReclaimer(nbt.getBoolean("entityIsInReclaimer"));
+        entityPortalInfo.setTeleportCooldown(nbt.getInt("teleportCooldown"));
     }
 }
