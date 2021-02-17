@@ -38,7 +38,7 @@ public class PortalLakeVariants {
             .setMaxY(15)
             .setPlayerTeleportedMinY(100)
             .setPlayerTeleportedMaxY(120)
-            .setSpawnChance(.15)
+            .setSpawnChance(.05)
             .setSpawnDimension("minecraft:overworld")
             .setTargetDimension("minecraft:the_nether")
             .setSpawnPlatformBlock(Blocks.NETHERRACK.getDefaultState())

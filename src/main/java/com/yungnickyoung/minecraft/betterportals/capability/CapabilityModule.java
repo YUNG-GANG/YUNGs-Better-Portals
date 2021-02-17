@@ -53,12 +53,12 @@ public class CapabilityModule implements IModule {
     private static void onAttachCapabilitiesToEntities(AttachCapabilitiesEvent<Entity> event) {
         Entity entity = event.getObject();
 
-        if (entity instanceof PlayerEntity) {
+        if (entity instanceof PlayerEntity && !entity.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).isPresent()) {
             event.addCapability(
                 new ResourceLocation(BPSettings.MOD_ID, "player_portal_info"),
                 new PlayerPortalInfoProvider(new PlayerPortalInfo())
             );
-        } else {
+        } else if (!entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).isPresent()) {
             event.addCapability(
                 new ResourceLocation(BPSettings.MOD_ID, "entity_portal_info"),
                 new EntityPortalInfoProvider(new EntityPortalInfo())
