@@ -1,5 +1,8 @@
 package com.yungnickyoung.minecraft.betterportals.capability;
 
+import com.yungnickyoung.minecraft.betterportals.api.IPlayerPortalInfo;
+import net.minecraft.nbt.CompoundNBT;
+
 public class PlayerPortalInfo implements IPlayerPortalInfo {
     private int reclaimerCounter;  // counter to increment while player is in reclaimer
     private int reclaimerCooldown; // cooldown before player can teleport again via reclaimer
@@ -152,5 +155,57 @@ public class PlayerPortalInfo implements IPlayerPortalInfo {
     @Override
     public void setDEBUGportalCounter(int counter) {
         this.DEBUGportalCounter = counter;
+    }
+
+    @Override
+    public CompoundNBT serializeNBT() {
+        CompoundNBT nbt = new CompoundNBT();
+
+        // Reclaimer tags
+        nbt.putInt("reclaimerCounter", this.getReclaimerCounter());
+        nbt.putInt("reclaimerCooldown", this.getReclaimerCooldown());
+        nbt.putBoolean("isInReclaimer", this.isInReclaimer());
+
+        // Portal fluid tags
+        nbt.putInt("portalFluidCounter", this.getPortalFluidCounter());
+        nbt.putInt("portalFluidCooldown", this.getPortalFluidCooldown());
+        nbt.putBoolean("isInPortalFluid", this.isInPortalFluid());
+
+        // Client only
+        nbt.putFloat("timeInPortalFluid", this.getTimeInPortalFluid());
+        nbt.putFloat("prevTimeInPortalFluid", this.getPrevTimeInPortalFluid());
+        nbt.putFloat("timeInReclaimer", this.getTimeInReclaimer());
+        nbt.putFloat("prevTimeInReclaimer", this.getPrevTimeInReclaimer());
+
+        // DEBUG
+        nbt.putInt("DEBUGclientTickCounter", this.getDEBUGclientTickCounter());
+        nbt.putInt("DEBUGserverTickCounter", this.getDEBUGserverTickCounter());
+        nbt.putInt("DEBUGportalCounter", this.getDEBUGportalCounter());
+
+        return nbt;
+    }
+
+    @Override
+    public void deserializeNBT(CompoundNBT nbt) {
+        // Reclaimer tags
+        this.setReclaimerCounter(nbt.getInt("reclaimerCounter"));
+        this.setReclaimerCooldown(nbt.getInt("reclaimerCooldown"));
+        this.setInReclaimer(nbt.getBoolean("isInReclaimer"));
+
+        // Portal fluid tags
+        this.setPortalFluidCounter(nbt.getInt("portalFluidCounter"));
+        this.setPortalFluidCooldown(nbt.getInt("portalFluidCooldown"));
+        this.setInPortalFluid(nbt.getBoolean("isInPortalFluid"));
+
+        // Client only
+        this.setTimeInPortalFluid(nbt.getFloat("timeInPortalFluid"));
+        this.setPrevTimeInPortalFluid(nbt.getFloat("prevTimeInPortalFluid"));
+        this.setTimeInReclaimer(nbt.getFloat("timeInReclaimer"));
+        this.setPrevTimeInReclaimer(nbt.getFloat("prevTimeInReclaimer"));
+
+        // DEBUG
+        this.setDEBUGclientTickCounter(nbt.getInt("DEBUGclientTickCounter"));
+        this.setDEBUGserverTickCounter(nbt.getInt("DEBUGserverTickCounter"));
+        this.setDEBUGportalCounter(nbt.getInt("DEBUGportalCounter"));
     }
 }

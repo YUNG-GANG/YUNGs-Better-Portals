@@ -1,18 +1,20 @@
-package com.yungnickyoung.minecraft.betterportals.capability;
+package com.yungnickyoung.minecraft.betterportals.api;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.potion.Effects;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvents;
+import net.minecraftforge.common.util.INBTSerializable;
 
 import java.util.Random;
 import java.util.function.BiConsumer;
 
-public interface IPlayerPortalInfo {
+public interface IPlayerPortalInfo extends INBTSerializable<CompoundNBT> {
     int PORTAL_COOLDOWN = 10;
     int RECLAIMER_COOLDOWN = 10;
 

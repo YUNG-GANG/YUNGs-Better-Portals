@@ -1,8 +1,8 @@
 package com.yungnickyoung.minecraft.betterportals.world;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
-import com.yungnickyoung.minecraft.betterportals.capability.IEntityPortalInfo;
-import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
+import com.yungnickyoung.minecraft.betterportals.api.IEntityPortalInfo;
+import com.yungnickyoung.minecraft.betterportals.api.IPlayerPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.util.BlockUtil;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;

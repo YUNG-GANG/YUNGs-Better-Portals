@@ -1,15 +1,5 @@
 package com.yungnickyoung.minecraft.betterportals.client;
 
-import com.mojang.blaze3d.matrix.MatrixStack;
-import com.yungnickyoung.minecraft.betterportals.capability.CapabilityModule;
-import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
-import net.minecraft.client.Minecraft;
-import net.minecraft.potion.Effects;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.vector.Matrix4f;
-import net.minecraft.util.math.vector.Vector3f;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-
 //public class PortalPerturbRenderer {
 //    public static void renderPortalPerturb(RenderWorldLastEvent event) {
 //        IPlayerPortalInfo playerPortalInfo = Minecraft.getInstance().player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).resolve().orElse(null);

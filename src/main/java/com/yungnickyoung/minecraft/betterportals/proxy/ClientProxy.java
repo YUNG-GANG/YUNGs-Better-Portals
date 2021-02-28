@@ -5,6 +5,6 @@ import com.yungnickyoung.minecraft.betterportals.module.ModuleLoader;
 public class ClientProxy extends CommonProxy {
     public void init() {
         super.init();
-        ModuleLoader.instance().initClientModules();
+        ModuleLoader.get().initClientModules();
     }
 }

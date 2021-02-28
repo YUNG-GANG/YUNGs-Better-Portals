@@ -1,8 +1,8 @@
 package com.yungnickyoung.minecraft.betterportals.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.yungnickyoung.minecraft.betterportals.api.BetterPortalsCapabilities;
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
-import com.yungnickyoung.minecraft.betterportals.capability.CapabilityModule;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
@@ -66,7 +66,7 @@ public class OverlayRenderer {
             return;
         }
 
-        Minecraft.getInstance().player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
+        Minecraft.getInstance().player.getCapability(BetterPortalsCapabilities.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
             // Current amount of time in portal
             float portalTime = playerPortalInfo.getPrevTimeInPortalFluid() + (playerPortalInfo.getTimeInPortalFluid() - playerPortalInfo.getPrevTimeInPortalFluid()) * event.getPartialTicks();
 
@@ -121,7 +121,7 @@ public class OverlayRenderer {
             return;
         }
 
-        Minecraft.getInstance().player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
+        Minecraft.getInstance().player.getCapability(BetterPortalsCapabilities.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
             // Current amount of time in reclaimer
             float reclaimerTime = playerPortalInfo.getPrevTimeInReclaimer() + (playerPortalInfo.getTimeInReclaimer() - playerPortalInfo.getPrevTimeInReclaimer()) * event.getPartialTicks();
 
@@ -178,7 +178,7 @@ public class OverlayRenderer {
 
     public static void renderDebugOverlay(RenderGameOverlayEvent.Text event) {
         PlayerEntity player = Minecraft.getInstance().player;
-        player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
+        player.getCapability(BetterPortalsCapabilities.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
 //            event.getLeft().add("Reclaimer: ");
 //            event.getLeft().add("  isIn: " + playerPortalInfo.isInReclaimer());
 //            event.getLeft().add("  counter: " + playerPortalInfo.getReclaimerCounter());

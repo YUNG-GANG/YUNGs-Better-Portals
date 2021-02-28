@@ -1,11 +1,11 @@
 package com.yungnickyoung.minecraft.betterportals.tileentity;
 
 import com.google.common.collect.Lists;
+import com.yungnickyoung.minecraft.betterportals.api.BetterPortalsCapabilities;
+import com.yungnickyoung.minecraft.betterportals.api.IEntityPortalInfo;
+import com.yungnickyoung.minecraft.betterportals.api.IPlayerPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.block.ReclaimerBlock;
-import com.yungnickyoung.minecraft.betterportals.capability.CapabilityModule;
-import com.yungnickyoung.minecraft.betterportals.capability.IEntityPortalInfo;
-import com.yungnickyoung.minecraft.betterportals.capability.IPlayerPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
 import net.minecraft.block.BlockState;
@@ -19,7 +19,8 @@ import net.minecraft.potion.EffectInstance;
 import net.minecraft.potion.Effects;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvents;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.Heightmap;
@@ -155,7 +156,7 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
 
                 // Powered reclaimers insta-teleport non-player entities
                 if (isPowered && !entity.isPassenger() && !entity.isBeingRidden() && entity.isNonBoss()) {
-                    entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).ifPresent(IEntityPortalInfo::enterReclaimer);
+                    entity.getCapability(BetterPortalsCapabilities.ENTITY_PORTAL_INFO).ifPresent(IEntityPortalInfo::enterReclaimer);
                 }
             }
         }
@@ -177,7 +178,7 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
             // Powered reclaimers act as teleporters
             // Note that we don't check for world.isRemote here - we need to update the capability on the client side for rendering
             if (isPowered) {
-                playerEntity.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(IPlayerPortalInfo::enterReclaimer);
+                playerEntity.getCapability(BetterPortalsCapabilities.PLAYER_PORTAL_INFO).ifPresent(IPlayerPortalInfo::enterReclaimer);
             }
         }
     }

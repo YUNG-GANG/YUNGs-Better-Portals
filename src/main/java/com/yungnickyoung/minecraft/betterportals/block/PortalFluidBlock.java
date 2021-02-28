@@ -1,6 +1,6 @@
 package com.yungnickyoung.minecraft.betterportals.block;
 
-import com.yungnickyoung.minecraft.betterportals.capability.CapabilityModule;
+import com.yungnickyoung.minecraft.betterportals.api.BetterPortalsCapabilities;
 import com.yungnickyoung.minecraft.betterportals.fluid.FluidModule;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
@@ -30,12 +30,12 @@ public class PortalFluidBlock extends FlowingFluidBlock {
     @Override
     public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entity) {
         if (entity instanceof PlayerEntity && !entity.isPassenger() && !entity.isBeingRidden()) {
-            entity.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
+            entity.getCapability(BetterPortalsCapabilities.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
                 playerPortalInfo.setDEBUGportalCounter(playerPortalInfo.getDEBUGportalCounter() + 1);
                 playerPortalInfo.enterPortalFluid();
             });
         } else if (!entity.isPassenger() && !entity.isBeingRidden() && entity.isNonBoss() && !worldIn.isRemote) { // Non-player entities get insta-teleported
-            entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).ifPresent(entityPortalInfo -> {
+            entity.getCapability(BetterPortalsCapabilities.ENTITY_PORTAL_INFO).ifPresent(entityPortalInfo -> {
                 entityPortalInfo.enterPortalFluid();
             });
         }

@@ -14,15 +14,15 @@ import java.util.Map;
 
 public class ModuleLoader {
     // Singleton instance
-    private static final ModuleLoader instance = new ModuleLoader();
+    private static final ModuleLoader INSTANCE = new ModuleLoader();
 
     private ModuleLoader() {
         registerCommonModules();
         registerClientModules();
     }
 
-    public static ModuleLoader instance() {
-        return instance;
+    public static ModuleLoader get() {
+        return INSTANCE;
     }
 
     // List of Modules. We use linked hash maps to preserve insertion order.

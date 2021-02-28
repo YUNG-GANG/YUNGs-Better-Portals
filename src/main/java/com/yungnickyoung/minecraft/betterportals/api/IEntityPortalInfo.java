@@ -1,9 +1,12 @@
-package com.yungnickyoung.minecraft.betterportals.capability;
+package com.yungnickyoung.minecraft.betterportals.api;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.CompoundNBT;
+import net.minecraftforge.common.util.INBTSerializable;
+
 import java.util.function.BiConsumer;
 
-public interface IEntityPortalInfo {
+public interface IEntityPortalInfo extends INBTSerializable<CompoundNBT> {
     int TELEPORT_COOLDOWN = 100;
 
     boolean isInPortalFluid();

@@ -1,5 +1,6 @@
 package com.yungnickyoung.minecraft.betterportals.capability;
 
+import com.yungnickyoung.minecraft.betterportals.api.*;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import com.yungnickyoung.minecraft.betterportals.world.ReclaimerTeleporter;
@@ -11,10 +12,8 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.server.ServerWorld;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -22,54 +21,42 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class CapabilityModule implements IModule {
-    // Capabilities
-    @CapabilityInject(IPlayerPortalInfo.class)
-    public static final Capability<IPlayerPortalInfo> PLAYER_PORTAL_INFO = null;
-
-    @CapabilityInject(IEntityPortalInfo.class)
-    public static final Capability<IEntityPortalInfo> ENTITY_PORTAL_INFO = null;
-
     @Override
     public void init() {
         MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, CapabilityModule::onAttachCapabilitiesToEntities);
-        MinecraftForge.EVENT_BUS.addListener(CapabilityModule::commonSetup);
         MinecraftForge.EVENT_BUS.addListener(CapabilityModule::onPlayerTick);
         MinecraftForge.EVENT_BUS.addListener(CapabilityModule::onEntityTick);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(CapabilityModule::commonSetup);
     }
 
     /**
      * Common setup. Registers the capabilities with the capability manager.
      */
     private static void commonSetup(FMLCommonSetupEvent event) {
-        CapabilityManager.INSTANCE.register(IPlayerPortalInfo.class, new CapabilityFactory<>(), PlayerPortalInfo::new);
-        CapabilityManager.INSTANCE.register(IEntityPortalInfo.class, new CapabilityFactory<>(), EntityPortalInfo::new);
+        CapabilityManager.INSTANCE.register(IPlayerPortalInfo.class, new CapabilityStorage<>(), PlayerPortalInfo::new);
+        CapabilityManager.INSTANCE.register(IEntityPortalInfo.class, new CapabilityStorage<>(), EntityPortalInfo::new);
     }
 
     /**
      * Attaches capabilities to player entity.
      */
     private static void onAttachCapabilitiesToEntities(AttachCapabilitiesEvent<Entity> event) {
-        Entity entity = event.getObject();
-
-        if (entity instanceof PlayerEntity && !entity.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).isPresent()) {
-            event.addCapability(
-                new ResourceLocation(BPSettings.MOD_ID, "player_portal_info"),
-                new PlayerPortalInfoProvider(new PlayerPortalInfo())
-            );
-        } else if (!entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).isPresent()) {
-            event.addCapability(
-                new ResourceLocation(BPSettings.MOD_ID, "entity_portal_info"),
-                new EntityPortalInfoProvider(new EntityPortalInfo())
-            );
+        if (event.getObject() instanceof PlayerEntity) {
+            NBTCapabilityProvider<IPlayerPortalInfo> capabilityProvider = new NBTCapabilityProvider<>(BetterPortalsCapabilities.PLAYER_PORTAL_INFO, new PlayerPortalInfo());
+            event.addCapability(new ResourceLocation(BPSettings.MOD_ID, "player_portal_info"), capabilityProvider);
+        } else if (event.getObject() instanceof LivingEntity) {
+            NBTCapabilityProvider<IEntityPortalInfo> capabilityProvider = new NBTCapabilityProvider<>(BetterPortalsCapabilities.ENTITY_PORTAL_INFO, new EntityPortalInfo());
+            event.addCapability(new ResourceLocation(BPSettings.MOD_ID, "entity_portal_info"), capabilityProvider);
         }
     }
 
     /**
-     * Capability Factory helper class.
+     * Capability helper class.
      */
-    private static class CapabilityFactory<T> implements Capability.IStorage<T> {
+    private static class CapabilityStorage<T> implements Capability.IStorage<T> {
         @Override
         public INBT writeNBT(Capability<T> capability, T instance, Direction side) {
             if (instance instanceof INBTSerializable)
@@ -94,7 +81,7 @@ public class CapabilityModule implements IModule {
             return;
         }
 
-        event.player.getCapability(CapabilityModule.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
+        event.player.getCapability(BetterPortalsCapabilities.PLAYER_PORTAL_INFO).ifPresent(playerPortalInfo -> {
             if (event.side == LogicalSide.SERVER) {
                 playerPortalInfo.serverTick(event.player, PortalLakeTeleporter::teleportPlayer, ReclaimerTeleporter::initTeleport);
             }
@@ -111,7 +98,7 @@ public class CapabilityModule implements IModule {
     private static void onEntityTick(LivingEvent.LivingUpdateEvent event) {
         LivingEntity entity = event.getEntityLiving();
         if (!(entity instanceof PlayerEntity) && entity.isServerWorld()) {
-            entity.getCapability(CapabilityModule.ENTITY_PORTAL_INFO).ifPresent(entityPortalInfo -> {
+            entity.getCapability(BetterPortalsCapabilities.ENTITY_PORTAL_INFO).ifPresent(entityPortalInfo -> {
                 entityPortalInfo.serverTick(entity, PortalLakeTeleporter::teleportNonPlayer, ReclaimerTeleporter::teleportNonPlayer);
             });
         }
