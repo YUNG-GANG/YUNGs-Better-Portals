@@ -9,6 +9,8 @@ import com.yungnickyoung.minecraft.betterportals.world.feature.PortalLake2Featur
 import com.yungnickyoung.minecraft.betterportals.world.feature.PortalLakeFeature;
 import com.yungnickyoung.minecraft.betterportals.world.placement.PortalLakePlacement;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.village.PointOfInterestType;
 import net.minecraft.world.gen.GenerationStage;
 import net.minecraft.world.gen.feature.*;
@@ -19,6 +21,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 public class WorldGenModule implements IModule {
@@ -45,6 +48,7 @@ public class WorldGenModule implements IModule {
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, WorldGenModule::registerFeatures);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Placement.class, WorldGenModule::registerDecorators);
         FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(PointOfInterestType.class, WorldGenModule::registerPointsofInterest);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(WorldGenModule::commonSetup);
         MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, WorldGenModule::onBiomeLoad);
     }
 
@@ -55,6 +59,18 @@ public class WorldGenModule implements IModule {
         event.getRegistry().register(PORTAL_LAKE.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "portal_lake")));
         event.getRegistry().register(PORTAL_LAKE_2.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "portal_lake_2")));
         event.getRegistry().register(MONOLITH.setRegistryName(new ResourceLocation(BPSettings.MOD_ID, "monolith")));
+    }
+
+    /**
+     * Common setup. Registers configured features.
+     */
+    private static void commonSetup(FMLCommonSetupEvent event) {
+        event.enqueueWork(() -> {
+            Registry<ConfiguredFeature<?, ?>> registry = WorldGenRegistries.CONFIGURED_FEATURE;
+            Registry.register(registry, new ResourceLocation(BPSettings.MOD_ID, "portal_lake"), CONFIGURED_PORTAL_LAKE);
+            Registry.register(registry, new ResourceLocation(BPSettings.MOD_ID, "portal_lake_2"), CONFIGURED_PORTAL_LAKE_2);
+            Registry.register(registry, new ResourceLocation(BPSettings.MOD_ID, "monolith"), CONFIGURED_MONOLITH);
+        });
     }
 
     /**
