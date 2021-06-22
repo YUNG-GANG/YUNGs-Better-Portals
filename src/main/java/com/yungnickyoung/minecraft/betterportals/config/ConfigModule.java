@@ -5,7 +5,10 @@ import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;
 import com.yungnickyoung.minecraft.yungsapi.io.JSON;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.io.File;
@@ -19,10 +22,17 @@ public class ConfigModule implements IModule  {
     public void init() {
         createDirectory();
         createJsonReadMe();
+
+        // Register config with Forge
+        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Configuration.SPEC, BPSettings.BASE_CONFIG_NAME);
+
+        // Refresh JSON config on world load so that user doesn't have to restart MC
+        MinecraftForge.EVENT_BUS.addListener(ConfigModule::onWorldLoad);
+    }
+
+    private static void onWorldLoad(WorldEvent.Load event) {
         loadRiftVariantSettings();
         loadMonolithVariantSettings();
-        // Register config with Forge
-        ModLoadingContext.get().registerConfig(net.minecraftforge.fml.config.ModConfig.Type.COMMON, Configuration.SPEC, BPSettings.BASE_CONFIG_NAME);
     }
 
     private static void createDirectory() {
@@ -132,12 +142,12 @@ public class ConfigModule implements IModule  {
             try {
                 JSON.createJsonFileFromObject(jsonPath, PortalLakeVariants.get());
             } catch (IOException e) {
-                BetterPortals.LOGGER.error("Error creating Better Portals {} file! - {}", fileName, e.toString());
+                BetterPortals.LOGGER.error("Unable to create {} file: {}", fileName, e.toString());
             }
         } else {
             // If file already exists, load data into PortalLakeVariants
             if (!jsonFile.canRead()) {
-                BetterPortals.LOGGER.error("Better Portals {} file not readable! Using default configuration...", fileName);
+                BetterPortals.LOGGER.error("Better Portals {} file is not readable! Using default configuration...", fileName);
                 return;
             }
 
@@ -160,12 +170,12 @@ public class ConfigModule implements IModule  {
             try {
                 JSON.createJsonFileFromObject(jsonPath, MonolithVariants.get());
             } catch (IOException e) {
-                BetterPortals.LOGGER.error("Error creating Better Portals {} file! - {}", fileName, e.toString());
+                BetterPortals.LOGGER.error("Unable to create {} file: {}", fileName, e.toString());
             }
         } else {
             // If file already exists, load data into PortalLakeVariants
             if (!jsonFile.canRead()) {
-                BetterPortals.LOGGER.error("Better Portals {} file not readable! Using default configuration...", fileName);
+                BetterPortals.LOGGER.error("Better Portals {} file is not readable! Using default configuration...", fileName);
                 return;
             }
 

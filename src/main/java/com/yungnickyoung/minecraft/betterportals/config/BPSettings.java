@@ -5,7 +5,7 @@ public class BPSettings {
 
     public static final String BASE_CONFIG_NAME = "betterportals-1_16.toml";
     public static final String CUSTOM_CONFIG_PATH = "betterportals";
-    public static final String VERSION_PATH = "1_16_3";
+    public static final String VERSION_PATH = "1_16";
 
     public static final int DEFAULT_FLUID_COLOR = 0xFC190020;
 

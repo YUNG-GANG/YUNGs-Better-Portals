@@ -2,16 +2,16 @@ modLoader="javafml"
 loaderVersion="[35,)"
 license="GPLv3"
 issueTrackerURL="https://github.com/yungnickyoung/YUNGs-Better-Portals/issues"
-displayURL="https://www.curseforge.com/minecraft/mc-mods/yungs-better-portals"
-logoFile="logo.png"
 
 [[mods]]
-	modId="${modId}"
-	version="${version}"
-	displayName="${modName}"
-	credits="${modCredits}"
-	authors="${modAuthor}"
-	description="${modDescription}"
+    modId="${modId}"
+    version="${version}"
+    displayName="${modName}"
+    credits="${modCredits}"
+    authors="${modAuthor}"
+    description="${modDescription}"
+    displayURL="https://www.curseforge.com/minecraft/mc-mods/yungs-better-portals"
+    logoFile="logo.png"
 
 [[dependencies.betterportals]]
     modId="forge"
@@ -22,7 +22,7 @@ logoFile="logo.png"
 
 [[dependencies.betterportals]]
     modId="yungsapi"
-    versionRange="[1.16.4-Forge-3,)"
+    versionRange="[1.16.4-Forge-6,)"
     mandatory=true
     ordering="NONE"
     side="BOTH"
