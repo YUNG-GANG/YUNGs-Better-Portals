@@ -159,6 +159,11 @@ public class ReclaimerTeleporter implements ITeleporter {
         // Find target dimension for this reclaimer
         String sourceDimension = playerEntity.world.getDimensionKey().getLocation().toString();
         MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(sourceDimension);
+
+        if (settings == null) {
+            return;
+        }
+
         String targetDimension = settings.getTargetDimension();
 
         MinecraftServer minecraftServer = playerEntity.getServer(); // the server itself
@@ -188,6 +193,11 @@ public class ReclaimerTeleporter implements ITeleporter {
         // Find target dimension for this fluid
         String sourceDimension = entity.world.getDimensionKey().getLocation().toString();
         MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(sourceDimension);
+
+        if (settings == null) {
+            return;
+        }
+
         String targetDimension = settings.getTargetDimension();
 
         MinecraftServer minecraftServer = entity.getServer(); // the server itself

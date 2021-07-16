@@ -86,6 +86,11 @@ public class OverlayRenderer {
             // Get color information for overlay in this dimension
             String sourceDimension = minecraft.world.getDimensionKey().getLocation().toString();
             PortalLakeVariantSettings settings = PortalLakeVariants.get().getVariantForDimension(sourceDimension);
+
+            if (settings == null) {
+                return;
+            }
+
             float[] colors = settings.getFluidColor().getColorComponentValues();
 
             // Alpha channel over time uses an adjusted portalTime value for a smoother transition
@@ -141,6 +146,11 @@ public class OverlayRenderer {
             // Get color information for overlay in this dimension
             String sourceDimension = minecraft.world.getDimensionKey().getLocation().toString();
             MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(sourceDimension);
+
+            if (settings == null) {
+                return;
+            }
+
             float[] colors = settings.getPoweredBeamColor().getColorComponentValues();
 
             // Alpha channel over time uses an adjusted reclaimerTime value for a smoother transition
