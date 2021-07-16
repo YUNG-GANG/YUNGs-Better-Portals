@@ -161,6 +161,8 @@ public class ReclaimerTeleporter implements ITeleporter {
         MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(sourceDimension);
 
         if (settings == null) {
+            BetterPortals.LOGGER.error("Unable to find reclaimer settings for dimension {}.", sourceDimension);
+            BetterPortals.LOGGER.error("Have you removed the reclaimer variant for this dimension?");
             return;
         }
 

@@ -127,6 +127,8 @@ public class PortalLakeTeleporter implements ITeleporter {
         PortalLakeVariantSettings settings = PortalLakeVariants.get().getVariantForDimension(sourceDimension);
 
         if (settings == null) {
+            BetterPortals.LOGGER.error("Unable to find rift settings for dimension {}.", sourceDimension);
+            BetterPortals.LOGGER.error("Have you removed the rift variant for this dimension?");
             return;
         }
 
