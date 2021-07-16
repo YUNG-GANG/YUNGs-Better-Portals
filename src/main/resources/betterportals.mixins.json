@@ -6,7 +6,9 @@
   "mixins": [
     "MixinPortalSize"
   ],
-  "client": [],
+  "client": [
+    "MixinClientPlayerEntity"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
