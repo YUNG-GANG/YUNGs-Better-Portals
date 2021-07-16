@@ -125,6 +125,13 @@ public class PortalLakeTeleporter implements ITeleporter {
         // Find target dimension for this fluid
         String sourceDimension = playerEntity.world.getDimensionKey().getLocation().toString();
         PortalLakeVariantSettings settings = PortalLakeVariants.get().getVariantForDimension(sourceDimension);
+
+        if (settings == null) {
+            BetterPortals.LOGGER.error("Unable to find rift settings for dimension {}.", sourceDimension);
+            BetterPortals.LOGGER.error("Have you removed the rift variant for this dimension?");
+            return;
+        }
+
         String targetDimension = settings.getTargetDimension();
 
         MinecraftServer minecraftServer = playerEntity.getServer(); // the server itself
@@ -154,6 +161,11 @@ public class PortalLakeTeleporter implements ITeleporter {
         // Find target dimension for this fluid
         String sourceDimension = entity.world.getDimensionKey().getLocation().toString();
         PortalLakeVariantSettings settings = PortalLakeVariants.get().getVariantForDimension(sourceDimension);
+
+        if (settings == null) {
+            return;
+        }
+
         String targetDimension = settings.getTargetDimension();
 
         MinecraftServer minecraftServer = entity.getServer(); // the server itself
