@@ -1,10 +1,8 @@
-package com.yungnickyoung.minecraft.betterportals.client;
+package com.yungnickyoung.minecraft.betterportals.init;
 
-import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
+import com.yungnickyoung.minecraft.betterportals.client.OverlayRenderer;
+import com.yungnickyoung.minecraft.betterportals.client.ReclaimerTileEntityRenderer;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
-import com.yungnickyoung.minecraft.betterportals.fluid.FluidModule;
-import com.yungnickyoung.minecraft.betterportals.module.IModule;
-import com.yungnickyoung.minecraft.betterportals.tileentity.TileEntityModule;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.RenderTypeLookup;
 import net.minecraftforge.common.MinecraftForge;
@@ -12,13 +10,9 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-public class ClientModule implements IModule {
-    public void init() {
-        registerClientListeners();
-    }
-
-    private static void registerClientListeners() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(ClientModule::onClientSetup);
+public class BPModClient {
+    public static void init() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(BPModClient::onClientSetup);
         MinecraftForge.EVENT_BUS.addListener(OverlayRenderer::renderUnderwaterOverlay);
         MinecraftForge.EVENT_BUS.addListener(OverlayRenderer::renderPortalOverlay);
         MinecraftForge.EVENT_BUS.addListener(OverlayRenderer::renderReclaimerOverlay);
@@ -33,11 +27,11 @@ public class ClientModule implements IModule {
      * Binds TE renderer(s) and adds necessary render layers for portal fluid and reclaimer blocks.
      */
     private static void onClientSetup(FMLClientSetupEvent event) {
-        ClientRegistry.bindTileEntityRenderer(TileEntityModule.RECLAIMER_TILE_ENTITY, ReclaimerTileEntityRenderer::new);
+        ClientRegistry.bindTileEntityRenderer(BPModTileEntities.RECLAIMER_TILE_ENTITY, ReclaimerTileEntityRenderer::new);
         event.enqueueWork(() -> {
-            RenderTypeLookup.setRenderLayer(FluidModule.PORTAL_FLUID, RenderType.getTranslucent());
-            RenderTypeLookup.setRenderLayer(FluidModule.PORTAL_FLUID_FLOWING, RenderType.getTranslucent());
-            RenderTypeLookup.setRenderLayer(BlockModule.RECLAIMER_BLOCK, RenderType.getCutout()); // Cutout renders the TE even when the block is out of sight
+            RenderTypeLookup.setRenderLayer(BPModFluids.PORTAL_FLUID, RenderType.getTranslucent());
+            RenderTypeLookup.setRenderLayer(BPModFluids.PORTAL_FLUID_FLOWING, RenderType.getTranslucent());
+            RenderTypeLookup.setRenderLayer(BPModBlocks.RECLAIMER_BLOCK, RenderType.getCutout()); // Cutout renders the TE even when the block is out of sight
         });
     }
 }

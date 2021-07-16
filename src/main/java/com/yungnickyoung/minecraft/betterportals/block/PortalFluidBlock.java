@@ -1,7 +1,7 @@
 package com.yungnickyoung.minecraft.betterportals.block;
 
 import com.yungnickyoung.minecraft.betterportals.api.BetterPortalsCapabilities;
-import com.yungnickyoung.minecraft.betterportals.fluid.FluidModule;
+import com.yungnickyoung.minecraft.betterportals.init.BPModFluids;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -18,7 +18,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 public class PortalFluidBlock extends FlowingFluidBlock {
     public PortalFluidBlock() {
         super(
-            () -> FluidModule.PORTAL_FLUID,
+            () -> BPModFluids.PORTAL_FLUID,
             AbstractBlock.Properties.create(Material.LAVA)
                 .doesNotBlockMovement()
                 .hardnessAndResistance(100.0F)
@@ -65,7 +65,7 @@ public class PortalFluidBlock extends FlowingFluidBlock {
             if (direction != Direction.DOWN) {
                 BlockPos blockpos = pos.offset(direction);
                 Fluid fluid = worldIn.getFluidState(blockpos).getFluidState().getFluid();
-                if (fluid != Fluids.EMPTY && fluid != FluidModule.PORTAL_FLUID && fluid != FluidModule.PORTAL_FLUID_FLOWING) {
+                if (fluid != Fluids.EMPTY && fluid != BPModFluids.PORTAL_FLUID && fluid != BPModFluids.PORTAL_FLUID_FLOWING) {
                     Block replacementBlock = worldIn.getFluidState(pos).isSource() ? Blocks.OBSIDIAN : Blocks.COBBLESTONE;
                     worldIn.setBlockState(pos, net.minecraftforge.event.ForgeEventFactory.fireFluidPlaceBlockEvent(worldIn, pos, pos, replacementBlock.getDefaultState()));
                     this.triggerMixEffects(worldIn, pos);

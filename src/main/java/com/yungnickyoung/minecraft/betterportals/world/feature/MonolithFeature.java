@@ -2,7 +2,7 @@ package com.yungnickyoung.minecraft.betterportals.world.feature;
 
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
-import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
+import com.yungnickyoung.minecraft.betterportals.init.BPModBlocks;
 import com.yungnickyoung.minecraft.betterportals.util.BlockUtil;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
@@ -158,7 +158,7 @@ public class MonolithFeature extends Feature<NoFeatureConfig> {
         BlockUtil.fillWallsRandom(world, sharedSeedRandom, .6f, startX + 7, startY + 2, startZ + 6, startX + 7, startY + 2, startZ + 6, settings.getFenceSelector(), WallHeight.NONE, WallHeight.NONE, WallHeight.LOW, WallHeight.NONE, true);
 
         // Reclaimer
-        world.setBlockState(new BlockPos(startX + 4, startY + 1, startZ + 4), BlockModule.RECLAIMER_BLOCK.getDefaultState(), 2);
+        world.setBlockState(new BlockPos(startX + 4, startY + 1, startZ + 4), BPModBlocks.RECLAIMER_BLOCK.getDefaultState(), 2);
 
         return true;
     }

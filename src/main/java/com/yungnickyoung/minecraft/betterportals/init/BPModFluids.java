@@ -1,9 +1,7 @@
-package com.yungnickyoung.minecraft.betterportals.fluid;
+package com.yungnickyoung.minecraft.betterportals.init;
 
-import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
+import com.yungnickyoung.minecraft.betterportals.fluid.PortalFluid;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
-import com.yungnickyoung.minecraft.betterportals.item.ItemModule;
-import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import net.minecraft.fluid.FlowingFluid;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Rarity;
@@ -12,14 +10,13 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-public class FluidModule implements IModule {
+public class BPModFluids {
     public static ForgeFlowingFluid.Properties PORTAL_FLUID_PROPERTIES;
     public static FlowingFluid PORTAL_FLUID;
     public static FlowingFluid PORTAL_FLUID_FLOWING;
 
-    @Override
-    public void init() {
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Fluid.class, FluidModule::registerFluids);
+    public static void init() {
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Fluid.class, BPModFluids::registerFluids);
 
         // Initialize fluids & properties
         PORTAL_FLUID_PROPERTIES = new ForgeFlowingFluid.Properties(
@@ -35,8 +32,8 @@ public class FluidModule implements IModule {
                 .luminosity(7)
                 .rarity(Rarity.RARE)
         )
-            .bucket(() -> ItemModule.PORTAL_BUCKET)
-            .block(() -> BlockModule.PORTAL_FLUID_BLOCK);
+            .bucket(() -> BPModItems.PORTAL_BUCKET)
+            .block(() -> BPModBlocks.PORTAL_FLUID_BLOCK);
 
         PORTAL_FLUID = new PortalFluid.Source(PORTAL_FLUID_PROPERTIES);
         PORTAL_FLUID_FLOWING = new PortalFluid.Flowing(PORTAL_FLUID_PROPERTIES);

@@ -1,9 +1,7 @@
-package com.yungnickyoung.minecraft.betterportals.world;
+package com.yungnickyoung.minecraft.betterportals.init;
 
 import com.google.common.collect.ImmutableSet;
-import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
-import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import com.yungnickyoung.minecraft.betterportals.world.feature.MonolithFeature;
 import com.yungnickyoung.minecraft.betterportals.world.feature.PortalLake2Feature;
 import com.yungnickyoung.minecraft.betterportals.world.feature.PortalLakeFeature;
@@ -24,7 +22,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-public class WorldGenModule implements IModule {
+public class BPModWorldGen {
     // Portal Lake features
     public static Feature<NoFeatureConfig> PORTAL_LAKE = new PortalLakeFeature(NoFeatureConfig.field_236558_a_);
     public static Feature<NoFeatureConfig> PORTAL_LAKE_2 = new PortalLake2Feature(NoFeatureConfig.field_236558_a_);
@@ -35,7 +33,7 @@ public class WorldGenModule implements IModule {
     // Portal Lake POI
     public static PointOfInterestType PORTAL_LAKE_POI = PointOfInterestType.registerBlockStates(new PointOfInterestType(
         "portal_lake",
-        ImmutableSet.copyOf(BlockModule.PORTAL_FLUID_BLOCK.getStateContainer().getValidStates()),
+        ImmutableSet.copyOf(BPModBlocks.PORTAL_FLUID_BLOCK.getStateContainer().getValidStates()),
         1,
         1
     ));
@@ -44,12 +42,12 @@ public class WorldGenModule implements IModule {
     public static Feature<NoFeatureConfig> MONOLITH = new MonolithFeature(NoFeatureConfig.field_236558_a_);
     public static ConfiguredFeature<?, ?> CONFIGURED_MONOLITH = MONOLITH.withConfiguration(new NoFeatureConfig()).withPlacement(Placement.COUNT_MULTILAYER.configure(new FeatureSpreadConfig(1)));
 
-    public void init() {
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, WorldGenModule::registerFeatures);
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Placement.class, WorldGenModule::registerDecorators);
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(PointOfInterestType.class, WorldGenModule::registerPointsofInterest);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(WorldGenModule::commonSetup);
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, WorldGenModule::onBiomeLoad);
+    public static void init() {
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Feature.class, BPModWorldGen::registerFeatures);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Placement.class, BPModWorldGen::registerDecorators);
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(PointOfInterestType.class, BPModWorldGen::registerPointsofInterest);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(BPModWorldGen::commonSetup);
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, BPModWorldGen::onBiomeLoad);
     }
 
     /**

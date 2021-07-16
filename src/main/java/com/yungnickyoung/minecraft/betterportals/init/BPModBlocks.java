@@ -1,20 +1,20 @@
-package com.yungnickyoung.minecraft.betterportals.block;
+package com.yungnickyoung.minecraft.betterportals.init;
 
+import com.yungnickyoung.minecraft.betterportals.block.PortalFluidBlock;
+import com.yungnickyoung.minecraft.betterportals.block.ReclaimerBlock;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
-import com.yungnickyoung.minecraft.betterportals.module.IModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.FlowingFluidBlock;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-public class BlockModule implements IModule {
+public class BPModBlocks {
     public static FlowingFluidBlock PORTAL_FLUID_BLOCK = new PortalFluidBlock();
     public static Block RECLAIMER_BLOCK = new ReclaimerBlock();
 
-    @Override
-    public void init() {
-        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Block.class, BlockModule::registerBlocks);
+    public static void init() {
+        FMLJavaModLoadingContext.get().getModEventBus().addGenericListener(Block.class, BPModBlocks::registerBlocks);
     }
 
     /**

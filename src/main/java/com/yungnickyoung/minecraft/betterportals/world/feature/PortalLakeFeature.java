@@ -2,7 +2,7 @@ package com.yungnickyoung.minecraft.betterportals.world.feature;
 
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
-import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
+import com.yungnickyoung.minecraft.betterportals.init.BPModBlocks;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;
 import com.yungnickyoung.minecraft.yungsapi.world.BlockSetSelector;
@@ -25,7 +25,7 @@ import java.util.Random;
 @MethodsReturnNonnullByDefault
 public class PortalLakeFeature extends Feature<NoFeatureConfig> {
     private PortalLakeVariantSettings settings;
-    private static final BlockState PORTAL_FLUID = BlockModule.PORTAL_FLUID_BLOCK.getDefaultState();
+    private static final BlockState PORTAL_FLUID = BPModBlocks.PORTAL_FLUID_BLOCK.getDefaultState();
 
     public PortalLakeFeature(Codec<NoFeatureConfig> codec) {
         super(codec);

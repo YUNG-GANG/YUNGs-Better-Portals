@@ -4,8 +4,9 @@ import com.google.common.collect.Lists;
 import com.yungnickyoung.minecraft.betterportals.api.BetterPortalsCapabilities;
 import com.yungnickyoung.minecraft.betterportals.api.IEntityPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.api.IPlayerPortalInfo;
-import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
+import com.yungnickyoung.minecraft.betterportals.init.BPModBlocks;
 import com.yungnickyoung.minecraft.betterportals.block.ReclaimerBlock;
+import com.yungnickyoung.minecraft.betterportals.init.BPModTileEntities;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
 import net.minecraft.block.BlockState;
@@ -39,7 +40,7 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
     private float activeRotation; // keep track of beam rotation for rendering
 
     public ReclaimerTileEntity() {
-        super(TileEntityModule.RECLAIMER_TILE_ENTITY);
+        super(BPModTileEntities.RECLAIMER_TILE_ENTITY);
     }
 
     @Override
@@ -50,7 +51,7 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
         }
 
         // Play ambient sound if powered
-        if (this.world.getBlockState(this.pos).getBlock() == BlockModule.RECLAIMER_BLOCK) {
+        if (this.world.getBlockState(this.pos).getBlock() == BPModBlocks.RECLAIMER_BLOCK) {
             if (this.world.getBlockState(this.pos).get(ReclaimerBlock.POWERED)) {
                 if (world.getGameTime() % 80L == 0L) {
                     world.playSound(null, pos, SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS, 1f, 1f);
@@ -82,7 +83,7 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
 
             // Determine color of this piece
             float[] colors;
-            if (blockstate.getBlock() == BlockModule.RECLAIMER_BLOCK) {
+            if (blockstate.getBlock() == BPModBlocks.RECLAIMER_BLOCK) {
                 // Reclaimers use a special method that allows for dimension-specific beam coloring
                 colors = ((ReclaimerBlock)blockstate.getBlock()).getColor(world, this.isPowered());
             } else {
@@ -213,7 +214,7 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
     }
 
     public boolean isPowered() {
-        if (this.world != null && this.world.getBlockState(this.pos).getBlock() == BlockModule.RECLAIMER_BLOCK) {
+        if (this.world != null && this.world.getBlockState(this.pos).getBlock() == BPModBlocks.RECLAIMER_BLOCK) {
             return this.world.getBlockState(this.pos).get(ReclaimerBlock.POWERED);
         }
         return false;

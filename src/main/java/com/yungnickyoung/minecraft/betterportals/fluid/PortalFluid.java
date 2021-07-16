@@ -1,8 +1,9 @@
 package com.yungnickyoung.minecraft.betterportals.fluid;
 
-import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
+import com.yungnickyoung.minecraft.betterportals.init.BPModBlocks;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
-import com.yungnickyoung.minecraft.betterportals.item.ItemModule;
+import com.yungnickyoung.minecraft.betterportals.init.BPModFluids;
+import com.yungnickyoung.minecraft.betterportals.init.BPModItems;
 import com.yungnickyoung.minecraft.betterportals.util.RGBAColor;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;
@@ -42,17 +43,17 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
 
     @Override
     public Fluid getFlowingFluid() {
-        return FluidModule.PORTAL_FLUID_FLOWING;
+        return BPModFluids.PORTAL_FLUID_FLOWING;
     }
 
     @Override
     public Fluid getStillFluid() {
-        return FluidModule.PORTAL_FLUID;
+        return BPModFluids.PORTAL_FLUID;
     }
 
     @Override
     public Item getFilledBucket() {
-        return ItemModule.PORTAL_BUCKET;
+        return BPModItems.PORTAL_BUCKET;
     }
 
     @Override
@@ -62,7 +63,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
 
     @Override
     public boolean isEquivalentTo(Fluid fluidIn) {
-        return fluidIn == FluidModule.PORTAL_FLUID || fluidIn == FluidModule.PORTAL_FLUID_FLOWING;
+        return fluidIn == BPModFluids.PORTAL_FLUID || fluidIn == BPModFluids.PORTAL_FLUID_FLOWING;
     }
 
     @Override
@@ -128,7 +129,7 @@ public abstract class PortalFluid extends ForgeFlowingFluid {
 
     @Override
     public BlockState getBlockState(FluidState state) {
-        return BlockModule.PORTAL_FLUID_BLOCK.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
+        return BPModBlocks.PORTAL_FLUID_BLOCK.getDefaultState().with(FlowingFluidBlock.LEVEL, getLevelFromState(state));
     }
 
     public static class Flowing extends PortalFluid {

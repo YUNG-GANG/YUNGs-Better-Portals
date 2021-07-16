@@ -2,7 +2,7 @@ package com.yungnickyoung.minecraft.betterportals.world.feature;
 
 import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
-import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
+import com.yungnickyoung.minecraft.betterportals.init.BPModBlocks;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;
 import mcp.MethodsReturnNonnullByDefault;
@@ -29,7 +29,7 @@ import java.util.Random;
 public class PortalLake2Feature extends Feature<NoFeatureConfig> {
     private PortalLakeVariantSettings settings;
     private static final BlockState AIR = Blocks.CAVE_AIR.getDefaultState();
-    private static final BlockState PORTAL_FLUID = BlockModule.PORTAL_FLUID_BLOCK.getDefaultState();
+    private static final BlockState PORTAL_FLUID = BPModBlocks.PORTAL_FLUID_BLOCK.getDefaultState();
 
     public PortalLake2Feature(Codec<NoFeatureConfig> codec) {
         super(codec);

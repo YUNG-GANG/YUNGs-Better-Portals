@@ -2,7 +2,7 @@ package com.yungnickyoung.minecraft.betterportals.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.yungnickyoung.minecraft.betterportals.api.BetterPortalsCapabilities;
-import com.yungnickyoung.minecraft.betterportals.block.BlockModule;
+import com.yungnickyoung.minecraft.betterportals.init.BPModBlocks;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
@@ -36,7 +36,7 @@ public class OverlayRenderer {
         FluidState fluidstate = event.getPlayer().world.getFluidState(blockpos);
         BlockState blockState = event.getPlayer().world.getBlockState(blockpos);
 
-        if (blockState.getBlock() == BlockModule.PORTAL_FLUID_BLOCK) {
+        if (blockState.getBlock() == BPModBlocks.PORTAL_FLUID_BLOCK) {
             double fluidHeight = (float)blockpos.getY() + fluidstate.getActualHeight(event.getPlayer().world, blockpos);
             if (fluidHeight > eyeHeight) {
                 Minecraft minecraft = Minecraft.getInstance();

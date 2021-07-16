@@ -1,7 +1,8 @@
-package com.yungnickyoung.minecraft.betterportals.config;
+package com.yungnickyoung.minecraft.betterportals.init;
 
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
-import com.yungnickyoung.minecraft.betterportals.module.IModule;
+import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
+import com.yungnickyoung.minecraft.betterportals.config.Configuration;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariants;
 import com.yungnickyoung.minecraft.yungsapi.io.JSON;
@@ -17,20 +18,29 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class ConfigModule implements IModule  {
-    @Override
-    public void init() {
-        createDirectory();
-        createJsonReadMe();
-
+public class BPModConfig {
+    public static void init() {
+        initCustomFiles();
         // Register config with Forge
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Configuration.SPEC, BPSettings.BASE_CONFIG_NAME);
-
         // Refresh JSON config on world load so that user doesn't have to restart MC
-        MinecraftForge.EVENT_BUS.addListener(ConfigModule::onWorldLoad);
+        MinecraftForge.EVENT_BUS.addListener(BPModConfig::onWorldLoad);
+        MinecraftForge.EVENT_BUS.addListener(BPModConfig::onCreateSpawn);
     }
 
     private static void onWorldLoad(WorldEvent.Load event) {
+        loadRiftVariantSettings();
+        loadMonolithVariantSettings();
+    }
+
+    private static void onCreateSpawn(WorldEvent.CreateSpawnPosition event) {
+        loadRiftVariantSettings();
+        loadMonolithVariantSettings();
+    }
+
+    private static void initCustomFiles() {
+        createDirectory();
+        createJsonReadMe();
         loadRiftVariantSettings();
         loadMonolithVariantSettings();
     }

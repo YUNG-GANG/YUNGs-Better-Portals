@@ -1,10 +1,14 @@
-package com.yungnickyoung.minecraft.betterportals.capability;
+package com.yungnickyoung.minecraft.betterportals.init;
 
-import com.yungnickyoung.minecraft.betterportals.api.*;
+import com.yungnickyoung.minecraft.betterportals.api.BetterPortalsCapabilities;
+import com.yungnickyoung.minecraft.betterportals.api.IEntityPortalInfo;
+import com.yungnickyoung.minecraft.betterportals.api.IPlayerPortalInfo;
+import com.yungnickyoung.minecraft.betterportals.capability.EntityPortalInfo;
+import com.yungnickyoung.minecraft.betterportals.capability.NBTCapabilityProvider;
+import com.yungnickyoung.minecraft.betterportals.capability.PlayerPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.config.BPSettings;
-import com.yungnickyoung.minecraft.betterportals.module.IModule;
-import com.yungnickyoung.minecraft.betterportals.world.ReclaimerTeleporter;
 import com.yungnickyoung.minecraft.betterportals.world.PortalLakeTeleporter;
+import com.yungnickyoung.minecraft.betterportals.world.ReclaimerTeleporter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -23,13 +27,12 @@ import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-public class CapabilityModule implements IModule {
-    @Override
-    public void init() {
-        MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, CapabilityModule::onAttachCapabilitiesToEntities);
-        MinecraftForge.EVENT_BUS.addListener(CapabilityModule::onPlayerTick);
-        MinecraftForge.EVENT_BUS.addListener(CapabilityModule::onEntityTick);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(CapabilityModule::commonSetup);
+public class BPModCapabilities {
+    public static void init() {
+        MinecraftForge.EVENT_BUS.addGenericListener(Entity.class, BPModCapabilities::onAttachCapabilitiesToEntities);
+        MinecraftForge.EVENT_BUS.addListener(BPModCapabilities::onPlayerTick);
+        MinecraftForge.EVENT_BUS.addListener(BPModCapabilities::onEntityTick);
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(BPModCapabilities::commonSetup);
     }
 
     /**
