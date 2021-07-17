@@ -3,6 +3,7 @@
   "minVersion": "0.8",
   "package": "com.yungnickyoung.minecraft.betterportals.mixin",
   "compatibilityLevel": "JAVA_8",
+  "refmap": "betterportals.refmap.json",
   "mixins": [
     "MixinPortalSize"
   ],
