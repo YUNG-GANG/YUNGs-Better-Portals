@@ -4,7 +4,7 @@ import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.api.IEntityPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.api.IPlayerPortalInfo;
 import com.yungnickyoung.minecraft.betterportals.init.BPModFluids;
-import com.yungnickyoung.minecraft.betterportals.init.BPModWorldGen;
+import com.yungnickyoung.minecraft.betterportals.init.BPModPOIs;
 import com.yungnickyoung.minecraft.betterportals.util.BlockUtil;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
@@ -71,7 +71,7 @@ public class ReclaimerTeleporter implements ITeleporter {
         pointofinterestmanager.ensureLoadedAndValid(targetWorld, targetPos, blockSearchRange);
 
         Optional<BlockPos> optional = pointofinterestmanager
-            .getInSquare(poiType -> poiType == BPModWorldGen.PORTAL_LAKE_POI, targetPos, blockSearchRange, PointOfInterestManager.Status.ANY)
+            .getInSquare(poiType -> poiType == BPModPOIs.PORTAL_LAKE_POI, targetPos, blockSearchRange, PointOfInterestManager.Status.ANY)
             .map(PointOfInterest::getPos)
             .filter(pos -> {
                 Fluid fluid = targetWorld.getBlockState(pos).getFluidState().getFluid();

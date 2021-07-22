@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.feature.WorldDecoratingHelper;
+import net.minecraft.world.gen.placement.IPlacementConfig;
 import net.minecraft.world.gen.placement.NoPlacementConfig;
 import net.minecraft.world.gen.placement.Placement;
 
@@ -14,8 +15,8 @@ import java.util.stream.Stream;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class PortalLakePlacement extends Placement<NoPlacementConfig> {
-    public PortalLakePlacement(Codec<NoPlacementConfig> codec) {
-        super(codec);
+    public PortalLakePlacement() {
+        super(NoPlacementConfig.CODEC);
     }
 
     @Override

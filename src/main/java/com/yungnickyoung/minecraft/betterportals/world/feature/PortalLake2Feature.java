@@ -17,6 +17,7 @@ import net.minecraft.world.LightType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.structure.Structure;
 
@@ -31,8 +32,8 @@ public class PortalLake2Feature extends Feature<NoFeatureConfig> {
     private static final BlockState AIR = Blocks.CAVE_AIR.getDefaultState();
     private static final BlockState PORTAL_FLUID = BPModBlocks.PORTAL_FLUID_BLOCK.getDefaultState();
 
-    public PortalLake2Feature(Codec<NoFeatureConfig> codec) {
-        super(codec);
+    public PortalLake2Feature() {
+        super(NoFeatureConfig.field_236558_a_);
     }
 
     @Override

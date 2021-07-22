@@ -23,7 +23,9 @@ public class BetterPortals {
         BPModFluids.init();
         BPModItems.init();
         BPModTileEntities.init();
-        BPModWorldGen.init();
+        BPModPlacements.init();
+        BPModFeatures.init();
+        BPModPOIs.init();
         BPModConfig.init();
         DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> BPModClient::init);
     }

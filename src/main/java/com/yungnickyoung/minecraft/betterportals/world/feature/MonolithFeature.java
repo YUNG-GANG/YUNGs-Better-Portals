@@ -27,8 +27,8 @@ public class MonolithFeature extends Feature<NoFeatureConfig> {
 
     private MonolithVariantSettings settings;
 
-    public MonolithFeature(Codec<NoFeatureConfig> codec) {
-        super(codec);
+    public MonolithFeature() {
+        super(NoFeatureConfig.field_236558_a_);
     }
 
     @Override

@@ -27,8 +27,8 @@ public class PortalLakeFeature extends Feature<NoFeatureConfig> {
     private PortalLakeVariantSettings settings;
     private static final BlockState PORTAL_FLUID = BPModBlocks.PORTAL_FLUID_BLOCK.getDefaultState();
 
-    public PortalLakeFeature(Codec<NoFeatureConfig> codec) {
-        super(codec);
+    public PortalLakeFeature() {
+        super(NoFeatureConfig.field_236558_a_);
     }
 
     @Override
