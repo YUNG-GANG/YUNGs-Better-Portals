@@ -214,8 +214,11 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
     }
 
     public boolean isPowered() {
-        if (this.world != null && this.world.getBlockState(this.pos).getBlock() == BPModBlocks.RECLAIMER_BLOCK) {
-            return this.world.getBlockState(this.pos).get(ReclaimerBlock.POWERED);
+        if (this.world != null) {
+            BlockState state = this.world.getBlockState(this.pos);
+            if (state.getBlock() == BPModBlocks.RECLAIMER_BLOCK && state.hasProperty(ReclaimerBlock.POWERED)) {
+                return state.get(ReclaimerBlock.POWERED);
+            }
         }
         return false;
     }
