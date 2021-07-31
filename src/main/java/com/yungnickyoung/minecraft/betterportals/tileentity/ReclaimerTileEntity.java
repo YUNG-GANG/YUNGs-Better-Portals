@@ -117,7 +117,7 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
                         this.tempBeamSegments.add(beamSegment);
                     }
                 }
-            } else {
+            } else if (beamSegment != null) {
                 beamSegment.incrementHeight();
             }
 
