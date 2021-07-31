@@ -51,11 +51,10 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
         }
 
         // Play ambient sound if powered
-        if (this.world.getBlockState(this.pos).getBlock() == BPModBlocks.RECLAIMER_BLOCK) {
-            if (this.world.getBlockState(this.pos).get(ReclaimerBlock.POWERED)) {
-                if (world.getGameTime() % 80L == 0L) {
-                    world.playSound(null, pos, SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS, 1f, 1f);
-                }
+        boolean isPowered = this.isPowered();
+        if (isPowered) {
+            if (world.getGameTime() % 80L == 0L) {
+                world.playSound(null, pos, SoundEvents.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS, 1f, 1f);
             }
         }
 
@@ -137,14 +136,13 @@ public class ReclaimerTileEntity extends TileEntity implements ITickableTileEnti
             this.beamSegments = this.tempBeamSegments;
         }
 
-        boolean isPowered = this.isPowered();
         int floatAmp = isPowered ? 5 : 2; // Powered beams levitate entities more quickly
 
         // Float up items in beam
         if (!this.world.isRemote) {
             List<ItemEntity> itemsInBeam = getItemsInBeam();
             for (ItemEntity entity : itemsInBeam) {
-                double floatSpeed = isPowered() ? .2 : .08;
+                double floatSpeed = isPowered ? .2 : .08;
                 entity.setMotion(entity.getMotion().getX() / 1.5, floatSpeed, entity.getMotion().getZ() / 1.5);
             }
         }
