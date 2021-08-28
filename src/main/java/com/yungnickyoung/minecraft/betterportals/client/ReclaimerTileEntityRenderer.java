@@ -62,6 +62,7 @@ public class ReclaimerTileEntityRenderer extends TileEntityRenderer<ReclaimerTil
 
     private static void renderBeam(ReclaimerTileEntity tileEntity, float partialTicks, MatrixStack matrixStack, IRenderTypeBuffer renderTypeBuffer) {
         long time = tileEntity.getWorld().getGameTime();
+        boolean isPowered = tileEntity.isPowered();
         List<ReclaimerTileEntity.BeamPiece> beamSegments = tileEntity.getBeamPieces();
         float yOffset = 0.5f;
 
@@ -77,9 +78,9 @@ public class ReclaimerTileEntityRenderer extends TileEntityRenderer<ReclaimerTil
                 yOffset,
                 beamSegment.getHeight(),
                 beamSegment.getColors(),
-                tileEntity.isPowered() ? .4f : .1f, // Powered beam has larger beam radius
-                tileEntity.isPowered() ? .6f : .15f, // Powered beam has larger glow radius
-                tileEntity.isPowered() ? 2.5f : .5f // Powered beam spins faster
+                isPowered ? .4f : .1f, // Powered beam has larger beam radius
+                isPowered ? .6f : .15f, // Powered beam has larger glow radius
+                isPowered ? 2.5f : .5f // Powered beam spins faster
             );
             yOffset += beamSegment.getHeight();
         }
