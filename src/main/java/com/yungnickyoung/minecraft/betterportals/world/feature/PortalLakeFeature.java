@@ -1,6 +1,5 @@
 package com.yungnickyoung.minecraft.betterportals.world.feature;
 
-import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.init.BPModBlocks;
 import com.yungnickyoung.minecraft.betterportals.world.variant.PortalLakeVariantSettings;
@@ -24,7 +23,6 @@ import java.util.Random;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class PortalLakeFeature extends Feature<NoFeatureConfig> {
-    private PortalLakeVariantSettings settings;
     private static final BlockState PORTAL_FLUID = BPModBlocks.PORTAL_FLUID_BLOCK.getDefaultState();
 
     public PortalLakeFeature() {
@@ -42,11 +40,10 @@ public class PortalLakeFeature extends Feature<NoFeatureConfig> {
             return false;
         }
 
-        // Lazy init settings
-        if (settings == null || !settings.getSpawnDimension().equals(dimensionName)) {
-            settings = PortalLakeVariants.get().getVariantForDimension(dimensionName);
-        }
+        // Grab proper settings, depending on dimension
+        PortalLakeVariantSettings settings = PortalLakeVariants.get().getVariantForDimension(dimensionName);
 
+        // Settings are null -> no variant for this dimension
         if (settings == null) {
             return false;
         }

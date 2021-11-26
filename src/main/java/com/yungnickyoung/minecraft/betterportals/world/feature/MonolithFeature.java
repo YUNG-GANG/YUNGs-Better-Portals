@@ -1,13 +1,14 @@
 package com.yungnickyoung.minecraft.betterportals.world.feature;
 
-import com.mojang.serialization.Codec;
 import com.yungnickyoung.minecraft.betterportals.BetterPortals;
 import com.yungnickyoung.minecraft.betterportals.init.BPModBlocks;
 import com.yungnickyoung.minecraft.betterportals.util.BlockUtil;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariantSettings;
 import com.yungnickyoung.minecraft.betterportals.world.variant.MonolithVariants;
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraft.block.*;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Blocks;
+import net.minecraft.block.WallHeight;
 import net.minecraft.util.Direction;
 import net.minecraft.util.SharedSeedRandom;
 import net.minecraft.util.math.BlockPos;
@@ -25,8 +26,6 @@ import java.util.Random;
 public class MonolithFeature extends Feature<NoFeatureConfig> {
     private static final BlockState CAVE_AIR = Blocks.CAVE_AIR.getDefaultState();
 
-    private MonolithVariantSettings settings;
-
     public MonolithFeature() {
         super(NoFeatureConfig.field_236558_a_);
     }
@@ -42,10 +41,8 @@ public class MonolithFeature extends Feature<NoFeatureConfig> {
             return false;
         }
 
-        // Lazy init settings
-        if (settings == null || !settings.getSpawnDimension().equals(dimensionName)) {
-            settings = MonolithVariants.get().getVariantForDimension(dimensionName);
-        }
+        // Grab proper settings, depending on dimension
+        MonolithVariantSettings settings = MonolithVariants.get().getVariantForDimension(dimensionName);
 
         // Settings are null -> no variant for this dimension
         if (settings == null) {
